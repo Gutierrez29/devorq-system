@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 
 const STATS = [
-  { value: "2", label: "Productos en desarrollo" },
+  { value: "2", label: "Plataformas empresariales" },
   { value: "100%", label: "Orientado a resultados" },
   { value: "LATAM", label: "Foco regional" },
 ];
@@ -84,69 +84,7 @@ export default function Hero() {
         }}
       />
 
-      {/* Floating decorative icons */}
-      <div
-        className="floating"
-        style={{
-          position: "absolute",
-          top: "22%",
-          right: "15%",
-          width: "52px",
-          height: "52px",
-          background: "white",
-          borderRadius: "14px",
-          boxShadow: "0 8px 32px rgba(91,78,255,0.2)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: "1.5rem",
-          animationDelay: "0s",
-        }}
-      >
-        ⚡
-      </div>
 
-      <div
-        className="floating-delayed"
-        style={{
-          position: "absolute",
-          top: "45%",
-          right: "6%",
-          width: "44px",
-          height: "44px",
-          background: "white",
-          borderRadius: "12px",
-          boxShadow: "0 8px 32px rgba(224,64,251,0.2)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: "1.25rem",
-          animationDelay: "2s",
-        }}
-      >
-        🤖
-      </div>
-
-      <div
-        className="floating"
-        style={{
-          position: "absolute",
-          bottom: "25%",
-          right: "20%",
-          width: "40px",
-          height: "40px",
-          background: "white",
-          borderRadius: "10px",
-          boxShadow: "0 8px 32px rgba(6,182,212,0.2)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: "1.1rem",
-          animationDelay: "1s",
-        }}
-      >
-        📊
-      </div>
 
       {/* Dot grid pattern */}
       <div
@@ -247,12 +185,21 @@ export default function Hero() {
             animation: "slide-in-bottom 0.8s 0.3s both",
           }}
         >
-          <a href="#productos" className="btn-primary">
+          <button
+            onClick={() => {
+              const el = document.getElementById("cigo");
+              if (el) {
+                el.scrollIntoView({ behavior: "smooth", block: "center" });
+              }
+            }}
+            className="btn-primary"
+            style={{ border: "none", cursor: "pointer" }}
+          >
             Ver productos
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
-          </a>
+          </button>
           <a href="#contacto" className="btn-secondary">
             Hablar con nosotros
           </a>

@@ -4,7 +4,7 @@ import { useRef, useEffect, useState } from "react";
 
 function useInView(threshold = 0.05) {
   const ref = useRef<HTMLDivElement>(null);
-  const [inView, setInView] = useState(true);
+  const [inView, setInView] = useState(false);
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([e]) => { if (e.isIntersecting) setInView(true); },
@@ -18,7 +18,7 @@ function useInView(threshold = 0.05) {
 
 const PILLARS = [
   {
-    icon: "🚀",
+    iconPath: "M13 2L3 14h9l-1 8 10-12h-9l1-8z",
     color: "#5B4EFF",
     bg: "rgba(91,78,255,0.06)",
     title: "Tecnología de vanguardia",
@@ -27,7 +27,7 @@ const PILLARS = [
     points: ["Next.js & React 19", "IA y machine learning", "Infraestructura en la nube"],
   },
   {
-    icon: "🎯",
+    iconPath: "M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12z M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z",
     color: "#0EA5E9",
     bg: "rgba(14,165,233,0.06)",
     title: "Diseñado para el mundo real",
@@ -36,7 +36,7 @@ const PILLARS = [
     points: ["Flujos de trabajo reales", "Onboarding sin fricción", "UX probada con usuarios"],
   },
   {
-    icon: "🛡️",
+    iconPath: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z",
     color: "#10B981",
     bg: "rgba(16,185,129,0.06)",
     title: "Escalable y seguro",
@@ -138,16 +138,21 @@ function PillarCard({
           height: "52px",
           borderRadius: "14px",
           background: pillar.bg,
+          border: `1.5px solid ${pillar.color}20`,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontSize: "1.5rem",
           marginBottom: "1.25rem",
           transition: "transform 0.3s ease",
           transform: hovered ? "scale(1.1) rotate(-5deg)" : "scale(1)",
         }}
       >
-        {pillar.icon}
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+          stroke={pillar.color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+          {pillar.iconPath.split(" M ").map((seg, i) => (
+            <path key={i} d={i === 0 ? seg : `M ${seg}`} />
+          ))}
+        </svg>
       </div>
 
       <h3

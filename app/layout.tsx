@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: "Devorq Systems — Software que transforma negocios",
   description:
     "Devorq Systems es la empresa detrás de CIGO y ASYS IA. Construimos software moderno, escalable y orientado a resultados reales para empresas latinoamericanas.",
-  keywords: ["Devorq", "Devorq Systems", "CIGO", "ASYS IA", "software empresarial", "ERP", "chatbot IA", "WhatsApp", "Perú"],
+  keywords: ["Devorq", "Devorq Systems", "CIGO", "ASYS IA", "software empresarial", "plataforma b2b", "chatbot IA", "WhatsApp", "Perú"],
   authors: [{ name: "Devorq Systems" }],
   openGraph: {
     title: "Devorq Systems — Software que transforma negocios",

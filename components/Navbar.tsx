@@ -4,11 +4,27 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const NAV_LINKS = [
-  { label: "Productos", href: "#productos" },
-  { label: "¿Por qué Devor?", href: "#por-que-devor" },
-  { label: "ASYS IA", href: "#asys-ia" },
-  { label: "Contacto", href: "#contacto" },
+  { label: "Productos", href: "/#cigo" },
+  { label: "¿Por qué Devorq?", href: "/#por-que-devor" },
+  { label: "¿Cómo funciona?", href: "/#como-funciona" },
+  { label: "Preguntas Frecuentes", href: "/#faq" },
+  { label: "Contacto", href: "/#contacto" },
 ];
+
+/**
+ * Maneja el scroll a una sección hash de forma confiable.
+ * Evita el bug de Next.js donde el router no scrollea al hash
+ * si el usuario ya está en "/" y no ha scrolleado.
+ */
+function scrollToHash(href: string, e: React.MouseEvent) {
+  if (!href.includes("#")) return;
+  e.preventDefault();
+  const id = href.split("#")[1];
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+}
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -57,23 +73,23 @@ export default function Navbar() {
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "0.5rem",
+            gap: "0.6rem",
             textDecoration: "none",
           }}
         >
           <div
             style={{
-              width: "32px",
-              height: "32px",
-              borderRadius: "8px",
+              width: "38px",
+              height: "38px",
+              borderRadius: "10px",
               background: "var(--gradient-main)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              boxShadow: "0 4px 12px rgba(91,78,255,0.35)",
+              boxShadow: "0 4px 14px rgba(91,78,255,0.35)",
             }}
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
               <path
                 d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"
                 fill="white"
@@ -83,7 +99,7 @@ export default function Navbar() {
           </div>
           <span
             style={{
-              fontSize: "1.25rem",
+              fontSize: "1.45rem",
               fontWeight: 800,
               letterSpacing: "-0.03em",
               color: "var(--fg)",
@@ -105,8 +121,9 @@ export default function Navbar() {
         >
           {NAV_LINKS.map((link) => (
             <li key={link.href}>
-              <a
+              <Link
                 href={link.href}
+                onClick={(e) => scrollToHash(link.href, e)}
                 style={{
                   fontSize: "0.9rem",
                   fontWeight: 500,
@@ -117,16 +134,16 @@ export default function Navbar() {
                   transition: "all 0.2s ease",
                 }}
                 onMouseEnter={(e) => {
-                  (e.target as HTMLElement).style.color = "var(--primary)";
-                  (e.target as HTMLElement).style.background = "var(--primary-light)";
+                  (e.currentTarget as HTMLElement).style.color = "var(--primary)";
+                  (e.currentTarget as HTMLElement).style.background = "var(--primary-light)";
                 }}
                 onMouseLeave={(e) => {
-                  (e.target as HTMLElement).style.color = "var(--fg-muted)";
-                  (e.target as HTMLElement).style.background = "transparent";
+                  (e.currentTarget as HTMLElement).style.color = "var(--fg-muted)";
+                  (e.currentTarget as HTMLElement).style.background = "transparent";
                 }}
               >
                 {link.label}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
@@ -180,7 +197,10 @@ export default function Navbar() {
             <a
               key={link.href}
               href={link.href}
-              onClick={() => setMenuOpen(false)}
+              onClick={(e) => {
+                scrollToHash(link.href, e);
+                setMenuOpen(false);
+              }}
               style={{
                 display: "block",
                 padding: "0.75rem 0",

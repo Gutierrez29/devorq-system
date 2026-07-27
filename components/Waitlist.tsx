@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
 function useInView(threshold = 0.05) {
   const ref = useRef<HTMLDivElement>(null);
-  const [inView, setInView] = useState(true);
+  const [inView, setInView] = useState(false);
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([e]) => { if (e.isIntersecting) setInView(true); },
@@ -18,21 +18,16 @@ function useInView(threshold = 0.05) {
 
 export default function Waitlist() {
   const { ref, inView } = useInView();
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [product, setProduct] = useState<"asys" | "cigo">("asys");
+  const [copied, setCopied] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setStatus("error");
-      return;
-    }
-    setStatus("loading");
-    // Simulated submission — replace with actual API call
-    await new Promise((r) => setTimeout(r, 1200));
-    setStatus("success");
-    setEmail("");
+  const emailAddress = "diego.gutierrez2911@gmail.com";
+  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${emailAddress}&su=Consulta%20sobre%20Devorq%20Systems`;
+  const mailtoUrl = `mailto:${emailAddress}?subject=Consulta%20sobre%20Devorq%20Systems`;
+
+  const copyEmail = () => {
+    navigator.clipboard.writeText(emailAddress);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -75,20 +70,22 @@ export default function Waitlist() {
             width: "72px",
             height: "72px",
             borderRadius: "20px",
-            background: "linear-gradient(135deg, #5B4EFF, #E040FB)",
+            background: "linear-gradient(135deg, #EA4335, #E040FB)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            fontSize: "2rem",
             margin: "0 auto 1.5rem",
-            boxShadow: "0 12px 40px rgba(91,78,255,0.3)",
+            boxShadow: "0 12px 40px rgba(234,67,53,0.25)",
           }}
         >
-          ✉️
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+          </svg>
         </div>
 
         <div className="section-label" style={{ margin: "0 auto 1rem" }}>
-          Lista de espera y contacto
+          Contacto Directo
         </div>
 
         <h2
@@ -100,204 +97,89 @@ export default function Waitlist() {
             marginBottom: "1rem",
           }}
         >
-          Sé el primero en{" "}
-          <span className="gradient-text">saber cuándo lanzamos</span>
+          Hablemos sobre <span className="gradient-text">tu proyecto</span>
         </h2>
 
         <p
           style={{
-            fontSize: "1rem",
+            fontSize: "1.0625rem",
             color: "var(--fg-muted)",
             lineHeight: 1.75,
             marginBottom: "2.5rem",
           }}
         >
-          Déjanos tu correo y te avisamos con acceso anticipado a ASYS IA,
-          actualizaciones de CIGO y noticias de Devorq Systems.
+          Envíanos un mensaje directo con tus consultas o requerimientos operativos. Te responderemos en menos de 24 horas.
         </p>
 
-        {/* Product selector */}
-        <div
-          style={{
-            display: "flex",
-            background: "var(--bg-secondary)",
-            borderRadius: "100px",
-            padding: "4px",
-            marginBottom: "1.5rem",
-            border: "1px solid rgba(91,78,255,0.1)",
-          }}
-        >
-          {(["asys", "cigo"] as const).map((p) => (
-            <button
-              key={p}
-              onClick={() => setProduct(p)}
-              style={{
-                flex: 1,
-                padding: "0.625rem 1rem",
-                borderRadius: "100px",
-                border: "none",
-                cursor: "pointer",
-                fontWeight: 600,
-                fontSize: "0.875rem",
-                transition: "all 0.25s ease",
-                background: product === p ? "white" : "transparent",
-                color: product === p ? "var(--primary)" : "var(--fg-muted)",
-                boxShadow: product === p ? "0 2px 8px rgba(13,8,32,0.08)" : "none",
-              }}
-            >
-              {p === "asys" ? "🤖 ASYS IA" : "📦 CIGO"}
-            </button>
-          ))}
-        </div>
+        {/* Action Buttons */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem" }}>
+          {/* Primary Gmail Web Button */}
+          <a
+            href={gmailUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.625rem",
+              padding: "0.9375rem 2.25rem",
+              borderRadius: "100px",
+              background: "linear-gradient(135deg, #EA4335 0%, #C5221F 100%)",
+              color: "white",
+              fontWeight: 700,
+              fontSize: "1rem",
+              textDecoration: "none",
+              boxShadow: "0 8px 24px rgba(234, 67, 53, 0.35)",
+              transition: "all 0.25s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-3px)";
+              e.currentTarget.style.boxShadow = "0 12px 32px rgba(234, 67, 53, 0.45)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 8px 24px rgba(234, 67, 53, 0.35)";
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.272H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L12 9.545l8.073-6.052C21.69 2.28 24 3.434 24 5.457z"/>
+            </svg>
+            Enviar correo desde Gmail
+          </a>
 
-        {/* Form */}
-        {status === "success" ? (
+          {/* Copyable email pill */}
           <div
             style={{
-              background: "rgba(16,185,129,0.06)",
-              border: "1px solid rgba(16,185,129,0.3)",
-              borderRadius: "1rem",
-              padding: "2rem",
-              animation: "bounce-in 0.5s ease both",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.625rem",
+              background: "rgba(91,78,255,0.06)",
+              border: "1px solid rgba(91,78,255,0.12)",
+              borderRadius: "100px",
+              padding: "0.4rem 1rem",
+              fontSize: "0.8125rem",
+              color: "var(--fg-muted)",
+              marginTop: "0.5rem",
             }}
           >
-            <div style={{ fontSize: "2.5rem", marginBottom: "0.75rem" }}>🎉</div>
-            <h3 style={{ fontWeight: 700, fontSize: "1.125rem", color: "#065F46", marginBottom: "0.5rem" }}>
-              ¡Estás en la lista!
-            </h3>
-            <p style={{ color: "#065F46", opacity: 0.8, fontSize: "0.9rem" }}>
-              Te avisaremos cuando {product === "asys" ? "ASYS IA" : "CIGO"} esté disponible. ¡Gracias!
-            </p>
-          </div>
-        ) : (
-          <form
-            onSubmit={handleSubmit}
-            noValidate
-            style={{
-              display: "flex",
-              gap: "0.75rem",
-              flexWrap: "wrap",
-            }}
-          >
-            <input
-              type="email"
-              id="waitlist-email"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                if (status === "error") setStatus("idle");
-              }}
-              placeholder="tu@correo.com"
-              required
-              style={{
-                flex: "1",
-                minWidth: "220px",
-                padding: "0.875rem 1.25rem",
-                borderRadius: "100px",
-                border: `1.5px solid ${status === "error" ? "#EF4444" : "rgba(91,78,255,0.2)"}`,
-                fontSize: "0.9375rem",
-                outline: "none",
-                background: "white",
-                color: "var(--fg)",
-                transition: "border-color 0.2s ease, box-shadow 0.2s ease",
-              }}
-              onFocus={(e) => {
-                (e.target as HTMLInputElement).style.borderColor = "var(--primary)";
-                (e.target as HTMLInputElement).style.boxShadow = "0 0 0 3px rgba(91,78,255,0.1)";
-              }}
-              onBlur={(e) => {
-                (e.target as HTMLInputElement).style.borderColor =
-                  status === "error" ? "#EF4444" : "rgba(91,78,255,0.2)";
-                (e.target as HTMLInputElement).style.boxShadow = "none";
-              }}
-            />
+            <span>{emailAddress}</span>
             <button
-              type="submit"
-              disabled={status === "loading"}
-              className="btn-primary"
-              style={{ whiteSpace: "nowrap", opacity: status === "loading" ? 0.7 : 1 }}
+              onClick={copyEmail}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                color: copied ? "#10B981" : "var(--primary)",
+                fontWeight: 700,
+                fontSize: "0.78125rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.25rem",
+              }}
             >
-              {status === "loading" ? (
-                <>
-                  <svg
-                    width="16" height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    style={{ animation: "spin-slow 1s linear infinite" }}
-                  >
-                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
-                  </svg>
-                  Enviando...
-                </>
-              ) : (
-                <>
-                  Notifícame
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
-                </>
-              )}
+              {copied ? "¡Copiado!" : "Copiar"}
             </button>
-          </form>
-        )}
-
-        {status === "error" && (
-          <p style={{ color: "#EF4444", fontSize: "0.8125rem", marginTop: "0.5rem", textAlign: "left" }}>
-            Por favor ingresa un correo válido.
-          </p>
-        )}
-
-        <p
-          style={{
-            fontSize: "0.78125rem",
-            color: "var(--fg-light)",
-            marginTop: "1rem",
-            lineHeight: 1.6,
-          }}
-        >
-          Sin spam. Solo actualizaciones importantes. Puedes darte de baja cuando quieras.
-        </p>
-
-        {/* Social proof */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "0.75rem",
-            marginTop: "2rem",
-            paddingTop: "2rem",
-            borderTop: "1px solid rgba(91,78,255,0.08)",
-          }}
-        >
-          <div style={{ display: "flex" }}>
-            {["#5B4EFF", "#E040FB", "#06B6D4", "#10B981"].map((color, i) => (
-              <div
-                key={color}
-                style={{
-                  width: "30px",
-                  height: "30px",
-                  borderRadius: "50%",
-                  background: color,
-                  border: "2px solid white",
-                  marginLeft: i === 0 ? 0 : "-8px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "white",
-                  fontWeight: 700,
-                  fontSize: "0.65rem",
-                }}
-              >
-                {["J", "M", "A", "R"][i]}
-              </div>
-            ))}
           </div>
-          <p style={{ fontSize: "0.8125rem", color: "var(--fg-muted)" }}>
-            <strong style={{ color: "var(--fg)" }}>+50 personas</strong> ya están en la lista
-          </p>
         </div>
       </div>
     </section>

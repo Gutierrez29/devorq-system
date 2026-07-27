@@ -73,8 +73,13 @@ function WhatsAppMockup() {
   const [inputVal, setInputVal] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
@@ -175,14 +180,17 @@ function WhatsAppMockup() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: "1.125rem",
               flexShrink: 0,
             }}
           >
-            🤖
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2a5 5 0 0 1 5 5v3a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5z"/>
+              <path d="M12 16v6"/><path d="M8 19h8"/>
+              <circle cx="9" cy="10" r="0.5" fill="white"/><circle cx="15" cy="10" r="0.5" fill="white"/>
+            </svg>
           </div>
           <div>
-            <div style={{ color: "white", fontWeight: 600, fontSize: "0.9rem", lineHeight: 1.2 }}>ASYS IA (Demostración)</div>
+            <div style={{ color: "white", fontWeight: 600, fontSize: "0.9rem", lineHeight: 1.2 }}>ASYS IA</div>
             <div style={{ color: "rgba(255,255,255,0.85)", fontSize: "0.75rem", display: "flex", alignItems: "center", gap: "0.25rem" }}>
               <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#25D366" }} />
               en línea · responde al instante
@@ -352,11 +360,27 @@ function WhatsAppMockup() {
   );
 }
 
-const ASYS_USECASES = [
-  { icon: "🛒", title: "Ventas", desc: "Toma pedidos y cierra ventas automáticamente" },
-  { icon: "📅", title: "Reservas", desc: "Agenda citas sin que nadie las gestione" },
-  { icon: "🎧", title: "Soporte", desc: "Resuelve dudas frecuentes en segundos" },
-  { icon: "📢", title: "Marketing", desc: "Campañas y seguimiento por WhatsApp" },
+const ASYS_USECASES: { iconPath: string; title: string; desc: string }[] = [
+  {
+    iconPath: "M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z M3 6h18 M16 10a4 4 0 0 1-8 0",
+    title: "Ventas",
+    desc: "Toma pedidos y cierra ventas automáticamente",
+  },
+  {
+    iconPath: "M8 2v4 M16 2v4 M3 10h18 M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6z",
+    title: "Reservas",
+    desc: "Agenda citas sin que nadie las gestione",
+  },
+  {
+    iconPath: "M3 18v-6a9 9 0 0 1 18 0v6 M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z",
+    title: "Soporte",
+    desc: "Resuelve dudas frecuentes en segundos",
+  },
+  {
+    iconPath: "M22 2H2l8 9.46V19l4 2v-8.54L22 2z",
+    title: "Marketing",
+    desc: "Campañas y seguimiento por WhatsApp",
+  },
 ];
 
 export default function AsysSpotlight() {
@@ -419,7 +443,7 @@ export default function AsysSpotlight() {
             <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
             </svg>
-            Próximamente — ASYS IA
+            ASYS IA · Activo
           </div>
 
           <h2
@@ -481,7 +505,17 @@ export default function AsysSpotlight() {
                   (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
                 }}
               >
-                <div style={{ fontSize: "1.375rem", marginBottom: "0.375rem" }}>{uc.icon}</div>
+                <div style={{
+                  width: 36, height: 36, borderRadius: "10px", marginBottom: "0.375rem",
+                  background: "rgba(124,58,237,0.1)", border: "1px solid rgba(124,58,237,0.2)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                    {uc.iconPath.split(" M ").map((seg: string, i: number) => (
+                      <path key={i} d={i === 0 ? seg : `M ${seg}`} />
+                    ))}
+                  </svg>
+                </div>
                 <div style={{ fontWeight: 700, fontSize: "0.875rem", color: "var(--fg)", marginBottom: "0.25rem" }}>
                   {uc.title}
                 </div>
@@ -519,7 +553,7 @@ export default function AsysSpotlight() {
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6 6l1.06-.93a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
               </svg>
-              Quiero acceso anticipado
+              Comenzar integración
             </a>
           </div>
         </div>
