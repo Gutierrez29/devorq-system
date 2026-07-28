@@ -76,22 +76,16 @@ export default function Footer() {
                 marginBottom: "1rem",
               }}
             >
-              <div
+              <img
+                src="/devorq-isotype.png"
+                alt="Devorq Logo"
                 style={{
                   width: "38px",
                   height: "38px",
                   borderRadius: "10px",
-                  background: "linear-gradient(135deg, #5B4EFF, #E040FB)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  boxShadow: "0 4px 16px rgba(91,78,255,0.4)",
+                  objectFit: "contain",
                 }}
-              >
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="white" />
-                </svg>
-              </div>
+              />
               <span
                 style={{
                   fontSize: "1.45rem",

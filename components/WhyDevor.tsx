@@ -19,8 +19,8 @@ function useInView(threshold = 0.05) {
 const PILLARS = [
   {
     iconPath: "M13 2L3 14h9l-1 8 10-12h-9l1-8z",
-    color: "#5B4EFF",
-    bg: "rgba(91,78,255,0.06)",
+    color: "#0EA5E9",
+    bg: "rgba(14,165,233,0.06)",
     title: "Tecnología de vanguardia",
     description:
       "Construimos con las últimas versiones de los frameworks más robustos del mercado. Nada de legacy, nada de deuda técnica innecesaria.",
@@ -203,7 +203,7 @@ function BottomBanner() {
       ref={ref}
       style={{
         marginTop: "3rem",
-        background: "linear-gradient(135deg, #5B4EFF 0%, #E040FB 100%)",
+        background: "linear-gradient(135deg, #0EA5E9 0%, #2563EB 100%)",
         borderRadius: "1.5rem",
         padding: "3rem",
         display: "flex",

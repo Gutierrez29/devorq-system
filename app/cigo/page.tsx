@@ -156,22 +156,16 @@ export default function CigoPage() {
       >
         {/* Devorq Logo */}
         <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "0.6rem" }}>
-          <div
+          <img
+            src="/devorq-isotype.png"
+            alt="Devorq Logo"
             style={{
               width: "32px",
               height: "32px",
-              borderRadius: "9px",
-              background: "linear-gradient(135deg, #5B4EFF, #E040FB)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: "0 4px 12px rgba(91,78,255,0.25)",
+              borderRadius: "8px",
+              objectFit: "contain",
             }}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-            </svg>
-          </div>
+          />
           <span style={{ fontSize: "1.125rem", fontWeight: 900, color: "#0F172A", letterSpacing: "-0.03em" }}>
             Devorq <span style={{ color: "#5B4EFF" }}>Systems</span>
           </span>

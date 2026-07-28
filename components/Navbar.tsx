@@ -77,26 +77,16 @@ export default function Navbar() {
             textDecoration: "none",
           }}
         >
-          <div
+          <img
+            src="/devorq-isotype.png"
+            alt="Devorq Logo"
             style={{
               width: "38px",
               height: "38px",
               borderRadius: "10px",
-              background: "var(--gradient-main)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: "0 4px 14px rgba(91,78,255,0.35)",
+              objectFit: "contain",
             }}
-          >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"
-                fill="white"
-                strokeWidth="0"
-              />
-            </svg>
-          </div>
+          />
           <span
             style={{
               fontSize: "1.45rem",
