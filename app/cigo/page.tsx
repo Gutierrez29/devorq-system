@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 
-const GMAIL_URL = "https://mail.google.com/mail/?view=cm&fs=1&to=diego.gutierrez2911@gmail.com&su=Solicitud%20de%20Demo%20CIGO%20-%20Devorq%20Systems";
+const GMAIL_URL = "https://mail.google.com/mail/?view=cm&fs=1&to=contacto.devorqsystems@gmail.com&su=Solicitud%20de%20Demo%20CIGO%20-%20Devorq%20Systems";
 
 const MODULES = [
   {
@@ -104,6 +104,7 @@ function useInView(threshold = 0.1) {
 
 export default function CigoPage() {
   const [activeModuleIndex, setActiveModuleIndex] = useState(0);
+  const [showTerms, setShowTerms] = useState(false);
 
   const scrollToContent = () => {
     const el = document.getElementById("whatsapp-feature");
@@ -724,10 +725,135 @@ export default function CigoPage() {
         </div>
       </section>
 
+      {/* ── Section: Términos y Condiciones (Oculto por defecto) ── */}
+      {showTerms && (
+        <section id="terminos" style={{ padding: "4rem 1.5rem", background: "#F8FAFC", borderTop: "1px solid #E2E8F0" }}>
+          <div style={{ maxWidth: "880px", margin: "0 auto", color: "#334155", fontSize: "0.9375rem", lineHeight: "1.7", position: "relative" }}>
+            <button
+              onClick={() => setShowTerms(false)}
+              style={{
+                position: "absolute",
+                top: 0,
+                right: 0,
+                background: "#E2E8F0",
+                border: "none",
+                borderRadius: "50%",
+                width: "32px",
+                height: "32px",
+                cursor: "pointer",
+                fontWeight: 700,
+                color: "#475569",
+              }}
+              title="Cerrar"
+            >
+              ✕
+            </button>
+            <h2 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#0F172A", marginBottom: "0.25rem" }}>
+              TÉRMINOS Y CONDICIONES DEL SERVICIO &quot;CIGO&quot;
+            </h2>
+            <p style={{ fontSize: "0.85rem", color: "#64748B", marginBottom: "1.5rem", fontWeight: 600 }}>
+              Última actualización: Julio 2026
+            </p>
+
+            <p style={{ marginBottom: "1rem" }}>
+              El presente documento establece los Términos y Condiciones de Uso del software y servicio digital denominado &quot;CIGO&quot;, comercializado y operado bajo la marca comercial Devorq Systems por el titular registrado ante la SUNAT como Persona Natural con Negocio bajo RUC N° [TU-RUC-10-AQUÍ] (en adelante, &quot;EL PRESTADOR&quot;).
+            </p>
+
+            <p style={{ marginBottom: "1.75rem" }}>
+              Al contratar, registrarse o hacer uso de los servicios de CIGO a través de WhatsApp, la plataforma web o cualquier canal habilitado, la empresa o persona contratante (en adelante, &quot;EL CLIENTE&quot;) acepta de forma plena y sin reservas los siguientes términos:
+            </p>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+              <div>
+                <h3 style={{ fontSize: "1.05rem", fontWeight: 700, color: "#0F172A", marginBottom: "0.5rem" }}>
+                  1. NATURALEZA Y ALCANCE DEL SERVICIO
+                </h3>
+                <p>
+                  1.1. CIGO es un software as a service (SaaS) de asistencia tecnológica que utiliza inteligencia artificial y procesamiento de datos para la lectura, extracción automatizada y consolidación de comprobantes de pago de viáticos y transporte. 1.2. EL PRESTADOR opera legalmente bajo el régimen tributario de Persona Natural con Negocio amparado por la legislación de la República del Perú, emitiendo comprobantes de pago electrónicos (Facturas y Boletas Electrónicas) totalmente válidos y deducibles para EL CLIENTE.
+                </p>
+              </div>
+
+              <div>
+                <h3 style={{ fontSize: "1.05rem", fontWeight: 700, color: "#0F172A", marginBottom: "0.5rem" }}>
+                  2. DESLINDE DE RESPONSABILIDAD CONTABLE Y TRIBUTARIA (CLÁUSULA BLINDADA)
+                </h3>
+                <p>
+                  2.1. CIGO es una herramienta tecnológica de automatización y auditoría preliminar. En ningún caso EL PRESTADOR actúa como estudio contable, auditor tributario ni asesor fiscal de EL CLIENTE. 2.2. La responsabilidad legal, fiscal y tributaria sobre la veracidad, sustento, declaración de IGV, impuesto a la renta y presentación final de libros contables ante la SUNAT recae exclusiva e inderogablemente sobre EL CLIENTE y sus contadores designados. 2.3. EL PRESTADOR no se hace responsable por multas, sanciones, reparos tributarios ni inconsistencias emitidas por la SUNAT u otros organismos públicos derivados de comprobantes falsos, ilegibles, clonados o mal emitidos por proveedores terceros de EL CLIENTE.
+                </p>
+              </div>
+
+              <div>
+                <h3 style={{ fontSize: "1.05rem", fontWeight: 700, color: "#0F172A", marginBottom: "0.5rem" }}>
+                  3. DISPONIBILIDAD DEL SERVICIO (SLA Y PROVEEDORES TERCEROS)
+                </h3>
+                <p style={{ marginBottom: "0.5rem" }}>
+                  3.1. El servicio se presta bajo la modalidad &quot;Tal cual&quot; (As Is) y &quot;Según disponibilidad&quot;. 3.2. EL PRESTADOR realiza sus mejores esfuerzos para garantizar una disponibilidad del 99% del servicio. Sin embargo, no asumirá responsabilidad por interrupciones temporales, caídas o demoras causadas por fallas en servicios de terceros ajenos a su control, tales como:
+                </p>
+                <ul style={{ paddingLeft: "1.25rem", margin: "0.5rem 0" }}>
+                  <li>Caídas o suspensiones del servicio global de la plataforma Meta / WhatsApp Cloud API.</li>
+                  <li>Mantenimientos, caídas o lentitud de la plataforma SUNAT / Servicios Migo.</li>
+                  <li>Interrupciones de conectividad a internet de las empresas de telecomunicaciones en el Perú.</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 style={{ fontSize: "1.05rem", fontWeight: 700, color: "#0F172A", marginBottom: "0.5rem" }}>
+                  4. PROTECCIÓN DE DATOS PERSONALES (LEY N° 29733)
+                </h3>
+                <p>
+                  4.1. De conformidad con la Ley N° 29733 (Ley de Protección de Datos Personales del Perú), EL PRESTADOR se compromete a tratar la información, fotos de comprobantes, números de teléfono y datos recibidos de EL CLIENTE con absoluta confidencialidad y reserva. 4.2. Los datos e imágenes procesados serán utilizados única y exclusivamente para la prestación del servicio de consolidación contable contratado. EL PRESTADOR garantiza que nunca venderá, cederá ni comercializará la información de EL CLIENTE a terceros.
+                </p>
+              </div>
+
+              <div>
+                <h3 style={{ fontSize: "1.05rem", fontWeight: 700, color: "#0F172A", marginBottom: "0.5rem" }}>
+                  5. PAGOS, FACTURACIÓN Y SUSPENSIÓN DEL SERVICIO
+                </h3>
+                <p>
+                  5.1. El servicio se factura de forma mensual según la cantidad de choferes/usuarios activos contratados. 5.2. Las facturas emitidas por EL PRESTADOR cuentan con un plazo máximo de pago de cinco (5) días calendario desde su emisión. 5.3. El incumplimiento del pago dentro del plazo otorgará a EL PRESTADOR la facultad de suspender temporalmente el procesamiento de comprobantes en el bot de WhatsApp hasta la regularización del saldo adeudado, sin que ello genere derecho a indemnización ni reclamo alguno por parte de EL CLIENTE.
+                </p>
+              </div>
+
+              <div>
+                <h3 style={{ fontSize: "1.05rem", fontWeight: 700, color: "#0F172A", marginBottom: "0.5rem" }}>
+                  6. JURISDICCIÓN Y LEY APLICABLE
+                </h3>
+                <p>
+                  6.1. Para todos los efectos del presente contrato, las partes se someten a la legislación vigente de la República del Perú y a la competencia de los jueces y tribunales de la ciudad de Lima, Perú.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ── Footer ── */}
-      <footer style={{ borderTop: "1px solid #E2E8F0", padding: "1.5rem", textAlign: "center", background: "#F8FAFC" }}>
+      <footer style={{ borderTop: "1px solid #E2E8F0", padding: "1.5rem", textAlign: "center", background: "#FFFFFF" }}>
         <p style={{ fontSize: "0.8125rem", color: "#94A3B8" }}>
-          © {new Date().getFullYear()} Devorq Systems · CIGO Control Inteligente de Gastos · <Link href="/" style={{ color: "#0EA5E9", textDecoration: "none", fontWeight: 600 }}>Volver a Devorq</Link>
+          © {new Date().getFullYear()} Devorq Systems · CIGO Control Inteligente de Gastos ·{" "}
+          <button
+            onClick={() => {
+              setShowTerms((prev) => !prev);
+              if (!showTerms) {
+                setTimeout(() => {
+                  document.getElementById("terminos")?.scrollIntoView({ behavior: "smooth" });
+                }, 100);
+              }
+            }}
+            style={{
+              background: "none",
+              border: "none",
+              color: "#0EA5E9",
+              fontWeight: 600,
+              cursor: "pointer",
+              padding: 0,
+              font: "inherit",
+              textDecoration: "underline",
+            }}
+          >
+            {showTerms ? "Ocultar Términos y Condiciones" : "Términos y Condiciones"}
+          </button>{" "}
+          · <Link href="/" style={{ color: "#0EA5E9", textDecoration: "none", fontWeight: 600 }}>Volver a Devorq</Link>
         </p>
       </footer>
     </div>

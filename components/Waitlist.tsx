@@ -20,7 +20,7 @@ export default function Waitlist() {
   const { ref, inView } = useInView();
   const [copied, setCopied] = useState(false);
 
-  const emailAddress = "diego.gutierrez2911@gmail.com";
+  const emailAddress = "contacto.devorqsystems@gmail.com";
   const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${emailAddress}&su=Consulta%20sobre%20Devorq%20Systems`;
   const mailtoUrl = `mailto:${emailAddress}?subject=Consulta%20sobre%20Devorq%20Systems`;
 
