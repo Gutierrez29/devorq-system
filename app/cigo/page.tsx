@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 
-const GMAIL_URL = "https://mail.google.com/mail/?view=cm&fs=1&to=contacto.devorqsystems@gmail.com&su=Solicitud%20de%20Demo%20CIGO%20-%20Devorq%20Systems";
+const GMAIL_URL = "https://mail.google.com/mail/?view=cm&fs=1&to=contacto@devorq.com&su=Solicitud%20de%20Demo%20CIGO%20-%20Devorq%20Systems";
 
 const MODULES = [
   {
