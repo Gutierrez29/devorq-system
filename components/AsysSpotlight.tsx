@@ -74,6 +74,7 @@ function WhatsAppMockup() {
   const [isTyping, setIsTyping] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const isFirstRender = useRef(true);
+  const msgIdRef = useRef(100);
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -86,14 +87,14 @@ function WhatsAppMockup() {
   const handleSend = (userText: string, botResponse?: string) => {
     if (!userText.trim()) return;
 
-    const now = new Date();
-    const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+    const userMsgId = `user-${++msgIdRef.current}`;
+    const botMsgId = `bot-${++msgIdRef.current}`;
 
     const userMsg: Message = {
-      id: Date.now().toString(),
+      id: userMsgId,
       type: "user",
       text: userText,
-      time: timeStr,
+      time: "10:43 AM",
     };
 
     setMessages((prev) => [...prev, userMsg]);
@@ -103,12 +104,12 @@ function WhatsAppMockup() {
     setTimeout(() => {
       setIsTyping(false);
       const botMsg: Message = {
-        id: (Date.now() + 1).toString(),
+        id: botMsgId,
         type: "bot",
         text:
           botResponse ||
           `¡Entendido! Como ASYS IA, procesé tu mensaje ("${userText}") al instante. ¿En qué más puedo asistirte?`,
-        time: `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`,
+        time: "10:43 AM",
       };
       setMessages((prev) => [...prev, botMsg]);
     }, 1000);

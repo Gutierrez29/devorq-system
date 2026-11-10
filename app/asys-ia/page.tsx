@@ -226,7 +226,7 @@ export default function AsysIaPage() {
               </div>
             </div>
             <Image
-              src="/asys-dashboard.webp"
+              src="/asys_dashboard.webp"
               alt="Panel de control de ASYS IA — Chatbot para WhatsApp"
               width={1100}
               height={620}

@@ -1,14 +1,32 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useEffect, useState } from "react";
+import Image from "next/image";
+import { useRef, useEffect, useState, useCallback } from "react";
+import {
+  ShieldCheck,
+  Truck,
+  CheckCircle2,
+  Sparkles,
+  ArrowRight,
+  TrendingUp,
+  Lock,
+  Layers,
+  Send,
+  Bot,
+  Zap,
+  Clock,
+  ScanLine,
+} from "lucide-react";
 
 function useInView(threshold = 0.1) {
   const ref = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) setInView(true); },
+      ([e]) => {
+        if (e.isIntersecting) setInView(true);
+      },
       { threshold }
     );
     if (ref.current) observer.observe(ref.current);
@@ -17,850 +35,601 @@ function useInView(threshold = 0.1) {
   return { ref, inView };
 }
 
-/* --- CIGO Visual Mockup --- */
-function CigoMockup() {
-  const rows = [
-    { code: "#24-A", detail: "Autopista Del Norte S.A.C.", amount: "S/. 1,240.00", status: "✓ Válido SUNAT" },
-    { code: "#23-A", detail: "Repsol Peajes & Combustible", amount: "S/. 890.00", status: "✓ Válido SUNAT" },
-    { code: "#22-A", detail: "Concesionaria Vial Sierra Norte", amount: "S/. 3,100.00", status: "✓ Válido SUNAT" },
-    { code: "#21-A", detail: "Autopista Del Norte S.A.C.", amount: "S/. 670.00", status: "✓ Válido SUNAT" },
-    { code: "#20-A", detail: "Servicios de Transporte LATAM", amount: "S/. 1,450.00", status: "✓ Válido SUNAT" },
-  ];
+/* ─── Stable High-Tech Glow Card (Zero 3D Tilt, completely steady buttons) ─── */
+function GlowCard({
+  children,
+  borderColor = "border-sky-500/30",
+  ambientGlow = "from-sky-500/10 via-indigo-500/5 to-transparent",
+}: {
+  children: React.ReactNode;
+  borderColor?: string;
+  ambientGlow?: string;
+}) {
+  return (
+    <div className={`relative w-full rounded-2xl overflow-hidden shadow-2xl border ${borderColor} bg-slate-950/80 backdrop-blur-xl group transition-all duration-300`}>
+      {/* Ambient background glow inside card */}
+      <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${ambientGlow} opacity-50 group-hover:opacity-75 transition-opacity`} />
+      <div className="relative z-10">{children}</div>
+    </div>
+  );
+}
+
+/* ─── CIGO LIVE INTERACTIVE AUDIT SIMULATOR ─── */
+interface InvoiceRow {
+  id: string;
+  code: string;
+  detail: string;
+  category: "peajes" | "combustible" | "viaticos";
+  amount: string;
+  status: "valido" | "escaneando" | "pendiente";
+  time: string;
+}
+
+const INITIAL_ROWS: InvoiceRow[] = [
+  { id: "1", code: "#F001-4921", detail: "Autopista Del Norte S.A.C.", category: "peajes", amount: "S/. 1,240.00", status: "valido", time: "10:14" },
+  { id: "2", code: "#E001-8312", detail: "Primax Estación Central", category: "combustible", amount: "S/. 890.00", status: "valido", time: "10:22" },
+  { id: "3", code: "#F004-1290", detail: "Concesionaria Vial Sierra", category: "peajes", amount: "S/. 3,100.00", status: "valido", time: "10:35" },
+  { id: "4", code: "#B002-9411", detail: "Repsol Flota Norte", category: "combustible", amount: "S/. 670.00", status: "valido", time: "10:48" },
+];
+
+function CigoLiveSimulator() {
+  const [activeTab, setActiveTab] = useState<"auditoria" | "dashboard">("auditoria");
+  const [rows, setRows] = useState<InvoiceRow[]>(INITIAL_ROWS);
+  const [filter, setFilter] = useState<"todos" | "peajes" | "combustible">("todos");
+  const [isAuditing, setIsAuditing] = useState(false);
+  const [scannedId, setScannedId] = useState<string | null>(null);
+
+  const simulateNewInvoiceAudit = useCallback(() => {
+    if (isAuditing) return;
+    setIsAuditing(true);
+
+    const newId = String(Date.now());
+    setScannedId(newId);
+
+    const pendingRow: InvoiceRow = {
+      id: newId,
+      code: `#F005-${Math.floor(1000 + Math.random() * 9000)}`,
+      detail: "Servicios de Transporte & Peajes Lima S.A.",
+      category: "peajes",
+      amount: "S/. 1,450.00",
+      status: "escaneando",
+      time: "Ahora",
+    };
+
+    setRows((prev) => [pendingRow, ...prev.slice(0, 4)]);
+
+    setTimeout(() => {
+      setRows((prev) =>
+        prev.map((r) => (r.id === newId ? { ...r, status: "valido" } : r))
+      );
+      setIsAuditing(false);
+      setScannedId(null);
+    }, 900);
+  }, [isAuditing]);
+
+  const filteredRows = filter === "todos" ? rows : rows.filter((r) => r.category === filter);
 
   return (
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        background: "#F8FAFC",
-        borderRadius: "14px",
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden",
-        border: "1px solid rgba(14,165,233,0.2)",
-        boxShadow: "0 8px 30px rgba(14,165,233,0.08)",
-        fontSize: "0.78rem",
-      }}
-    >
-      {/* Top Navbar */}
-      <div
-        style={{
-          background: "#FFFFFF",
-          borderBottom: "1px solid #E2E8F0",
-          padding: "0.6rem 1rem",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          flexShrink: 0,
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          {/* CIGO Real Logo */}
-          <img
+    <div className="w-full bg-slate-950 text-slate-100 rounded-2xl overflow-hidden font-sans border border-slate-800/80">
+      {/* Topbar */}
+      <div className="bg-slate-900/90 px-4 py-3 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs">
+        <div className="flex items-center gap-2">
+          <Image
             src="/cigo-logo.webp"
             alt="CIGO Logo"
-            style={{ height: "22px", width: "auto", objectFit: "contain" }}
+            width={70}
+            height={18}
+            className="h-4 w-auto object-contain brightness-125"
           />
-          <div style={{ height: "14px", width: "1px", background: "#CBD5E1" }} />
-          <span style={{ fontWeight: 600, color: "#334155", fontSize: "0.78rem" }}>Historial de Comprobantes</span>
-          <span style={{ background: "#E0F2FE", color: "#0EA5E9", fontWeight: 700, padding: "0.2rem 0.6rem", borderRadius: "100px", fontSize: "0.68rem" }}>
-            Flota Activa
+          <span className="bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2 py-0.5 rounded-full font-semibold flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-ping" />
+            SUNAT CDR En Línea
           </span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", color: "#64748B", fontSize: "0.72rem" }}>
-          <div style={{ width: "22px", height: "22px", borderRadius: "50%", background: "#0EA5E9", color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: "0.65rem" }}>
-            C
-          </div>
-          <span style={{ fontWeight: 600, color: "#1E293B" }}>Cesar Pereda</span>
+
+        {/* View Switcher */}
+        <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
+          <button
+            onClick={() => setActiveTab("auditoria")}
+            className={`px-2.5 py-1 rounded-md transition-all font-medium cursor-pointer ${
+              activeTab === "auditoria" ? "bg-sky-500 text-white shadow-sm" : "text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            Auditoría en Vivo
+          </button>
+          <button
+            onClick={() => setActiveTab("dashboard")}
+            className={`px-2.5 py-1 rounded-md transition-all font-medium cursor-pointer ${
+              activeTab === "dashboard" ? "bg-sky-500 text-white font-medium shadow-sm" : "text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            Dashboard
+          </button>
         </div>
       </div>
 
-      {/* Content Table Area — Full Width without Sidebar */}
-      <div style={{ flex: 1, padding: "1rem", display: "flex", flexDirection: "column", gap: "0.75rem", overflow: "hidden", background: "#F8FAFC" }}>
-        {/* Header & Filter Bar */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#FFFFFF", padding: "0.65rem 1rem", borderRadius: "10px", border: "1px solid #E2E8F0", flexShrink: 0 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-            <span style={{ fontWeight: 800, color: "#0F172A", fontSize: "0.92rem" }}>Comprobantes Auditados</span>
-            <span style={{ fontSize: "0.75rem", color: "#10B981", fontWeight: 700 }}>● 100% Válidos SUNAT</span>
-          </div>
-          <span style={{ background: "#E0F2FE", color: "#0284C7", fontWeight: 700, padding: "0.25rem 0.65rem", borderRadius: "6px", fontSize: "0.75rem" }}>
-            Filtrar por RUC
-          </span>
-        </div>
+      {activeTab === "auditoria" ? (
+        <div className="p-4 space-y-3 bg-slate-950/70">
+          {/* Action Bar */}
+          <div className="flex flex-wrap items-center justify-between gap-2 text-xs pb-2 border-b border-slate-800/80">
+            <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-lg border border-slate-800">
+              {(["todos", "peajes", "combustible"] as const).map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setFilter(cat)}
+                  className={`px-2 py-0.5 rounded capitalize transition-all cursor-pointer ${
+                    filter === cat ? "bg-slate-800 text-white font-semibold" : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
 
-        {/* Table */}
-        <div style={{ background: "#FFFFFF", borderRadius: "10px", border: "1px solid #E2E8F0", overflow: "hidden", flex: 1, display: "flex", flexDirection: "column" }}>
-          {/* Table Header */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 2.5fr 1.2fr 1.4fr",
-              padding: "0.65rem 1rem",
-              background: "#F1F5F9",
-              fontWeight: 700,
-              color: "#475569",
-              fontSize: "0.78rem",
-              borderBottom: "1px solid #E2E8F0",
-              flexShrink: 0,
-            }}
-          >
-            <span>Código</span>
-            <span>Proveedor / Detalle</span>
-            <span>Monto</span>
-            <span>Estado SUNAT</span>
+            <button
+              onClick={simulateNewInvoiceAudit}
+              disabled={isAuditing}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-bold transition-all shadow-md shadow-sky-500/25 active:scale-95 disabled:opacity-50 cursor-pointer"
+            >
+              <ScanLine className="w-3.5 h-3.5" />
+              <span>{isAuditing ? "Verificando CDR..." : "Auditar Nuevo Comprobante"}</span>
+            </button>
           </div>
 
-          {/* Table Rows */}
-          <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
-            {rows.map((r, i) => (
+          {/* Table */}
+          <div className="space-y-1.5">
+            {filteredRows.map((row) => (
               <div
-                key={i}
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 2.5fr 1.2fr 1.4fr",
-                  padding: "0.7rem 1rem",
-                  borderBottom: i < rows.length - 1 ? "1px solid #F1F5F9" : "none",
-                  alignItems: "center",
-                  fontSize: "0.82rem",
-                  background: i % 2 === 0 ? "#FFFFFF" : "#FAFAFA",
-                }}
+                key={row.id}
+                className={`flex items-center justify-between p-2.5 rounded-xl border text-xs transition-all ${
+                  row.id === scannedId
+                    ? "bg-sky-500/10 border-sky-500/40 shadow-sm animate-pulse"
+                    : "bg-slate-900/60 border-slate-800/80 hover:border-slate-700"
+                }`}
               >
-                <span style={{ fontWeight: 800, color: "#0EA5E9" }}>{r.code}</span>
-                <span style={{ fontWeight: 600, color: "#1E293B" }}>{r.detail}</span>
-                <span style={{ fontWeight: 800, color: "#0F172A" }}>{r.amount}</span>
-                <span>
-                  <span style={{ background: "rgba(16,185,129,0.12)", color: "#059669", fontWeight: 700, padding: "0.25rem 0.65rem", borderRadius: "100px", fontSize: "0.75rem", display: "inline-block" }}>
-                    {r.status}
-                  </span>
-                </span>
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 font-mono text-[10px]">
+                    {row.category === "peajes" ? "PEA" : "COMB"}
+                  </div>
+                  <div>
+                    <div className="font-semibold text-slate-200 flex items-center gap-1.5">
+                      <span>{row.code}</span>
+                      <span className="text-[10px] text-slate-500 font-normal">{row.time}</span>
+                    </div>
+                    <div className="text-[11px] text-slate-400 truncate max-w-[170px] sm:max-w-xs">{row.detail}</div>
+                  </div>
+                </div>
+
+                <div className="text-right">
+                  <div className="font-mono font-bold text-slate-200">{row.amount}</div>
+                  {row.status === "escaneando" ? (
+                    <span className="text-[10px] text-amber-400 font-mono flex items-center gap-1 justify-end">
+                      <Clock className="w-2.5 h-2.5 animate-spin" /> Escaneando...
+                    </span>
+                  ) : (
+                    <span className="text-[10px] text-emerald-400 font-medium flex items-center gap-1 justify-end">
+                      <CheckCircle2 className="w-2.5 h-2.5" /> Válido SUNAT
+                    </span>
+                  )}
+                </div>
               </div>
             ))}
           </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
-/* --- ASYS Visual Mockup --- */
-function AsysMockup() {
-  return (
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "linear-gradient(145deg, #faf5ff 0%, #f3e8ff 100%)",
-        borderRadius: "16px",
-        padding: "0.75rem",
-      }}
-    >
-      {/* Phone container mockup: narrow & tall */}
-      <div
-        style={{
-          width: "320px",
-          height: "100%",
-          background: "#ECE5DD",
-          borderRadius: "18px",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          overflow: "hidden",
-          boxShadow: "0 12px 32px rgba(124, 58, 237, 0.15), 0 2px 8px rgba(0,0,0,0.06)",
-          border: "1px solid rgba(0,0,0,0.08)",
-        }}
-      >
-        {/* WhatsApp Header Bar */}
-        <div
-          style={{
-            background: "#075E54",
-            padding: "0.55rem 0.85rem",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            color: "white",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "0.55rem" }}>
-            {/* Avatar */}
-            <div
-              style={{
-                width: "30px",
-                height: "30px",
-                borderRadius: "50%",
-                background: "linear-gradient(135deg, #25D366, #128C7E)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "white",
-                fontWeight: 700,
-                fontSize: "0.75rem",
-                flexShrink: 0,
-              }}
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
-              </svg>
-            </div>
-            <div>
-              <div style={{ fontSize: "0.82rem", fontWeight: 700, lineHeight: 1.1 }}>
-                ASYS
-              </div>
-              <div style={{ fontSize: "0.62rem", opacity: 0.85 }}>en línea</div>
-            </div>
-          </div>
-
-          {/* Action icons */}
-          <div style={{ display: "flex", alignItems: "center", gap: "0.65rem", opacity: 0.85 }}>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-            </svg>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.3-4.3" />
-            </svg>
-          </div>
-        </div>
-
-        {/* Messages area */}
-        <div
-          style={{
-            padding: "0.55rem 0.75rem",
-            display: "flex",
-            flexDirection: "column",
-            gap: "0.4rem",
-            flex: 1,
-            justifyContent: "space-between",
-          }}
-        >
-          {/* Date pill */}
-          <div style={{ textAlign: "center", margin: "0.05rem 0" }}>
-            <span style={{ background: "rgba(255,255,255,0.85)", color: "#54656F", fontSize: "0.58rem", fontWeight: 600, padding: "0.15rem 0.55rem", borderRadius: "6px", boxShadow: "0 1px 1px rgba(0,0,0,0.05)" }}>
-              HOY
+          <div className="pt-2 flex items-center justify-between text-[11px] text-slate-400">
+            <span>Algoritmo anti-duplicados activo</span>
+            <span className="text-emerald-400 font-semibold flex items-center gap-1">
+              <ShieldCheck className="w-3.5 h-3.5" /> 100% Deducción Tributaria
             </span>
           </div>
-
-          {/* User message 1 */}
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <div
-              style={{
-                maxWidth: "86%",
-                background: "#DCF8C6",
-                color: "#111B21",
-                padding: "0.4rem 0.6rem",
-                borderRadius: "8px 0px 8px 8px",
-                fontSize: "0.7rem",
-                lineHeight: 1.35,
-                boxShadow: "0 1px 1px rgba(0,0,0,0.08)",
-              }}
-            >
-              Hola! ¿Tienen stock de las zapatillas urbanas en talla 41?
-              <div style={{ fontSize: "0.56rem", color: "#667781", textAlign: "right", marginTop: "1px", display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "2px" }}>
-                14:30 <span style={{ color: "#53bdeb", fontWeight: 700 }}>✓✓</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Bot message 1 */}
-          <div style={{ display: "flex", justifyContent: "flex-start" }}>
-            <div
-              style={{
-                maxWidth: "88%",
-                background: "#FFFFFF",
-                color: "#111B21",
-                padding: "0.4rem 0.6rem",
-                borderRadius: "0px 8px 8px 8px",
-                fontSize: "0.7rem",
-                lineHeight: 1.35,
-                boxShadow: "0 1px 1px rgba(0,0,0,0.08)",
-              }}
-            >
-              ¡Hola! 👋 Sí tenemos en stock. Su precio es S/. 240 con envío gratis hoy a todo Lima.
-              <div style={{ fontSize: "0.56rem", color: "#667781", textAlign: "right", marginTop: "1px" }}>
-                14:30
-              </div>
-            </div>
-          </div>
-
-          {/* User message 2 */}
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <div
-              style={{
-                maxWidth: "86%",
-                background: "#DCF8C6",
-                color: "#111B21",
-                padding: "0.4rem 0.6rem",
-                borderRadius: "8px 0px 8px 8px",
-                fontSize: "0.7rem",
-                lineHeight: 1.35,
-                boxShadow: "0 1px 1px rgba(0,0,0,0.08)",
-              }}
-            >
-              Excelente, envíenmelas a Miraflores por favor.
-              <div style={{ fontSize: "0.56rem", color: "#667781", textAlign: "right", marginTop: "1px", display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "2px" }}>
-                14:31 <span style={{ color: "#53bdeb", fontWeight: 700 }}>✓✓</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Bot message 2 */}
-          <div style={{ display: "flex", justifyContent: "flex-start" }}>
-            <div
-              style={{
-                maxWidth: "88%",
-                background: "#FFFFFF",
-                color: "#111B21",
-                padding: "0.4rem 0.6rem",
-                borderRadius: "0px 8px 8px 8px",
-                fontSize: "0.7rem",
-                lineHeight: 1.35,
-                boxShadow: "0 1px 1px rgba(0,0,0,0.08)",
-              }}
-            >
-              ¡Perfecto! Pedido registrado. Te envío el link de pago seguro 💳
-              <div style={{ fontSize: "0.56rem", color: "#667781", textAlign: "right", marginTop: "1px" }}>
-                14:31
-              </div>
-            </div>
-          </div>
-
-          {/* User message 3 */}
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <div
-              style={{
-                maxWidth: "86%",
-                background: "#DCF8C6",
-                color: "#111B21",
-                padding: "0.4rem 0.6rem",
-                borderRadius: "8px 0px 8px 8px",
-                fontSize: "0.7rem",
-                lineHeight: 1.35,
-                boxShadow: "0 1px 1px rgba(0,0,0,0.08)",
-              }}
-            >
-              Listo, pago realizado!
-              <div style={{ fontSize: "0.56rem", color: "#667781", textAlign: "right", marginTop: "1px", display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "2px" }}>
-                14:32 <span style={{ color: "#53bdeb", fontWeight: 700 }}>✓✓</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Bot message 3 */}
-          <div style={{ display: "flex", justifyContent: "flex-start" }}>
-            <div
-              style={{
-                maxWidth: "88%",
-                background: "#FFFFFF",
-                color: "#111B21",
-                padding: "0.4rem 0.6rem",
-                borderRadius: "0px 8px 8px 8px",
-                fontSize: "0.7rem",
-                lineHeight: 1.35,
-                boxShadow: "0 1px 1px rgba(0,0,0,0.08)",
-              }}
-            >
-              ¡Gracias por tu compra! Tu pedido sale en camino en breve 🚀
-              <div style={{ fontSize: "0.56rem", color: "#667781", textAlign: "right", marginTop: "1px" }}>
-                14:32
-              </div>
-            </div>
-          </div>
         </div>
-
-        {/* Input bar */}
-        <div
-          style={{
-            background: "#F0F2F5",
-            padding: "0.4rem 0.65rem",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.4rem",
-          }}
-        >
-          <div
-            style={{
-              flex: 1,
-              background: "#FFFFFF",
-              borderRadius: "20px",
-              padding: "0.35rem 0.75rem",
-              fontSize: "0.65rem",
-              color: "#8696A0",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <span>Escribe un mensaje</span>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8696A0" strokeWidth="2">
-              <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
-            </svg>
-          </div>
-
-          <div
-            style={{
-              width: "26px",
-              height: "26px",
-              borderRadius: "50%",
-              background: "#00A884",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "white",
-              flexShrink: 0,
-            }}
-          >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-            </svg>
-          </div>
+      ) : (
+        <div className="relative h-64 w-full bg-slate-950 overflow-hidden flex items-center justify-center">
+          <Image
+            src="/cigo/02-dashboard.webp"
+            alt="CIGO Dashboard"
+            fill
+            className="object-cover opacity-90 hover:opacity-100 transition-opacity"
+          />
         </div>
-      </div>
+      )}
     </div>
   );
 }
 
-/* --- Product Row --- */
-function ProductRow({
-  reverse,
-  accent,
-  accentLight,
-  gradient,
-  label,
-  tagline,
-  description,
-  features,
-  href,
-  visual,
-  delay = 0,
-  id,
-  showUpArrow,
-  scrollToId,
-  isComingSoon,
-}: {
-  reverse?: boolean;
-  accent: string;
-  accentLight: string;
-  gradient: string;
-  label: string;
-  tagline: string;
-  description: string;
-  features: { icon: string; title: string; desc: string }[];
-  href: string;
-  visual: React.ReactNode;
-  delay?: number;
-  id?: string;
-  showUpArrow?: boolean;
-  scrollToId?: string;
-  isComingSoon?: boolean;
-}) {
-  const { ref, inView } = useInView();
+/* ─── ASYS IA LIVE WHATSAPP AGENT SIMULATOR ─── */
+interface ChatMessage {
+  id: string;
+  sender: "user" | "bot";
+  text: string;
+  time: string;
+}
+
+const INITIAL_CHAT: ChatMessage[] = [
+  {
+    id: "1",
+    sender: "user",
+    text: "Hola, necesito el estado del camión placa F1X-892 en ruta hacia Arequipa.",
+    time: "14:32",
+  },
+  {
+    id: "2",
+    sender: "bot",
+    text: "¡Hola! Vehículo F1X-892 verificado en GPS:\n📍 Ubicación: Km 480 Panamericana Sur\n⛽ Combustible: 72% • Temperatura: Normal\n👤 Conductor: Carlos M. (Viáticos al día)\n\n¿Deseas descargar el reporte de liquidación en PDF?",
+    time: "14:32",
+  },
+];
+
+function AsysLiveSimulator() {
+  const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_CHAT);
+  const [inputText, setInputText] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const [activeTab, setActiveTab] = useState<"chat" | "dashboard">("chat");
+  const chatScrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (chatScrollRef.current) {
+      chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
+    }
+  }, [messages, isTyping]);
+
+  const sendQuestion = (text: string, replyText: string) => {
+    if (isTyping) return;
+
+    const userMsg: ChatMessage = {
+      id: String(Date.now()),
+      sender: "user",
+      text,
+      time: "Ahora",
+    };
+
+    setMessages((prev) => [...prev, userMsg]);
+    setIsTyping(true);
+
+    setTimeout(() => {
+      const botMsg: ChatMessage = {
+        id: String(Date.now() + 1),
+        sender: "bot",
+        text: replyText,
+        time: "Ahora",
+      };
+      setMessages((prev) => [...prev, botMsg]);
+      setIsTyping(false);
+    }, 750);
+  };
+
+  const handleCustomSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inputText.trim()) return;
+
+    const query = inputText;
+    setInputText("");
+    sendQuestion(
+      query,
+      `Entendido. He procesado tu solicitud sobre "${query}". La información fue sincronizada en el ERP empresarial en 140ms. ¿Requieres notificar al supervisor?`
+    );
+  };
 
   return (
-    <div
-      id={id}
-      ref={ref}
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: "4rem",
-        alignItems: "center",
-        opacity: inView ? 1 : 0,
-        transform: inView ? "translateY(0)" : "translateY(40px)",
-        transition: `opacity 0.7s ease ${delay}ms, transform 0.7s ease ${delay}ms`,
-      }}
-      className="product-row"
-    >
-      {/* Copy — izquierda o derecha según reverse */}
-      <div style={{ order: reverse ? 2 : 1 }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              background: accentLight,
-              color: accent,
-              fontSize: "0.8125rem",
-              fontWeight: 700,
-              padding: "0.35rem 0.875rem",
-              borderRadius: "100px",
-              letterSpacing: "0.02em",
-            }}
-          >
-            <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: accent, display: "inline-block" }} />
-            {label}
-          </div>
-
-          {showUpArrow && scrollToId && (
-            <button
-              onClick={() => {
-                const el = document.getElementById(scrollToId);
-                if (el) {
-                  const yOffset = -70;
-                  const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-                  window.scrollTo({ top: y, behavior: "smooth" });
-                }
-              }}
-              aria-label="Volver a CIGO"
-              title="Volver a CIGO"
-              style={{
-                width: "36px",
-                height: "36px",
-                borderRadius: "50%",
-                background: "#FFFFFF",
-                border: "1.5px solid rgba(14, 165, 233, 0.3)",
-                boxShadow: "0 4px 12px rgba(14, 165, 233, 0.16)",
-                color: "#0EA5E9",
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                transition: "all 0.25s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-3px)";
-                e.currentTarget.style.boxShadow = "0 6px 18px rgba(14, 165, 233, 0.3)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "0 4px 12px rgba(14, 165, 233, 0.16)";
-              }}
-            >
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                style={{ animation: "bounce-up 1.8s infinite ease-in-out" }}
-              >
-                <path d="M12 19V5M5 12l7-7 7 7" />
-              </svg>
-            </button>
-          )}
-        </div>
-
-        <h3
-          style={{
-            fontSize: "clamp(1.5rem, 2.5vw, 1.875rem)",
-            fontWeight: 800,
-            color: "var(--fg)",
-            letterSpacing: "-0.03em",
-            lineHeight: 1.2,
-            marginBottom: "1rem",
-          }}
-        >
-          {tagline}
-        </h3>
-
-        <p style={{ fontSize: "1rem", color: "var(--fg-muted)", lineHeight: 1.75, marginBottom: "1.75rem" }}>
-          {description}
-        </p>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "2rem" }}>
-          {features.map((f, i) => (
-            <div key={i} style={{ display: "flex", gap: "0.875rem", alignItems: "flex-start" }}>
-              <div
-                style={{
-                  width: "34px",
-                  height: "34px",
-                  borderRadius: "9px",
-                  background: accentLight,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexShrink: 0,
-                  marginTop: "1px",
-                }}
-              >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d={f.icon} />
-                </svg>
-              </div>
-              <div>
-                <div style={{ fontSize: "0.9rem", fontWeight: 600, color: "var(--fg)", marginBottom: "0.15rem" }}>{f.title}</div>
-                <div style={{ fontSize: "0.84rem", color: "var(--fg-muted)", lineHeight: 1.6 }}>{f.desc}</div>
-              </div>
+    <div className="w-full bg-[#0b141a] text-slate-100 rounded-2xl overflow-hidden font-sans border border-purple-900/40">
+      {/* WhatsApp Header */}
+      <div className="bg-[#1f2c34] px-4 py-3 border-b border-slate-700/60 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-purple-500 to-fuchsia-500 flex items-center justify-center text-white shadow-sm">
+              <Bot className="w-5 h-5" />
             </div>
-          ))}
+            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-[#1f2c34]" />
+          </div>
+          <div>
+            <div className="text-sm font-bold text-white flex items-center gap-1.5">
+              <span>ASYS IA</span>
+              <span className="text-[10px] bg-purple-500/20 text-purple-300 px-1.5 py-0.5 rounded-full border border-purple-500/30">
+                Agente Oficial
+              </span>
+            </div>
+            <div className="text-[11px] text-emerald-400 font-medium">En línea las 24 horas</div>
+          </div>
         </div>
 
-        {isComingSoon ? (
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              padding: "0.8rem 1.75rem",
-              borderRadius: "100px",
-              background: "#94A3B8",
-              color: "white",
-              fontWeight: 700,
-              fontSize: "0.9375rem",
-              cursor: "not-allowed",
-              boxShadow: "0 4px 14px rgba(148,163,184,0.3)",
-              userSelect: "none",
-            }}
+        <div className="flex items-center gap-1 bg-[#111b21] p-1 rounded-lg border border-slate-700/50 text-xs">
+          <button
+            onClick={() => setActiveTab("chat")}
+            className={`px-2.5 py-1 rounded transition-all cursor-pointer ${
+              activeTab === "chat" ? "bg-purple-600 text-white font-medium" : "text-slate-400 hover:text-slate-200"
+            }`}
           >
-            Próximamente
-          </div>
-        ) : (
-          <Link
-            href={href}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              padding: "0.8rem 1.75rem",
-              borderRadius: "100px",
-              background: gradient,
-              color: "white",
-              fontWeight: 700,
-              fontSize: "0.9375rem",
-              textDecoration: "none",
-              boxShadow: `0 8px 24px ${accent}28`,
-              transition: "transform 0.2s ease, box-shadow 0.2s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.boxShadow = `0 14px 32px ${accent}40`;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = `0 8px 24px ${accent}28`;
-            }}
+            Chat WhatsApp
+          </button>
+          <button
+            onClick={() => setActiveTab("dashboard")}
+            className={`px-2.5 py-1 rounded transition-all cursor-pointer ${
+              activeTab === "dashboard" ? "bg-purple-600 text-white font-medium" : "text-slate-400 hover:text-slate-200"
+            }`}
           >
-            Conocer {label}
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </Link>
-        )}
+            Dashboard
+          </button>
+        </div>
       </div>
 
-      {/* Visual */}
-      <div
-        style={{
-          height: "430px",
-          borderRadius: "20px",
-          border: `1px solid ${accent}18`,
-          boxShadow: `0 16px 48px ${accent}10, 0 4px 16px rgba(0,0,0,0.04)`,
-          overflow: "hidden",
-          padding: "1.25rem",
-          background: "white",
-          order: reverse ? 1 : 2,
-        }}
-      >
-        {visual}
-      </div>
+      {activeTab === "chat" ? (
+        <div className="flex flex-col h-[360px] bg-[#0b141a] relative">
+          <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
+
+          {/* Messages list */}
+          <div ref={chatScrollRef} className="flex-1 p-4 overflow-y-auto space-y-3 relative z-10 text-xs">
+            {messages.map((m) => (
+              <div
+                key={m.id}
+                className={`flex flex-col ${m.sender === "user" ? "items-end" : "items-start"}`}
+              >
+                <div
+                  className={`max-w-[85%] sm:max-w-[78%] rounded-2xl px-3.5 py-2 leading-relaxed shadow-sm whitespace-pre-line ${
+                    m.sender === "user"
+                      ? "bg-[#005c4b] text-slate-100 rounded-tr-none"
+                      : "bg-[#202c33] text-slate-200 rounded-tl-none border border-slate-700/40"
+                  }`}
+                >
+                  {m.text}
+                  <div
+                    className={`text-[9px] mt-1 text-right ${
+                      m.sender === "user" ? "text-emerald-300" : "text-slate-400"
+                    }`}
+                  >
+                    {m.time} {m.sender === "user" && "✓✓"}
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {isTyping && (
+              <div className="flex items-center gap-1.5 bg-[#202c33] text-slate-300 px-3 py-2 rounded-2xl rounded-tl-none w-fit border border-slate-700/40 animate-pulse">
+                <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce" />
+                <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce [animation-delay:0.2s]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce [animation-delay:0.4s]" />
+                <span className="text-[10px] text-slate-400 ml-1">ASYS IA redactando...</span>
+              </div>
+            )}
+          </div>
+
+          {/* Quick Prompts */}
+          <div className="px-3 py-2 bg-[#111b21] border-t border-slate-800 flex items-center gap-1.5 overflow-x-auto text-[11px] shrink-0">
+            <button
+              onClick={() =>
+                sendQuestion(
+                  "¿Pueden cotizar despacho para 20 toneladas?",
+                  "Cotización preliminar estimada: S/. 4,200 + IGV. Incluye rastreo satelital y seguro de carga. ¿Deseas que un asesor comercial valide tu ruta exacta?"
+                )
+              }
+              className="px-2.5 py-1 rounded-full bg-purple-950/80 hover:bg-purple-900 text-purple-300 border border-purple-800/60 whitespace-nowrap transition-all cursor-pointer"
+            >
+              📦 Cotizar 20 Toneladas
+            </button>
+            <button
+              onClick={() =>
+                sendQuestion(
+                  "¿Cómo se integra ASYS con mi ERP actual?",
+                  "ASYS cuenta con conectores directos vía Webhooks y REST API para SAP, Oracle, SQL Server y PostgreSQL. Se integra en menos de 48 horas sin interrumpir tus operaciones."
+                )
+              }
+              className="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap transition-all cursor-pointer"
+            >
+              ⚡ Integración ERP
+            </button>
+          </div>
+
+          {/* Input Box */}
+          <form onSubmit={handleCustomSubmit} className="p-2.5 bg-[#202c33] flex items-center gap-2 border-t border-slate-800">
+            <input
+              type="text"
+              placeholder="Escribe un mensaje de prueba a ASYS IA..."
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              className="flex-1 bg-[#2a3942] border border-slate-700/80 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-purple-500"
+            />
+            <button
+              type="submit"
+              className="w-8 h-8 rounded-xl bg-purple-600 hover:bg-purple-500 text-white flex items-center justify-center transition-all cursor-pointer"
+            >
+              <Send className="w-3.5 h-3.5" />
+            </button>
+          </form>
+        </div>
+      ) : (
+        <div className="relative h-[360px] w-full bg-slate-950 overflow-hidden flex items-center justify-center">
+          <Image
+            src="/asys_dashboard.webp"
+            alt="ASYS IA Dashboard"
+            fill
+            className="object-contain p-2 opacity-95"
+          />
+        </div>
+      )}
     </div>
   );
 }
 
-/* --- Main Section --- */
+/* ─── MAIN PRODUCTS SECTION (Dark Cosmic Cyber-Clean) ─── */
 export default function Products() {
   const { ref: headRef, inView: headInView } = useInView();
 
   return (
-    <section
-      id="productos"
-      style={{
-        padding: "3rem 1.5rem 6rem",
-        background: "#FFFFFF",
-      }}
-    >
-      <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-        {/* Header */}
+    <section id="productos" className="py-24 px-4 sm:px-6 bg-transparent relative z-10">
+      <div className="max-w-7xl mx-auto">
+        {/* Section Header */}
         <div
           ref={headRef}
-          style={{
-            textAlign: "center",
-            marginBottom: "2rem",
-            opacity: headInView ? 1 : 0,
-            transform: headInView ? "translateY(0)" : "translateY(24px)",
-            transition: "all 0.6s ease",
-          }}
+          className={`text-center max-w-3xl mx-auto mb-20 transition-all duration-700 ${
+            headInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
         >
-          <div className="section-label" style={{ margin: "0 auto 1rem" }}>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-            </svg>
-            Nuestras Soluciones
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-sky-950/80 text-sky-400 text-xs font-semibold uppercase tracking-wider mb-4 border border-sky-800/80">
+            <Layers className="w-3.5 h-3.5" />
+            <span>Nuestras Soluciones Propias</span>
           </div>
-          <h2
-            style={{
-              fontSize: "clamp(2rem, 4vw, 2.75rem)",
-              fontWeight: 800,
-              color: "var(--fg)",
-              letterSpacing: "-0.03em",
-              lineHeight: 1.15,
-              marginBottom: "0.875rem",
-            }}
-          >
-            Dos productos. <span className="gradient-text">Un objetivo.</span>
+          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white mb-4">
+            Dos plataformas de software.{" "}
+            <span className="bg-gradient-to-r from-sky-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">
+              Resultados inmediatos.
+            </span>
           </h2>
-          <p style={{ fontSize: "1.0625rem", color: "var(--fg-muted)", maxWidth: "500px", margin: "0 auto", lineHeight: 1.7 }}>
-            Cada herramienta ataca un problema específico de tu operación y se implementa en días.
+          <p className="text-base sm:text-lg text-slate-400 leading-relaxed">
+            Cada producto ataca un cuello de botella crítico de tu operación con automatización e inteligencia artificial.
           </p>
         </div>
 
-        {/* Products stacked */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "4.5rem" }}>
-          {/* CIGO */}
-          <ProductRow
-            id="cigo"
-            accent="#0EA5E9"
-            accentLight="rgba(14,165,233,0.08)"
-            gradient="linear-gradient(135deg, #0EA5E9 0%, #06B6D4 100%)"
-            label="CIGO"
-            tagline="Control Inteligente de Gastos Operativos"
-            description="Centralizá y automatizá el control de gastos de tu flota. Validá comprobantes en tiempo real contra SUNAT y eliminá errores antes de que se conviertan en multas."
-            features={[
-              {
-                icon: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z",
-                title: "Auditoría SUNAT en tiempo real",
-                desc: "Verifica CDR de cada comprobante automáticamente, sin procesos manuales.",
-              },
-              {
-                icon: "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z",
-                title: "Candados anti-duplicados",
-                desc: "Detecta y bloquea facturas duplicadas antes de que ingresen al sistema.",
-              },
-              {
-                icon: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z",
-                title: "Dashboard de flota y rutas",
-                desc: "Gastos por chofer, ruta y vehículo en una sola pantalla.",
-              },
-            ]}
-            href="/cigo"
-            visual={<CigoMockup />}
-          />
+        {/* Product 1: CIGO */}
+        <div id="cigo" className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-28 p-6 sm:p-10 rounded-3xl bg-slate-900/40 border border-slate-800/60 backdrop-blur-md">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-950/80 text-sky-400 text-xs font-bold uppercase tracking-wider mb-4 border border-sky-800/60">
+              <span className="w-2 h-2 rounded-full bg-sky-400" />
+              SaaS Financiero & Tributario
+            </div>
 
-          {/* Interactive Scroll Down Indicator to ASYS (Below CIGO) */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              position: "relative",
-              marginTop: "-1.75rem",
-              marginBottom: "0.5rem",
-            }}
-          >
-            <div
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: 0,
-                right: 0,
-                height: "1px",
-                background: "linear-gradient(90deg, transparent, rgba(124, 58, 237, 0.18), transparent)",
-                zIndex: 0,
-              }}
-            />
+            <h3 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight mb-4">
+              CIGO: Control Inteligente de Gastos y Flotas
+            </h3>
 
-            {/* Down Arrow (Purple) to ASYS */}
-            <button
-              onClick={() => {
-                const el = document.getElementById("asys-ia");
-                if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
-              }}
-              aria-label="Bajar a ASYS IA"
-              title="Bajar a ASYS IA"
-              style={{
-                position: "relative",
-                zIndex: 1,
-                width: "42px",
-                height: "42px",
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                background: "#FFFFFF",
-                border: "1.5px solid rgba(124, 58, 237, 0.3)",
-                boxShadow: "0 6px 16px rgba(124, 58, 237, 0.16)",
-                borderRadius: "50%",
-                color: "#7C3AED",
-                cursor: "pointer",
-                transition: "all 0.25s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(3px)";
-                e.currentTarget.style.boxShadow = "0 8px 24px rgba(124, 58, 237, 0.3)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "0 6px 16px rgba(124, 58, 237, 0.16)";
-              }}
+            <p className="text-base text-slate-400 leading-relaxed mb-6">
+              Centraliza y automatiza el control de viáticos y comprobantes de combustible y peajes. Valida cada factura en tiempo real contra los servicios de la SUNAT eliminando pérdidas operativas.
+            </p>
+
+            <div className="space-y-4 mb-8">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-lg bg-sky-950 border border-sky-800/60 flex items-center justify-center text-sky-400 shrink-0 mt-0.5">
+                  <ShieldCheck className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-white">Auditoría SUNAT con CDR en Vivo</h4>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Verificación instantánea del estado de validez tributaria del comprobante antes del pago.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-lg bg-sky-950 border border-sky-800/60 flex items-center justify-center text-sky-400 shrink-0 mt-0.5">
+                  <Lock className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-white">Candados Anti-Duplicados</h4>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Algoritmo que bloquea facturas ya rendidas por otros conductores o en otras rutas.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-lg bg-sky-950 border border-sky-800/60 flex items-center justify-center text-sky-400 shrink-0 mt-0.5">
+                  <Truck className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-white">Trazabilidad por Chofer y Vehículo</h4>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Consolidado de gastos por placa vehicular y ruta con liquidaciones automáticas.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <Link
+              href="/cigo"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-bold text-sm shadow-lg shadow-sky-500/25 hover:shadow-sky-500/35 transition-all group active:scale-95"
             >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                style={{ animation: "bounce-down 1.8s infinite ease-in-out" }}
-              >
-                <path d="M12 5v14M19 12l-7 7-7-7" />
-              </svg>
-            </button>
+              <span>Explorar Módulos de CIGO</span>
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </Link>
           </div>
 
-          {/* ASYS IA (espejado) */}
-          <ProductRow
-            id="asys-ia"
-            reverse
-            accent="#7C3AED"
-            accentLight="rgba(124,58,237,0.08)"
-            gradient="linear-gradient(135deg, #7C3AED 0%, #E040FB 100%)"
-            label="ASYS IA"
-            tagline="Agente de Ventas con Inteligencia Artificial"
-            description="Automatizá la atención a clientes en WhatsApp con IA. Vendé, cotizá y agendá reservas las 24 horas sin intervención humana."
-            features={[
-              {
-                icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z",
-                title: "Atención 24/7 sin pausas",
-                desc: "Responde consultas y cierra ventas fuera del horario laboral automáticamente.",
-              },
-              {
-                icon: "M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z",
-                title: "Toma de pedidos automática",
-                desc: "Tu catálogo integrado: el agente procesa pedidos completos sin fricción.",
-              },
-              {
-                icon: "M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z",
-                title: "Personalidad de tu marca",
-                desc: "Configuramos el agente con tu voz, tono y respuestas específicas.",
-              },
-            ]}
-            href="#"
-            visual={<AsysMockup />}
-            delay={100}
-            showUpArrow
-            scrollToId="cigo"
-            isComingSoon={true}
-          />
+          {/* Interactive Visual Playground (Steady, zero tilt) */}
+          <div>
+            <div className="mb-2 text-right">
+              <span className="text-[11px] font-mono text-slate-400">
+                🎮 Prueba interactiva: haz clic en los filtros o audita un comprobante
+              </span>
+            </div>
+            <GlowCard borderColor="border-sky-500/30" ambientGlow="from-sky-500/10 via-indigo-500/5 to-transparent">
+              <CigoLiveSimulator />
+            </GlowCard>
+          </div>
+        </div>
+
+        {/* Product 2: ASYS IA */}
+        <div id="asys-ia" className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center p-6 sm:p-10 rounded-3xl bg-slate-900/40 border border-slate-800/60 backdrop-blur-md">
+          {/* Interactive WhatsApp Visual (Order 2 on mobile, 1 on desktop) */}
+          <div className="order-2 lg:order-1">
+            <div className="mb-2 text-left">
+              <span className="text-[11px] font-mono text-slate-400">
+                💬 Simulador en vivo: haz clic en los botones o escribe tu mensaje
+              </span>
+            </div>
+            <GlowCard borderColor="border-purple-500/30" ambientGlow="from-purple-500/10 via-fuchsia-500/5 to-transparent">
+              <AsysLiveSimulator />
+            </GlowCard>
+          </div>
+
+          <div className="order-1 lg:order-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-950/80 text-purple-400 text-xs font-bold uppercase tracking-wider mb-4 border border-purple-800/60">
+              <Sparkles className="w-3.5 h-3.5" />
+              Agente IA Autónomo
+            </div>
+
+            <h3 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight mb-4">
+              ASYS IA: Automatización Inteligente en WhatsApp
+            </h3>
+
+            <p className="text-base text-slate-400 leading-relaxed mb-6">
+              Convierte WhatsApp en tu canal de atención y ventas más eficiente. Un agente entrenado con la lógica de tu empresa que responde dudas, consulta bases de datos y coordina despachos las 24 horas.
+            </p>
+
+            <div className="space-y-4 mb-8">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-lg bg-purple-950 border border-purple-800/60 flex items-center justify-center text-purple-400 shrink-0 mt-0.5">
+                  <Clock className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-white">Atención Continua 24/7</h4>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Responde al segundo consultas de clientes y conductores sin esperas ni fricción.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-lg bg-purple-950 border border-purple-800/60 flex items-center justify-center text-purple-400 shrink-0 mt-0.5">
+                  <Zap className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-white">Conexión Bidireccional con tu ERP</h4>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Lee inventarios, actualiza estados de viaje y sincroniza pedidos en tu sistema en tiempo real.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-lg bg-purple-950 border border-purple-800/60 flex items-center justify-center text-purple-400 shrink-0 mt-0.5">
+                  <TrendingUp className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-white">Capacidad Multimodal</h4>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Procesa mensajes de voz, imágenes de comprobantes y documentos PDF automáticamente.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <Link
+              href="/asys-ia"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold text-sm shadow-lg shadow-purple-600/25 hover:shadow-purple-600/35 transition-all group active:scale-95"
+            >
+              <span>Conocer ASYS IA</span>
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
         </div>
       </div>
-
-      <style>{`
-        @media (max-width: 860px) {
-          .product-row {
-            grid-template-columns: 1fr !important;
-            gap: 2.5rem !important;
-          }
-          .product-row > div {
-            order: unset !important;
-          }
-        }
-      `}</style>
     </section>
   );
 }

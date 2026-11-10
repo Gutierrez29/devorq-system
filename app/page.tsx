@@ -1,3 +1,4 @@
+import GlobalNetworkCanvas from "@/components/GlobalNetworkCanvas";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Products from "@/components/Products";
@@ -9,7 +10,8 @@ import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <main>
+    <main className="relative min-h-screen bg-[#030712] text-slate-100 selection:bg-sky-500/30 selection:text-sky-200">
+      <GlobalNetworkCanvas />
       <Navbar />
       <Hero />
       <Products />

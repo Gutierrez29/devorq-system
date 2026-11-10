@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
+import { Zap, ShieldCheck, Cpu, Check, ArrowRight } from "lucide-react";
 
 function useInView(threshold = 0.05) {
   const ref = useRef<HTMLDivElement>(null);
@@ -18,31 +19,31 @@ function useInView(threshold = 0.05) {
 
 const PILLARS = [
   {
-    iconPath: "M13 2L3 14h9l-1 8 10-12h-9l1-8z",
-    color: "#0EA5E9",
-    bg: "rgba(14,165,233,0.06)",
-    title: "Tecnología de vanguardia",
+    icon: Zap,
+    color: "sky",
+    badge: "FRONTEND & CLOUD",
+    title: "Tecnología de Vanguardia",
     description:
-      "Construimos con las últimas versiones de los frameworks más robustos del mercado. Nada de legacy, nada de deuda técnica innecesaria.",
-    points: ["Next.js & React 19", "IA y machine learning", "Infraestructura en la nube"],
+      "Desarrollamos interfaces ultra interactivas y reactivas con React 19, Next.js 16 y Tailwind CSS v4. Arquitecturas limpias sin deuda técnica.",
+    points: ["Next.js 16 App Router", "Server Components & Client Islands", "Animaciones a 120 FPS"],
   },
   {
-    iconPath: "M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12z M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z",
-    color: "#0EA5E9",
-    bg: "rgba(14,165,233,0.06)",
-    title: "Diseñado para el mundo real",
+    icon: Cpu,
+    color: "indigo",
+    badge: "INTELIGENCIA ARTIFICIAL",
+    title: "Soluciones de IA Realistas",
     description:
-      "Cada función existe porque un negocio real la necesita. No construimos features para impresionar — construimos para resolver.",
-    points: ["Flujos de trabajo reales", "Onboarding sin fricción", "UX probada con usuarios"],
+      "Integramos agentes autónomos de IA y flujos multimodales conectados directamente a tus bases de datos y canales como WhatsApp.",
+    points: ["Agentes de WhatsApp con ASYS IA", "Automatización de flujos B2B", "Procesamiento de Lenguaje Natural"],
   },
   {
-    iconPath: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z",
-    color: "#10B981",
-    bg: "rgba(16,185,129,0.06)",
-    title: "Escalable y seguro",
+    icon: ShieldCheck,
+    color: "emerald",
+    badge: "SEGURIDAD & ESCALA",
+    title: "Escalabilidad Empresarial",
     description:
-      "Arquitecturas que crecen contigo. Seguridad por diseño, no como afterthought. Desde una empresa hasta miles de usuarios.",
-    points: ["Row Level Security", "Auditoría completa", "Alta disponibilidad"],
+      "Aislamiento estricto de datos con Row Level Security, encriptación en tránsito y reposo, y disponibilidad del 99.99% en infraestructura cloud.",
+    points: ["Arquitecturas Serverless", "Auditoría en tiempo real", "Cumplimiento normativo y tributario"],
   },
 ];
 
@@ -50,50 +51,38 @@ export default function WhyDevor() {
   const { ref: titleRef, inView: titleInView } = useInView();
 
   return (
-    <section id="por-que-devor" style={{ padding: "6rem 1.5rem", background: "var(--bg)" }}>
-      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+    <section id="por-que-devor" className="py-24 px-4 sm:px-6 bg-transparent border-y border-slate-800/60 relative z-10">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div
           ref={titleRef}
-          style={{
-            textAlign: "center",
-            marginBottom: "4rem",
-            transition: "all 0.7s ease",
-            opacity: titleInView ? 1 : 0,
-            transform: titleInView ? "translateY(0)" : "translateY(30px)",
-          }}
+          className={`text-center max-w-2xl mx-auto mb-16 transition-all duration-700 ${
+            titleInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
         >
-          <div className="section-label">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-            </svg>
-            ¿Por qué Devorq?
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-950/80 text-sky-400 text-xs font-semibold uppercase tracking-wider mb-4 border border-sky-800/80">
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span>Nuestros Estándares</span>
           </div>
-          <h2
-            style={{
-              fontSize: "clamp(2rem, 4vw, 3rem)",
-              fontWeight: 900,
-              letterSpacing: "-0.035em",
-              lineHeight: 1.1,
-              marginBottom: "1rem",
-            }}
-          >
-            Principios que guían{" "}
-            <span className="gradient-text">cada línea de código</span>
+          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white mb-4">
+            Ingeniería de software que marca la{" "}
+            <span className="bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">
+              diferencia
+            </span>
           </h2>
-          <p style={{ fontSize: "1.0625rem", color: "var(--fg-muted)", maxWidth: "520px", margin: "0 auto", lineHeight: 1.7 }}>
-            No somos un estudio de freelancers ni una agencia. Somos un equipo producto — construimos, iteramos y mantenemos.
+          <p className="text-base sm:text-lg text-slate-400 leading-relaxed">
+            No somos intermediarios ni plantilleros. Diseñamos, programamos y desplegamos plataformas de software que resuelven problemas críticos con precisión quirúrgica.
           </p>
         </div>
 
-        {/* Pillars */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.5rem" }}>
+        {/* Pillars Bento Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {PILLARS.map((pillar, i) => (
             <PillarCard key={pillar.title} pillar={pillar} delay={i * 100} />
           ))}
         </div>
 
-        {/* Bottom banner */}
+        {/* Bottom Banner */}
         <BottomBanner />
       </div>
     </section>
@@ -108,86 +97,61 @@ function PillarCard({
   delay: number;
 }) {
   const { ref, inView } = useInView();
-  const [hovered, setHovered] = useState(false);
+  const Icon = pillar.icon;
+
+  const colorStyles = {
+    sky: {
+      bgIcon: "bg-sky-950 text-sky-400 border-sky-800/60",
+      badge: "text-sky-400 bg-sky-950/80 border border-sky-800/60",
+      check: "text-sky-400",
+      borderHover: "hover:border-sky-500/50 hover:shadow-sky-500/10",
+    },
+    indigo: {
+      bgIcon: "bg-indigo-950 text-indigo-400 border-indigo-800/60",
+      badge: "text-indigo-400 bg-indigo-950/80 border border-indigo-800/60",
+      check: "text-indigo-400",
+      borderHover: "hover:border-indigo-500/50 hover:shadow-indigo-500/10",
+    },
+    emerald: {
+      bgIcon: "bg-emerald-950 text-emerald-400 border-emerald-800/60",
+      badge: "text-emerald-400 bg-emerald-950/80 border border-emerald-800/60",
+      check: "text-emerald-400",
+      borderHover: "hover:border-emerald-500/50 hover:shadow-emerald-500/10",
+    },
+  }[pillar.color as "sky" | "indigo" | "emerald"];
 
   return (
     <div
       ref={ref}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        background: "white",
-        border: `1px solid ${hovered ? pillar.color + "30" : "rgba(91,78,255,0.07)"}`,
-        borderRadius: "1.25rem",
-        padding: "2rem",
-        transition: "all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)",
-        transform: inView
-          ? hovered ? "translateY(-6px)" : "translateY(0)"
-          : "translateY(40px)",
-        opacity: inView ? 1 : 0,
-        transitionDelay: `${delay}ms`,
-        boxShadow: hovered
-          ? `0 16px 48px ${pillar.color}18, 0 4px 16px rgba(13,8,32,0.06)`
-          : "var(--shadow-sm)",
-      }}
+      style={{ transitionDelay: `${delay}ms` }}
+      className={`bg-slate-900/60 backdrop-blur-xl rounded-3xl p-8 border border-slate-800 shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl ${
+        colorStyles.borderHover
+      } ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
     >
-      {/* Icon */}
-      <div
-        style={{
-          width: "52px",
-          height: "52px",
-          borderRadius: "14px",
-          background: pillar.bg,
-          border: `1.5px solid ${pillar.color}20`,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          marginBottom: "1.25rem",
-          transition: "transform 0.3s ease",
-          transform: hovered ? "scale(1.1) rotate(-5deg)" : "scale(1)",
-        }}
-      >
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-          stroke={pillar.color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-          {pillar.iconPath.split(" M ").map((seg, i) => (
-            <path key={i} d={i === 0 ? seg : `M ${seg}`} />
-          ))}
-        </svg>
+      <div className="flex items-center justify-between mb-6">
+        <div className={`w-14 h-14 rounded-2xl border flex items-center justify-center ${colorStyles.bgIcon}`}>
+          <Icon className="w-6 h-6" />
+        </div>
+        <span className={`text-[10px] font-bold tracking-wider px-2.5 py-1 rounded-full ${colorStyles.badge}`}>
+          {pillar.badge}
+        </span>
       </div>
 
-      <h3
-        style={{
-          fontSize: "1.125rem",
-          fontWeight: 700,
-          letterSpacing: "-0.02em",
-          marginBottom: "0.75rem",
-          color: "var(--fg)",
-        }}
-      >
+      <h3 className="text-xl font-bold text-white tracking-tight mb-3">
         {pillar.title}
       </h3>
 
-      <p style={{ fontSize: "0.9rem", color: "var(--fg-muted)", lineHeight: 1.7, marginBottom: "1.25rem" }}>
+      <p className="text-sm text-slate-400 leading-relaxed mb-6">
         {pillar.description}
       </p>
 
-      <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+      <ul className="space-y-2.5 pt-4 border-t border-slate-800">
         {pillar.points.map((point) => (
-          <li
-            key={point}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              fontSize: "0.8125rem",
-              fontWeight: 500,
-              color: pillar.color,
-            }}
-          >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={pillar.color} strokeWidth="2.5">
-              <path d="M20 6L9 17l-5-5" />
-            </svg>
-            {point}
+          <li key={point} className="flex items-center gap-2.5 text-xs font-semibold text-slate-300">
+            <span className={`rounded-full p-0.5 bg-slate-800 ${colorStyles.check}`}>
+              <Check className="w-3.5 h-3.5" />
+            </span>
+            <span>{point}</span>
           </li>
         ))}
       </ul>
@@ -201,75 +165,35 @@ function BottomBanner() {
   return (
     <div
       ref={ref}
-      style={{
-        marginTop: "3rem",
-        background: "linear-gradient(135deg, #0EA5E9 0%, #2563EB 100%)",
-        borderRadius: "1.5rem",
-        padding: "3rem",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        flexWrap: "wrap",
-        gap: "1.5rem",
-        position: "relative",
-        overflow: "hidden",
-        transition: "all 0.7s ease",
-        opacity: inView ? 1 : 0,
-        transform: inView ? "translateY(0)" : "translateY(30px)",
-      }}
+      className={`relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-sky-950 to-blue-950 p-8 sm:p-12 text-white border border-slate-800 shadow-2xl transition-all duration-700 ${
+        inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+      }`}
     >
-      <div
-        style={{
-          position: "absolute", top: "-40px", right: "-40px",
-          width: "180px", height: "180px", borderRadius: "50%",
-          background: "rgba(255,255,255,0.08)",
-          pointerEvents: "none",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute", bottom: "-20px", left: "30%",
-          width: "120px", height: "120px", borderRadius: "50%",
-          background: "rgba(255,255,255,0.05)",
-          pointerEvents: "none",
-        }}
-      />
+      {/* Decorative blurred circles */}
+      <div className="absolute top-0 right-0 w-80 h-80 bg-sky-500/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-1/4 w-60 h-60 bg-indigo-500/15 rounded-full blur-2xl pointer-events-none" />
 
-      <div>
-        <h3 style={{ fontSize: "1.5rem", fontWeight: 800, color: "white", letterSpacing: "-0.03em", marginBottom: "0.375rem" }}>
-          ¿Tienes un proyecto en mente?
-        </h3>
-        <p style={{ color: "rgba(255,255,255,0.75)", fontSize: "0.9375rem" }}>
-          Cuéntanos tu problema y encontramos la solución.
-        </p>
+      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="max-w-xl text-center md:text-left">
+          <span className="text-sky-400 font-semibold text-xs tracking-wider uppercase mb-2 inline-block">
+            Asesoría Técnica Especializada
+          </span>
+          <h3 className="text-2xl sm:text-3xl font-black tracking-tight mb-2">
+            ¿Tienes una idea o requieres modernizar tu plataforma?
+          </h3>
+          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+            Te mostramos en una demo personalizada cómo podemos diseñar la solución ideal para tu empresa.
+          </p>
+        </div>
+
+        <a
+          href="#contacto"
+          className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white hover:bg-slate-100 text-slate-900 font-bold text-sm shadow-xl transition-all hover:scale-105 active:scale-95 shrink-0 group"
+        >
+          <span>Agendar Sesión Técnica</span>
+          <ArrowRight className="w-4 h-4 text-sky-600 transition-transform group-hover:translate-x-1" />
+        </a>
       </div>
-
-      <a
-        href="#contacto"
-        style={{
-          background: "white",
-          color: "var(--primary)",
-          fontWeight: 700,
-          fontSize: "0.9375rem",
-          padding: "0.875rem 2rem",
-          borderRadius: "100px",
-          textDecoration: "none",
-          transition: "all 0.2s ease",
-          whiteSpace: "nowrap",
-          boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
-          flexShrink: 0,
-        }}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLElement).style.transform = "translateY(-3px)";
-          (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(0,0,0,0.2)";
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-          (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 16px rgba(0,0,0,0.15)";
-        }}
-      >
-        Conversemos →
-      </a>
     </div>
   );
 }

@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { ArrowRight, Menu, X, Sparkles } from "lucide-react";
 
 const NAV_LINKS = [
   { label: "Productos", href: "/#cigo" },
@@ -11,11 +13,6 @@ const NAV_LINKS = [
   { label: "Contacto", href: "/#contacto" },
 ];
 
-/**
- * Maneja el scroll a una sección hash de forma confiable.
- * Evita el bug de Next.js donde el router no scrollea al hash
- * si el usuario ya está en "/" y no ha scrolleado.
- */
 function scrollToHash(href: string, e: React.MouseEvent) {
   if (!href.includes("#")) return;
   e.preventDefault();
@@ -38,99 +35,46 @@ export default function Navbar() {
 
   return (
     <header
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 100,
-        transition: "all 0.3s ease",
-        background: scrolled
-          ? "rgba(255,255,255,0.85)"
-          : "transparent",
-        backdropFilter: scrolled ? "blur(20px)" : "none",
-        WebkitBackdropFilter: scrolled ? "blur(20px)" : "none",
-        borderBottom: scrolled
-          ? "1px solid rgba(91,78,255,0.08)"
-          : "1px solid transparent",
-        boxShadow: scrolled ? "0 4px 24px rgba(13,8,32,0.06)" : "none",
-      }}
+      className={`sticky top-0 z-50 w-full transition-all duration-200 ${
+        scrolled
+          ? "bg-[#030712]/90 backdrop-blur-xl border-b border-slate-800 shadow-[0_4px_24px_rgba(0,0,0,0.5)]"
+          : "bg-[#030712]/75 backdrop-blur-md border-b border-slate-900"
+      }`}
     >
-      <nav
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-          padding: "0 1.5rem",
-          height: "68px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        {/* Logo */}
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+        {/* Brand Logo */}
         <Link
           href="/"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "0.6rem",
-            textDecoration: "none",
-          }}
+          className="flex items-center gap-2.5 text-white group transition-transform duration-200 active:scale-95"
         >
-          <img
-            src="/devorq-isotype.png"
-            alt="Devorq Logo"
-            style={{
-              width: "38px",
-              height: "38px",
-              borderRadius: "10px",
-              objectFit: "contain",
-            }}
-          />
-          <span
-            style={{
-              fontSize: "1.45rem",
-              fontWeight: 800,
-              letterSpacing: "-0.03em",
-              color: "var(--fg)",
-            }}
-          >
-            Devorq
-          </span>
+          <div className="relative flex items-center justify-center transition-transform duration-200 group-hover:scale-105">
+            <Image
+              src="/devorq-logo.png"
+              alt="Devorq Logo"
+              width={38}
+              height={38}
+              priority
+              className="w-9 h-9 object-contain drop-shadow-[0_0_12px_rgba(14,165,233,0.5)]"
+            />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-xl font-extrabold tracking-tight text-white flex items-center gap-1.5">
+              Devorq
+              <span className="text-sky-400 text-xs px-2 py-0.5 rounded-full bg-sky-950/80 font-semibold border border-sky-800/80 hidden sm:inline-block">
+                Systems
+              </span>
+            </span>
+          </div>
         </Link>
 
-        {/* Desktop Nav */}
-        <ul
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "0.25rem",
-            listStyle: "none",
-          }}
-          className="hidden-mobile"
-        >
+        {/* Desktop Navigation Links */}
+        <ul className="hidden md:flex items-center gap-1 list-none bg-slate-900/80 p-1.5 rounded-full border border-slate-800 backdrop-blur-md">
           {NAV_LINKS.map((link) => (
             <li key={link.href}>
               <Link
                 href={link.href}
                 onClick={(e) => scrollToHash(link.href, e)}
-                style={{
-                  fontSize: "0.9rem",
-                  fontWeight: 500,
-                  color: "var(--fg-muted)",
-                  textDecoration: "none",
-                  padding: "0.5rem 0.875rem",
-                  borderRadius: "100px",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.color = "var(--primary)";
-                  (e.currentTarget as HTMLElement).style.background = "var(--primary-light)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.color = "var(--fg-muted)";
-                  (e.currentTarget as HTMLElement).style.background = "transparent";
-                }}
+                className="text-sm font-medium text-slate-300 hover:text-sky-400 hover:bg-slate-800 px-3.5 py-1.5 rounded-full transition-all duration-200"
               >
                 {link.label}
               </Link>
@@ -138,88 +82,62 @@ export default function Navbar() {
           ))}
         </ul>
 
-        {/* CTA */}
-        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <a href="#contacto" className="btn-primary hidden-mobile" style={{ fontSize: "0.875rem", padding: "0.6rem 1.375rem" }}>
-            Empezar
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </a>
-          {/* Mobile menu button */}
+        {/* Action Buttons */}
+        <div className="flex items-center gap-3">
+          <Link
+            href="/#contacto"
+            onClick={(e) => scrollToHash("/#contacto", e)}
+            className="hidden sm:inline-flex items-center gap-2 text-sm font-semibold text-white bg-gradient-to-r from-sky-500 via-sky-600 to-blue-600 hover:from-sky-600 hover:to-blue-700 px-4 py-2 rounded-full shadow-lg shadow-sky-500/25 hover:shadow-sky-500/40 transition-all duration-200 active:scale-95 group"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-sky-200 animate-pulse" />
+            <span>Iniciar Proyecto</span>
+            <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+          </Link>
+
+          {/* Mobile menu trigger */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              padding: "0.5rem",
-              color: "var(--fg)",
-              display: "none",
-            }}
-            className="show-mobile"
-            aria-label="Abrir menú"
+            className="md:hidden p-2 rounded-xl text-slate-300 hover:bg-slate-800 active:scale-95 transition-all cursor-pointer"
+            aria-label="Alternar menú"
           >
-            {menuOpen ? (
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M18 6L6 18M6 6l12 12" />
-              </svg>
-            ) : (
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M3 12h18M3 6h18M3 18h18" />
-              </svg>
-            )}
+            {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </nav>
 
-      {/* Mobile Menu */}
+      {/* Mobile Drawer */}
       {menuOpen && (
-        <div
-          style={{
-            background: "rgba(255,255,255,0.97)",
-            backdropFilter: "blur(20px)",
-            borderTop: "1px solid rgba(91,78,255,0.08)",
-            padding: "1rem 1.5rem 1.5rem",
-          }}
-        >
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={(e) => {
-                scrollToHash(link.href, e);
-                setMenuOpen(false);
-              }}
-              style={{
-                display: "block",
-                padding: "0.75rem 0",
-                fontSize: "1rem",
-                fontWeight: 500,
-                color: "var(--fg-muted)",
-                textDecoration: "none",
-                borderBottom: "1px solid rgba(91,78,255,0.06)",
-              }}
-            >
-              {link.label}
-            </a>
-          ))}
-          <a href="#contacto" className="btn-primary" style={{ marginTop: "1rem", width: "100%", justifyContent: "center" }}>
-            Empezar
-          </a>
+        <div className="md:hidden bg-[#030712]/95 backdrop-blur-2xl border-t border-slate-800 px-6 py-5 shadow-2xl transition-all">
+          <div className="flex flex-col gap-2">
+            {NAV_LINKS.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={(e) => {
+                  scrollToHash(link.href, e);
+                  setMenuOpen(false);
+                }}
+                className="py-2.5 px-3 rounded-lg text-base font-medium text-slate-300 hover:text-sky-400 hover:bg-slate-850 transition-colors"
+              >
+                {link.label}
+              </a>
+            ))}
+            <div className="pt-3 border-t border-slate-800 mt-2">
+              <a
+                href="#contacto"
+                onClick={(e) => {
+                  scrollToHash("/#contacto", e);
+                  setMenuOpen(false);
+                }}
+                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-sky-500 to-blue-600 shadow-md shadow-sky-500/25 active:scale-98 transition-all"
+              >
+                <span>Solicitar Asesoría</span>
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
         </div>
       )}
-
-      <style>{`
-        @media (min-width: 768px) {
-          .hidden-mobile { display: flex !important; }
-          .show-mobile { display: none !important; }
-        }
-        @media (max-width: 767px) {
-          .hidden-mobile { display: none !important; }
-          .show-mobile { display: flex !important; }
-        }
-      `}</style>
     </header>
   );
 }

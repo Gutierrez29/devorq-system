@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 const GMAIL_URL = "https://mail.google.com/mail/?view=cm&fs=1&to=contacto@devorq.com&su=Solicitud%20de%20Demo%20CIGO%20-%20Devorq%20Systems";
 
@@ -157,9 +158,11 @@ export default function CigoPage() {
       >
         {/* Devorq Logo */}
         <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "0.6rem" }}>
-          <img
+          <Image
             src="/devorq-isotype.png"
             alt="Devorq Logo"
+            width={32}
+            height={32}
             style={{
               width: "32px",
               height: "32px",
@@ -206,9 +209,12 @@ export default function CigoPage() {
         <div style={{ maxWidth: "880px", margin: "0 auto", position: "relative", zIndex: 1 }}>
           {/* CIGO LOGO IN LARGE FIRST ITEM */}
           <div style={{ marginBottom: "1.75rem" }}>
-            <img
+            <Image
               src="/cigo-logo.webp"
               alt="CIGO Logo"
+              width={200}
+              height={82}
+              priority
               style={{
                 height: "82px",
                 width: "auto",
@@ -676,11 +682,12 @@ export default function CigoPage() {
 
             {/* Right Column: Perfectly Proportioned Screenshot Container */}
             <div style={{ borderRadius: "18px", overflow: "hidden", border: "1px solid #E2E8F0", boxShadow: "0 12px 32px rgba(0,0,0,0.06)", background: "#F8FAFC" }}>
-              <img
+              <Image
                 src={currentMod.img}
                 alt={currentMod.title}
+                width={700}
+                height={440}
                 style={{ width: "100%", height: "auto", maxHeight: "440px", objectFit: "contain", display: "block" }}
-                onError={(e) => { (e.target as HTMLElement).style.display = "none"; }}
               />
             </div>
           </div>

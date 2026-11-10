@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
+import { ChevronDown, HelpCircle } from "lucide-react";
 
 function useInView(threshold = 0.05) {
   const ref = useRef<HTMLDivElement>(null);
@@ -46,89 +47,40 @@ function FaqItem({ faq, index }: { faq: typeof FAQS[0]; index: number }) {
   return (
     <div
       ref={ref}
-      style={{
-        borderBottom: "1px solid rgba(91,78,255,0.08)",
-        opacity: inView ? 1 : 0,
-        transform: inView ? "translateY(0)" : "translateY(20px)",
-        transition: `opacity 0.5s ease ${index * 80}ms, transform 0.5s ease ${index * 80}ms`,
-      }}
+      style={{ transitionDelay: `${index * 60}ms` }}
+      className={`border-b border-slate-800 transition-all duration-500 ${
+        inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+      }`}
     >
       <button
         onClick={() => setOpen(!open)}
         aria-expanded={open}
-        style={{
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: "1.5rem",
-          padding: "1.375rem 0",
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          textAlign: "left",
-        }}
+        className="w-full flex items-center justify-between gap-4 py-5 text-left transition-colors cursor-pointer group"
       >
         <span
-          style={{
-            fontSize: "1rem",
-            fontWeight: 600,
-            color: open ? "var(--primary)" : "var(--fg)",
-            lineHeight: 1.4,
-            transition: "color 0.2s ease",
-          }}
+          className={`text-base font-semibold leading-relaxed transition-colors ${
+            open ? "text-sky-400" : "text-white group-hover:text-sky-300"
+          }`}
         >
           {faq.q}
         </span>
-        {/* Chevron */}
         <span
-          style={{
-            flexShrink: 0,
-            width: "28px",
-            height: "28px",
-            borderRadius: "50%",
-            background: open ? "var(--primary-light)" : "rgba(0,0,0,0.04)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            transition: "all 0.25s ease",
-          }}
+          className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center border transition-all ${
+            open
+              ? "bg-sky-500/20 text-sky-400 border-sky-500/40 rotate-180"
+              : "bg-slate-900 text-slate-400 border-slate-800 group-hover:text-white"
+          }`}
         >
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke={open ? "var(--primary)" : "var(--fg-muted)"}
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            style={{
-              transition: "transform 0.25s ease",
-              transform: open ? "rotate(180deg)" : "rotate(0deg)",
-            }}
-          >
-            <path d="M6 9l6 6 6-6" />
-          </svg>
+          <ChevronDown className="w-4 h-4" />
         </span>
       </button>
 
-      {/* Answer */}
       <div
-        style={{
-          overflow: "hidden",
-          maxHeight: open ? "300px" : "0",
-          transition: "max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
-        }}
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+          open ? "max-h-96 pb-5 opacity-100" : "max-h-0 opacity-0"
+        }`}
       >
-        <p
-          style={{
-            fontSize: "0.9375rem",
-            color: "var(--fg-muted)",
-            lineHeight: 1.75,
-            paddingBottom: "1.375rem",
-          }}
-        >
+        <p className="text-sm text-slate-400 leading-relaxed pr-8">
           {faq.a}
         </p>
       </div>
@@ -140,93 +92,32 @@ export default function FAQ() {
   const { ref: headRef, inView: headInView } = useInView();
 
   return (
-    <section
-      id="faq"
-      style={{
-        padding: "6rem 1.5rem",
-        background: "var(--bg)",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: "720px",
-          margin: "0 auto",
-        }}
-      >
+    <section id="faq" className="py-24 px-4 sm:px-6 bg-transparent relative z-10">
+      <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div
           ref={headRef}
-          style={{
-            textAlign: "center",
-            marginBottom: "3.5rem",
-            opacity: headInView ? 1 : 0,
-            transform: headInView ? "translateY(0)" : "translateY(24px)",
-            transition: "all 0.6s ease",
-          }}
+          className={`text-center max-w-2xl mx-auto mb-16 transition-all duration-700 ${
+            headInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
         >
-          <div className="section-label" style={{ margin: "0 auto 1rem" }}>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <circle cx="12" cy="12" r="10" />
-              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-              <line x1="12" y1="17" x2="12.01" y2="17" />
-            </svg>
-            Preguntas frecuentes
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-950/80 text-sky-400 text-xs font-semibold uppercase tracking-wider mb-4 border border-sky-800/80">
+            <HelpCircle className="w-3.5 h-3.5" />
+            <span>Resolviendo Dudas</span>
           </div>
-          <h2
-            style={{
-              fontSize: "clamp(1.875rem, 3.5vw, 2.5rem)",
-              fontWeight: 800,
-              color: "var(--fg)",
-              letterSpacing: "-0.03em",
-              lineHeight: 1.15,
-              marginBottom: "1rem",
-            }}
-          >
-            Todo lo que necesitás{" "}
-            <span className="gradient-text">saber antes de empezar</span>
+          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white mb-4">
+            Preguntas Frecuentes
           </h2>
-          <p
-            style={{
-              fontSize: "1rem",
-              color: "var(--fg-muted)",
-              lineHeight: 1.7,
-            }}
-          >
-            Si tenés alguna duda que no está acá, escribinos directamente.
+          <p className="text-base text-slate-400 leading-relaxed">
+            Todo lo que necesitas saber sobre nuestra metodología, soporte y tiempos de entrega.
           </p>
         </div>
 
-        {/* FAQ list */}
-        <div>
-          {FAQS.map((faq, i) => (
-            <FaqItem key={i} faq={faq} index={i} />
+        {/* Accordion Container */}
+        <div className="p-6 sm:p-10 rounded-3xl bg-slate-900/50 backdrop-blur-xl border border-slate-800 shadow-2xl">
+          {FAQS.map((faq, index) => (
+            <FaqItem key={faq.q} faq={faq} index={index} />
           ))}
-        </div>
-
-        {/* CTA bottom */}
-        <div
-          style={{
-            marginTop: "3rem",
-            textAlign: "center",
-          }}
-        >
-          <p style={{ fontSize: "0.9375rem", color: "var(--fg-muted)", marginBottom: "1rem" }}>
-            ¿Tenés una pregunta más específica?
-          </p>
-          <a
-            href="#contacto"
-            onClick={(e) => {
-              e.preventDefault();
-              const el = document.getElementById("contacto");
-              if (el) {
-                const top = el.getBoundingClientRect().top + window.scrollY - 80;
-                window.scrollTo({ top, behavior: "smooth" });
-              }
-            }}
-            className="btn-secondary"
-          >
-            Contactanos directamente
-          </a>
         </div>
       </div>
     </section>
