@@ -35,18 +35,18 @@ export default function Waitlist() {
   const emailAddress = "contacto@devorq.com";
 
   const getProductLabel = () => {
-    if (product === "cigo") return "CIGO (Auditoría de Combustible & Telemetría)";
-    if (product === "asys") return "ASYS IA (Procesamiento de Documentos & Facturas)";
-    return "CIGO y ASYS IA (Ecosistema Completo)";
+    if (product === "cigo") return "CIGO (Control de Flotas, Combustible y Viáticos)";
+    if (product === "asys") return "ASYS IA (Agente de Ventas y Atención 24/7 por WhatsApp)";
+    return "Ecosistema Devorq (CIGO / ASYS IA / Solución a Medida)";
   };
 
   const buildMessage = () => {
-    let msg = `Hola Devorq, deseo coordinar una demostración técnica:\n`;
+    let msg = `Hola Devorq Systems, deseo coordinar una demostración:\n`;
     if (name) msg += `· Nombre: ${name}\n`;
-    if (company) msg += `· Empresa / Flota: ${company}\n`;
+    if (company) msg += `· Empresa: ${company}\n`;
     if (phone) msg += `· WhatsApp de contacto: ${phone}\n`;
     msg += `· Solución de Interés: ${getProductLabel()}\n`;
-    if (note) msg += `· Detalle operativo: ${note}\n`;
+    if (note) msg += `· Detalle del requerimiento: ${note}\n`;
     return msg;
   };
 
@@ -129,7 +129,7 @@ export default function Waitlist() {
               margin: "0 auto",
             }}
           >
-            Solicita tu Prueba Gratis de 7 días (hasta 10 unidades en ruta activa) o coordina una demostración en vivo para tu equipo de operaciones y contabilidad.
+            Cuéntanos qué proceso deseas mejorar con CIGO, ASYS IA o una solución a medida y coordinamos una demostración en vivo con tu equipo.
           </p>
           <p style={{ fontSize: "0.9rem", color: "#0284C7", fontWeight: 700, marginTop: "0.6rem" }}>
             Atención directa: +51 929 222 980 · +51 935 351 768 · contacto@devorq.com
@@ -183,13 +183,13 @@ export default function Waitlist() {
 
               <div>
                 <label htmlFor={companyId} style={{ display: "block", fontSize: "0.84rem", fontWeight: 700, color: "#334155", marginBottom: "0.4rem" }}>
-                  Empresa / Tamaño de Flota *
+                  Empresa / Rubro *
                 </label>
                 <input
                   id={companyId}
                   type="text"
                   required
-                  placeholder="Ej: Transportes del Norte (14 tractos)"
+                  placeholder="Ej: Inversiones del Norte S.A.C."
                   value={company}
                   onChange={(e) => setCompany(e.target.value)}
                   style={{
@@ -316,12 +316,12 @@ export default function Waitlist() {
             {/* Row 3: Notes / Message */}
             <div>
               <label htmlFor={noteId} style={{ display: "block", fontSize: "0.84rem", fontWeight: 700, color: "#334155", marginBottom: "0.4rem" }}>
-                Mensaje o Requerimiento Operativo (Opcional)
+                Mensaje o Requerimiento (Opcional)
               </label>
               <textarea
                 id={noteId}
                 rows={3}
-                placeholder="Cuéntanos sobre tus rutas, problemas con viáticos o volumen mensual de facturas..."
+                placeholder="Cuéntanos brevemente sobre tu operación, canal de WhatsApp o qué proceso deseas automatizar..."
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 style={{

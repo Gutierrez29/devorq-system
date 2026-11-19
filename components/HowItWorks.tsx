@@ -19,24 +19,22 @@ function useInView(threshold = 0.1) {
 const STEPS = [
   {
     number: "01",
-    title: "Registro de Flota y Conductores",
+    title: "Diagnóstico de tu Operación",
     description:
-      "Configuramos tus tractos, carretas/semirremolques y números de WhatsApp de tus choferes. Sin aplicaciones que instalar ni contraseñas: todo el personal opera desde su WhatsApp habitual.",
+      "Analizamos tus procesos actuales en operaciones, administración o atención al cliente para identificar cuellos de botella y definir el flujo ideal con CIGO, ASYS IA o una solución a medida.",
     color: "#0EA5E9",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="1" y="3" width="15" height="13" />
-        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
-        <circle cx="5.5" cy="18.5" r="2.5" />
-        <circle cx="18.5" cy="18.5" r="2.5" />
+        <circle cx="11" cy="11" r="8" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
       </svg>
     ),
   },
   {
     number: "02",
-    title: "Reporte en Ruta por WhatsApp",
+    title: "Configuración y Despliegue",
     description:
-      "Los conductores envían fotos de boletas/facturas, lecturas de odómetro o notas de voz de gastos menores. El sistema extrae los datos principales, consulta el RUC/comprobante y registra el avance del viaje.",
+      "Adaptamos la plataforma a las reglas de tu empresa, integramos los canales de WhatsApp y capacitamos a tu equipo sin fricciones técnicas ni necesidad de instalar apps complejas.",
     color: "#5B4EFF",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -47,14 +45,13 @@ const STEPS = [
   },
   {
     number: "03",
-    title: "Supervisión & Liquidación Contable",
+    title: "Control y Métricas en Vivo",
     description:
-      "Operaciones da seguimiento al consumo (Km/galón) y saldos de viáticos en el panel web, mientras Contabilidad descarga los reportes en Excel, planillas de liquidación, archivo TXT para SIRE y carpeta ZIP de evidencias.",
+      "Tu operación fluye desde WhatsApp mientras gerencia y administración supervisan reportes, alertas, pedidos o liquidaciones en tiempo real desde la web.",
     color: "#10B981",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83" />
       </svg>
     ),
   },
@@ -221,12 +218,12 @@ export default function HowItWorks() {
             style={{
               fontSize: "1rem",
               color: "var(--fg-muted)",
-              maxWidth: "520px",
+              maxWidth: "540px",
               margin: "0 auto",
               lineHeight: 1.7,
             }}
           >
-            Sin curvas de aprendizaje complejas para tus choferes. Tu flota conectada y auditada desde la primera semana.
+            Sin equipos de TI internos ni meses de integración. Tres pasos para poner en marcha nuestras plataformas en tu empresa.
           </p>
         </div>
 

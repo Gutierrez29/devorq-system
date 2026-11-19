@@ -1,12 +1,29 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
-const WSP_URL = "https://wa.me/51929222980?text=Hola%20Devorq%2C%20quisiera%20recibir%20informaci%C3%B3n%20sobre%20CIGO%20y%20la%20Prueba%20Gratis%20de%207%20d%C3%ADas.";
+import { usePathname } from "next/navigation";
 
 export default function FloatingWhatsApp() {
+  const pathname = usePathname();
   const [showTooltip, setShowTooltip] = useState(false);
   const [closedManually, setClosedManually] = useState(false);
+
+  const isCigoRoute = pathname?.startsWith("/cigo");
+  const isAsysRoute = pathname?.startsWith("/asys-ia");
+
+  const wspMessage = isCigoRoute
+    ? "Hola Devorq, quisiera recibir información sobre CIGO y la Prueba Gratis de 7 días."
+    : isAsysRoute
+    ? "Hola Devorq, quisiera recibir información sobre ASYS IA para WhatsApp."
+    : "Hola Devorq Systems, quisiera conversar con un asesor sobre sus soluciones (CIGO / ASYS IA).";
+
+  const wspUrl = `https://wa.me/51929222980?text=${encodeURIComponent(wspMessage)}`;
+
+  const tooltipCopy = isCigoRoute
+    ? "¿Consultas sobre CIGO o la prueba de 7 días? Escríbenos por WhatsApp."
+    : isAsysRoute
+    ? "¿Quieres ver cómo funciona ASYS IA en tu WhatsApp? Escríbenos."
+    : "¿Consultas sobre CIGO o ASYS IA? Escríbenos directamente por WhatsApp.";
 
   useEffect(() => {
     // Show tooltip after 4 seconds of reading
@@ -75,14 +92,14 @@ export default function FloatingWhatsApp() {
             <strong style={{ color: "#0F172A", fontSize: "0.8rem" }}>Asesoría en Línea</strong>
           </div>
           <p style={{ margin: 0, color: "#475569" }}>
-            ¿Consultas sobre CIGO o ASYS IA? Escríbenos directamente por WhatsApp.
+            {tooltipCopy}
           </p>
         </div>
       )}
 
       {/* Floating Action Button */}
       <a
-        href={WSP_URL}
+        href={wspUrl}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Contactar por WhatsApp a Devorq Systems"

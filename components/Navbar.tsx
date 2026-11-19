@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
-const WSP_URL = "https://wa.me/51929222980?text=Hola%20Devorq%2C%20quisiera%20conversar%20con%20un%20asesor%20sobre%20CIGO.";
+const WSP_URL = "https://wa.me/51929222980?text=Hola%20Devorq%20Systems%2C%20quisiera%20conversar%20con%20un%20asesor%20sobre%20sus%20soluciones%20de%20software.";
 
 function scrollToHash(href: string, e: React.MouseEvent) {
   if (!href.includes("#")) return;
@@ -225,57 +225,6 @@ export default function Navbar() {
 
           <li>
             <Link
-              href="/#documentacion-cigo"
-              onClick={(e) => scrollToHash("/#documentacion-cigo", e)}
-              style={{
-                fontSize: "0.9rem",
-                fontWeight: 600,
-                color: "#475569",
-                textDecoration: "none",
-                padding: "0.55rem 0.95rem",
-                borderRadius: "100px",
-                transition: "all 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.color = "#0EA5E9";
-                (e.currentTarget as HTMLElement).style.background = "rgba(14,165,233,0.08)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.color = "#475569";
-                (e.currentTarget as HTMLElement).style.background = "transparent";
-              }}
-            >
-              Clientes & Documentos
-            </Link>
-          </li>
-
-          <li>
-            <a
-              href="/cigo/carta-presentacion-cigo.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                fontSize: "0.9rem",
-                fontWeight: 600,
-                color: "#0284C7",
-                textDecoration: "none",
-                padding: "0.55rem 0.95rem",
-                borderRadius: "100px",
-                transition: "all 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.background = "rgba(14,165,233,0.08)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.background = "transparent";
-              }}
-            >
-              📄 Carta CIGO
-            </a>
-          </li>
-
-          <li>
-            <Link
               href="/#como-funciona"
               onClick={(e) => scrollToHash("/#como-funciona", e)}
               style={{
@@ -323,6 +272,32 @@ export default function Navbar() {
               }}
             >
               ¿Por qué Devorq?
+            </Link>
+          </li>
+
+          <li>
+            <Link
+              href="/#faq"
+              onClick={(e) => scrollToHash("/#faq", e)}
+              style={{
+                fontSize: "0.9rem",
+                fontWeight: 600,
+                color: "#475569",
+                textDecoration: "none",
+                padding: "0.55rem 0.95rem",
+                borderRadius: "100px",
+                transition: "all 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.color = "#0EA5E9";
+                (e.currentTarget as HTMLElement).style.background = "rgba(14,165,233,0.08)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.color = "#475569";
+                (e.currentTarget as HTMLElement).style.background = "transparent";
+              }}
+            >
+              FAQ
             </Link>
           </li>
 
@@ -447,55 +422,6 @@ export default function Navbar() {
           </Link>
 
           <a
-            href="/#documentacion-cigo"
-            onClick={(e) => {
-              scrollToHash("/#documentacion-cigo", e);
-              setMenuOpen(false);
-            }}
-            style={{
-              padding: "0.65rem 0",
-              fontSize: "0.95rem",
-              fontWeight: 600,
-              color: "#334155",
-              textDecoration: "none",
-            }}
-          >
-            Clientes y Documentación CIGO
-          </a>
-
-          <a
-            href="/cigo/carta-presentacion-cigo.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setMenuOpen(false)}
-            style={{
-              padding: "0.65rem 0",
-              fontSize: "0.95rem",
-              fontWeight: 700,
-              color: "#0284C7",
-              textDecoration: "none",
-            }}
-          >
-            📄 Carta de Presentación CIGO (PDF)
-          </a>
-
-          <a
-            href="/cigo/brochure-cigo.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setMenuOpen(false)}
-            style={{
-              padding: "0.65rem 0",
-              fontSize: "0.95rem",
-              fontWeight: 700,
-              color: "#0EA5E9",
-              textDecoration: "none",
-            }}
-          >
-            📘 Brochure Comercial CIGO (PDF)
-          </a>
-
-          <a
             href="/#como-funciona"
             onClick={(e) => {
               scrollToHash("/#como-funciona", e);
@@ -510,6 +436,40 @@ export default function Navbar() {
             }}
           >
             ¿Cómo funciona?
+          </a>
+
+          <a
+            href="/#por-que-devor"
+            onClick={(e) => {
+              scrollToHash("/#por-que-devor", e);
+              setMenuOpen(false);
+            }}
+            style={{
+              padding: "0.65rem 0",
+              fontSize: "0.95rem",
+              fontWeight: 600,
+              color: "#334155",
+              textDecoration: "none",
+            }}
+          >
+            ¿Por qué Devorq?
+          </a>
+
+          <a
+            href="/#faq"
+            onClick={(e) => {
+              scrollToHash("/#faq", e);
+              setMenuOpen(false);
+            }}
+            style={{
+              padding: "0.65rem 0",
+              fontSize: "0.95rem",
+              fontWeight: 600,
+              color: "#334155",
+              textDecoration: "none",
+            }}
+          >
+            Preguntas frecuentes
           </a>
 
           <a

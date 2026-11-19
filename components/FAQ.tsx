@@ -18,28 +18,24 @@ function useInView(threshold = 0.05) {
 
 const FAQS = [
   {
-    q: "¿Cómo asiste CIGO en la revisión de comprobantes ante SUNAT?",
-    a: "CIGO consulta el estado del RUC emisor (Activo y Habido) y el estado del comprobante electrónico mediante conectores de consulta tributaria. Si un establecimiento aún no ha enviado su resumen diario a SUNAT, el documento queda pendiente para revalidación y se alerta cualquier intento de registrar una serie y número duplicados.",
+    q: "¿Qué soluciones ofrece actualmente Devorq Systems?",
+    a: "Desarrollamos dos plataformas principales: CIGO (control operativo de flotas, combustible, viáticos y revisión contable vía WhatsApp) y ASYS IA (agente conversacional 24/7 para ventas, pedidos y atención al cliente por WhatsApp). También evaluamos implementaciones y automatizaciones a medida.",
   },
   {
-    q: "¿Qué archivos y reportes descarga el área de contabilidad?",
-    a: "Desde el panel web puedes exportar el reporte operativo en Excel, las planillas de liquidación por viaje (viáticos entregados vs. gastos rendidos), el archivo TXT estructurado para el Registro de Compras Electrónico (SIRE) de SUNAT y un archivo ZIP con todas las fotografías de respaldo ordenadas.",
+    q: "¿Cómo se adapta cada plataforma a los procesos de mi empresa?",
+    a: "Realizamos un diagnóstico inicial para configurar reglas operativas, categorías, catálogos, roles de usuario y reportes de acuerdo con la estructura real de tu negocio.",
   },
   {
-    q: "¿Necesito que mis choferes descarguen alguna aplicación especial?",
-    a: "No. Los choferes no instalan aplicaciones adicionales ni manejan contraseñas. Todo el envío de fotos de boletas/facturas, lecturas de odómetro o notas de voz para gastos menores se realiza desde su número habitual de WhatsApp.",
+    q: "¿Necesito contar con un equipo de TI o instalar aplicaciones complejas?",
+    a: "No. Nuestras plataformas operan en la nube y aprovechan canales cotidianos como WhatsApp y un panel web intuitivo. Nosotros nos encargamos de la configuración inicial, infraestructura y puesta en marcha.",
   },
   {
-    q: "¿Qué sucede si el conductor pasa por un tramo de carretera sin señal?",
-    a: "El conductor toma la foto del comprobante o del tablero y la envía al chat de WhatsApp. En cuanto la unidad retoma cobertura móvil o Wi-Fi en ruta, WhatsApp transmite el mensaje y CIGO lo procesa conservando la fecha de emisión del documento.",
+    q: "¿Cómo protegen la privacidad y confidencialidad de nuestra información?",
+    a: "De conformidad con la Ley N° 29733 (Ley de Protección de Datos Personales del Perú), cada empresa opera en un entorno privado independiente con roles diferenciados y acceso restringido. La información es de titularidad exclusiva de tu empresa.",
   },
   {
-    q: "¿Cómo se protege la privacidad y confidencialidad de nuestra operación?",
-    a: "De conformidad con la Ley N° 29733 (Ley de Protección de Datos Personales del Perú), cada empresa opera en un entorno privado independiente con roles diferenciados (Gerencia, Operaciones y Contabilidad). Tu información operativa y tributaria es de titularidad exclusiva de tu empresa.",
-  },
-  {
-    q: "¿Cómo funciona la prueba gratis de 7 días (1 semana)?",
-    a: "Habilitamos CIGO sin costo durante 7 días para evaluar el sistema con hasta 10 unidades de tu flota en ruta activa. Incluye configuración inicial, inducción para tu equipo y acompañamiento directo sin compromiso de permanencia.",
+    q: "¿Qué acompañamiento recibimos después del lanzamiento?",
+    a: "Brindamos soporte directo desde el Perú por WhatsApp y correo electrónico, además de sesiones virtuales de seguimiento para acompañar la adopción del equipo y atender ajustes operativos.",
   },
 ];
 
@@ -215,7 +211,7 @@ export default function FAQ() {
           }}
         >
           <p style={{ fontSize: "0.9375rem", color: "var(--fg-muted)", marginBottom: "1rem" }}>
-            ¿Tienes una consulta específica sobre tu flota?
+            ¿Tienes una consulta específica sobre tu empresa o proyecto?
           </p>
           <a
             href="#contacto"

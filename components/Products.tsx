@@ -759,50 +759,6 @@ function ProductRow({
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </Link>
-            {id === "cigo" && (
-              <>
-                <a
-                  href="/cigo/carta-presentacion-cigo.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "0.4rem",
-                    padding: "0.75rem 1.2rem",
-                    borderRadius: "100px",
-                    background: "#F8FAFC",
-                    color: "#0284C7",
-                    border: "1.5px solid #BAE6FD",
-                    fontWeight: 700,
-                    fontSize: "0.85rem",
-                    textDecoration: "none",
-                  }}
-                >
-                  📄 Carta de Presentación
-                </a>
-                <a
-                  href="/cigo/brochure-cigo.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "0.4rem",
-                    padding: "0.75rem 1.2rem",
-                    borderRadius: "100px",
-                    background: "#F8FAFC",
-                    color: "#334155",
-                    border: "1.5px solid #E2E8F0",
-                    fontWeight: 700,
-                    fontSize: "0.85rem",
-                    textDecoration: "none",
-                  }}
-                >
-                  📘 Brochure Comercial
-                </a>
-              </>
-            )}
           </div>
         )}
       </div>
@@ -882,28 +838,23 @@ export default function Products() {
             accentLight="rgba(14,165,233,0.08)"
             gradient="linear-gradient(135deg, #0EA5E9 0%, #06B6D4 100%)"
             label="CIGO"
-            tagline="Control de Flotas, Combustible y Rendición en Ruta"
-            description="Supervisa el consumo de combustible (Km/galón), lecturas de odómetro y rendición de viáticos durante el viaje. Los conductores reportan desde su WhatsApp habitual sin instalar aplicaciones adicionales, agilizando el cierre operativo y contable."
+            tagline="Control de Flotas, Combustible y Viáticos desde WhatsApp"
+            description="Plataforma diseñada para empresas de transporte. Los conductores envían fotos de tickets, odómetro y viáticos por su WhatsApp habitual sin instalar aplicaciones, mientras operaciones y contabilidad supervisan en tiempo real."
             features={[
               {
                 icon: "M13 10V3L4 14h7v7l9-11h-7z",
                 title: "Seguimiento de combustible y odómetro",
-                desc: "Cálculo referencial de rendimiento (Km/galón u Horas/galón) y verificación de consistencia de importes en cada carga.",
+                desc: "Cálculo referencial de rendimiento (Km/galón) y control de abastecimientos por viaje y unidad.",
               },
               {
                 icon: "M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z",
-                title: "Reporte práctico en carretera por WhatsApp",
-                desc: "Fotos de boletas/facturas, tableros de kilometraje, vouchers de viáticos y notas de voz para gastos menores en ruta.",
-              },
-              {
-                icon: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z",
-                title: "Apoyo en revisión fiscal y control de duplicados",
-                desc: "Consulta de estado del RUC y comprobante electrónico ante SUNAT, alertando documentos repetidos u observados.",
+                title: "Rendición práctica en ruta por WhatsApp",
+                desc: "Recepción de boletas, facturas, vouchers y notas de voz de gastos menores sin apps adicionales.",
               },
               {
                 icon: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z",
-                title: "Exportación contable en Excel, SIRE y ZIP",
-                desc: "Descarga de reportes operativos, planillas de liquidación de viaje, archivo TXT para SIRE Compras y carpeta ZIP de evidencias.",
+                title: "Revisión SUNAT y exportación contable",
+                desc: "Consulta de RUC y comprobantes, planillas de liquidación Excel, archivo TXT SIRE y ZIP de evidencias.",
               },
             ]}
             href="/cigo"

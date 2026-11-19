@@ -90,6 +90,33 @@ const MODULES = [
   }
 ];
 
+const CIGO_FAQS = [
+  {
+    q: "¿Cómo asiste CIGO en la revisión de comprobantes ante SUNAT?",
+    a: "CIGO consulta el estado del RUC emisor (Activo y Habido) y el estado del comprobante electrónico mediante conectores de consulta tributaria. Si un establecimiento aún no ha enviado su resumen diario a SUNAT, el documento queda pendiente para revalidación y se alerta cualquier intento de registrar una serie y número duplicados.",
+  },
+  {
+    q: "¿Qué archivos y reportes descarga el área de contabilidad?",
+    a: "Desde el panel web puedes exportar el reporte operativo en Excel, las planillas de liquidación por viaje (viáticos entregados vs. gastos rendidos), el archivo TXT estructurado para el Registro de Compras Electrónico (SIRE) de SUNAT y un archivo ZIP con todas las fotografías de respaldo ordenadas.",
+  },
+  {
+    q: "¿Necesito que mis choferes descarguen alguna aplicación especial?",
+    a: "No. Los choferes no instalan aplicaciones adicionales ni manejan contraseñas. Todo el envío de fotos de boletas/facturas, lecturas de odómetro o notas de voz para gastos menores se realiza desde su número habitual de WhatsApp.",
+  },
+  {
+    q: "¿Qué sucede si el conductor pasa por un tramo de carretera sin señal?",
+    a: "El conductor toma la foto del comprobante o del tablero y la envía al chat de WhatsApp. En cuanto la unidad retoma cobertura móvil o Wi-Fi en ruta, WhatsApp transmite el mensaje y CIGO lo procesa conservando la fecha de emisión del documento.",
+  },
+  {
+    q: "¿Cómo se protege la privacidad y confidencialidad de nuestra operación?",
+    a: "De conformidad con la Ley N° 29733 (Ley de Protección de Datos Personales del Perú), cada empresa opera en un entorno privado independiente con roles diferenciados (Gerencia, Operaciones y Contabilidad). Tu información operativa y tributaria es de titularidad exclusiva de tu empresa.",
+  },
+  {
+    q: "¿Cómo funciona la prueba gratis de 7 días (1 semana)?",
+    a: "Habilitamos CIGO sin costo durante 7 días para evaluar el sistema con hasta 10 unidades de tu flota en ruta activa. Incluye configuración inicial, inducción para tu equipo y acompañamiento directo sin compromiso de permanencia.",
+  },
+];
+
 function useInView(threshold = 0.1) {
   const ref = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
@@ -107,9 +134,19 @@ function useInView(threshold = 0.1) {
 export default function CigoPage() {
   const [activeModuleIndex, setActiveModuleIndex] = useState(0);
   const [showTerms, setShowTerms] = useState(false);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
   const [activeChatTab, setActiveChatTab] = useState<"combustible" | "audio" | "peaje">("combustible");
   const [isPaused, setIsPaused] = useState(false);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hash === "#terminos") {
+      setShowTerms(true);
+      setTimeout(() => {
+        document.getElementById("terminos")?.scrollIntoView({ behavior: "smooth" });
+      }, 150);
+    }
+  }, []);
 
   const scrollToContent = () => {
     const el = document.getElementById("whatsapp-feature");
@@ -995,8 +1032,134 @@ export default function CigoPage() {
         </div>
       </section>
 
-      {/* ── Direct ROI Calculator for Fleet Owners ── */}
+      {/* ── Clientes Reales, Carta de Presentación, Brochure y Video Demo CIGO ── */}
       <RoiCalculator />
+
+      {/* ── Preguntas Frecuentes Específicas de CIGO ── */}
+      <section
+        id="faq-cigo"
+        style={{
+          padding: "5rem 1.5rem",
+          background: "#FAFAFC",
+          borderTop: "1px solid #E2E8F0",
+        }}
+      >
+        <div style={{ maxWidth: "820px", margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+            <span
+              style={{
+                fontSize: "0.78rem",
+                fontWeight: 800,
+                color: "#0284C7",
+                textTransform: "uppercase",
+                letterSpacing: "0.06em",
+                background: "#E0F2FE",
+                padding: "0.35rem 0.9rem",
+                borderRadius: "100px",
+              }}
+            >
+              PREGUNTAS FRECUENTES · CIGO
+            </span>
+            <h2
+              style={{
+                fontSize: "clamp(1.75rem, 3.8vw, 2.35rem)",
+                fontWeight: 900,
+                color: "#0F172A",
+                letterSpacing: "-0.03em",
+                marginTop: "0.9rem",
+                marginBottom: "0.6rem",
+              }}
+            >
+              Dudas Operativas, Contables y de Implementación
+            </h2>
+            <p style={{ fontSize: "0.98rem", color: "#64748B", lineHeight: 1.65 }}>
+              Respuestas claras sobre el uso en carretera, consultas SUNAT, exportaciones SIRE y prueba gratuita.
+            </p>
+          </div>
+
+          <div
+            style={{
+              background: "#FFFFFF",
+              borderRadius: "20px",
+              border: "1px solid #E2E8F0",
+              padding: "0.5rem 1.75rem",
+              boxShadow: "0 8px 28px rgba(15, 23, 42, 0.04)",
+            }}
+          >
+            {CIGO_FAQS.map((faq, idx) => {
+              const isOpen = openFaqIndex === idx;
+              return (
+                <div
+                  key={faq.q}
+                  style={{
+                    borderBottom:
+                      idx < CIGO_FAQS.length - 1 ? "1px solid #F1F5F9" : "none",
+                  }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                    aria-expanded={isOpen}
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      gap: "1rem",
+                      padding: "1.25rem 0",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      textAlign: "left",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: "0.98rem",
+                        fontWeight: 700,
+                        color: isOpen ? "#0284C7" : "#0F172A",
+                        lineHeight: 1.45,
+                      }}
+                    >
+                      {faq.q}
+                    </span>
+                    <span
+                      style={{
+                        flexShrink: 0,
+                        width: "28px",
+                        height: "28px",
+                        borderRadius: "50%",
+                        background: isOpen ? "#E0F2FE" : "#F1F5F9",
+                        color: isOpen ? "#0284C7" : "#64748B",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontWeight: 800,
+                        fontSize: "1rem",
+                      }}
+                    >
+                      {isOpen ? "−" : "+"}
+                    </span>
+                  </button>
+                  {isOpen && (
+                    <p
+                      style={{
+                        fontSize: "0.92rem",
+                        color: "#475569",
+                        lineHeight: 1.7,
+                        paddingBottom: "1.25rem",
+                        margin: 0,
+                      }}
+                    >
+                      {faq.a}
+                    </p>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
 
       {/* ── High-Conversion Footer CTA ── */}
       <section style={{ padding: "5.5rem 1.5rem", background: "#FFFFFF", textAlign: "center", borderTop: "1px solid #E2E8F0", position: "relative", overflow: "hidden" }}>

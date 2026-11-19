@@ -23,8 +23,8 @@ const PILLARS = [
     bg: "rgba(14,165,233,0.06)",
     title: "Enfoque en la operación real",
     description:
-      "Nuestras herramientas nacen del trabajo diario en carretera y administración. Evitamos pantallas complejas para que tanto el chofer como el contador adopten el sistema con facilidad.",
-    points: ["Reporte directo por WhatsApp", "Lectura asistida de documentos", "Panel web claro para gerencia"],
+      "Nuestras herramientas nacen de procesos empresariales concretos. Evitamos pantallas complejas para que tanto el personal operativo como el área administrativa adopten el sistema con facilidad.",
+    points: ["Flujos prácticos por WhatsApp", "Automatización asistida por IA", "Panel web claro para gerencia"],
   },
   {
     iconPath: "M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12z M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z",
@@ -32,8 +32,8 @@ const PILLARS = [
     bg: "rgba(14,165,233,0.06)",
     title: "Acompañamiento e implementación",
     description:
-      "Configuramos tu padrón de unidades, rutas y usuarios junto a tu equipo. Incluimos guías prácticas para conductores y soporte directo en el Perú.",
-    points: ["Inducción al equipo operativo", "Guía rápida para conductores", "Soporte directo por WhatsApp"],
+      "Configuramos cada plataforma según el flujo de tu empresa. Incluimos inducción para tu equipo, material de apoyo y soporte técnico directo en el Perú.",
+    points: ["Configuración personalizada", "Inducción a usuarios clave", "Soporte directo por WhatsApp"],
   },
   {
     iconPath: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z",
@@ -41,8 +41,8 @@ const PILLARS = [
     bg: "rgba(16,185,129,0.06)",
     title: "Reserva y privacidad empresarial",
     description:
-      "Cada empresa cuenta con un entorno privado e independiente. Protegemos la confidencialidad de tus rutas, costos y comprobantes conforme a la Ley N° 29733.",
-    points: ["Entorno independiente por empresa", "Perfiles por área (Gerencia, Contabilidad)", "Respaldo digital de evidencias"],
+      "Cada organización cuenta con un entorno privado e independiente en la nube. Protegemos la confidencialidad de tus datos y operaciones conforme a la Ley N° 29733.",
+    points: ["Entorno independiente por empresa", "Perfiles y permisos por área", "Respaldo digital continuo"],
   },
 ];
 

@@ -3,10 +3,10 @@
 import { useEffect, useRef } from "react";
 
 const STATS = [
-  { value: "En Ruta", label: "Digitalización de tickets y odómetro" },
-  { value: "Km / Gal", label: "Seguimiento de consumo por unidad" },
-  { value: "7 Días", label: "Prueba gratis con hasta 10 unidades" },
-  { value: "WhatsApp", label: "Operación sin instalar aplicaciones" },
+  { value: "2 Plataformas", label: "CIGO (Flotas) y ASYS IA (WhatsApp)" },
+  { value: "WhatsApp + Web", label: "Operación ágil sin instalar apps" },
+  { value: "Nube B2B", label: "Entorno privado por empresa" },
+  { value: "Perú", label: "Soporte e implementación directa" },
 ];
 
 export default function Hero() {
@@ -130,7 +130,7 @@ export default function Hero() {
           id="hero-badge-left"
         >
           <span className="radar-live" />
-          <span>Telemetría Km/Galón en Vivo</span>
+          <span>CIGO · Control de Flotas y Gastos</span>
         </div>
 
         {/* Floating Interactive Badge (Right) - Desktop only */}
@@ -152,8 +152,8 @@ export default function Hero() {
           }}
           id="hero-badge-right"
         >
-          <span style={{ color: "#0EA5E9", fontWeight: 900 }}>✓ En Ruta</span>
-          <span>Digitalización por WhatsApp</span>
+          <span style={{ color: "#7C3AED", fontWeight: 900 }}>✦ ASYS IA</span>
+          <span>Ventas y Atención 24/7</span>
         </div>
 
         {/* Badge */}
@@ -185,7 +185,7 @@ export default function Hero() {
               animation: "pulse-ring 2s infinite",
             }}
           />
-          Plataformas Empresariales B2B · Conexión Directa con SUNAT & WhatsApp
+          Devorq Systems · Software B2B e Inteligencia Artificial en el Perú
         </div>
 
         {/* Headline */}
@@ -218,7 +218,7 @@ export default function Hero() {
             animation: "slide-in-bottom 0.8s 0.2s both",
           }}
         >
-          Construimos tecnología de alta precisión para transporte, finanzas y atención al cliente. Cero fricción, cero apps complejas: tus equipos operan desde WhatsApp y supervisas en tiempo real.
+          Desarrollamos plataformas empresariales enfocadas en resultados concretos. Desde el control operativo de flotas con CIGO hasta ventas y atención 24/7 por WhatsApp con ASYS IA.
         </p>
 
         {/* CTAs */}
@@ -233,30 +233,21 @@ export default function Hero() {
         >
           <button
             onClick={() => {
-              const el = document.getElementById("cigo");
+              const el = document.getElementById("productos");
               if (el) {
-                el.scrollIntoView({ behavior: "smooth", block: "center" });
+                el.scrollIntoView({ behavior: "smooth", block: "start" });
               }
             }}
             className="btn-primary"
             style={{ border: "none", cursor: "pointer" }}
           >
-            Ver productos
+            Explorar productos
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
           </button>
           <a href="#contacto" className="btn-secondary">
             Hablar con nosotros
-          </a>
-          <a
-            href="/cigo/carta-presentacion-cigo.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-secondary"
-            style={{ borderColor: "rgba(14,165,233,0.35)", color: "#0284C7" }}
-          >
-            📄 Ver Carta de Presentación CIGO
           </a>
         </div>
 

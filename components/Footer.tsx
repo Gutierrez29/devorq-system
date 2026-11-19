@@ -4,14 +4,13 @@ const FOOTER_LINKS = {
   Empresa: [
     { label: "Inicio", href: "/" },
     { label: "Soluciones", href: "/#productos" },
-    { label: "Clientes y Documentos", href: "/#documentacion-cigo" },
+    { label: "¿Cómo funciona?", href: "/#como-funciona" },
     { label: "Contacto", href: "/#contacto" },
   ],
   Productos: [
     { label: "CIGO (Control de Flotas)", href: "/cigo" },
-    { label: "📄 Carta de Presentación CIGO", href: "/cigo/carta-presentacion-cigo.pdf" },
-    { label: "📘 Brochure Comercial CIGO", href: "/cigo/brochure-cigo.pdf" },
     { label: "ASYS IA (Ventas WhatsApp)", href: "/asys-ia" },
+    { label: "Documentación CIGO", href: "/cigo#documentacion-cigo" },
   ],
   Legal: [
     { label: "Términos del Servicio", href: "/cigo#terminos" },
