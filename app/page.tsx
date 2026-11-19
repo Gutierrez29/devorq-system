@@ -1,7 +1,7 @@
-import GlobalNetworkCanvas from "@/components/GlobalNetworkCanvas";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Products from "@/components/Products";
+import RoiCalculator from "@/components/RoiCalculator";
 import HowItWorks from "@/components/HowItWorks";
 import WhyDevor from "@/components/WhyDevor";
 import FAQ from "@/components/FAQ";
@@ -10,11 +10,11 @@ import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen bg-[#030712] text-slate-100 selection:bg-sky-500/30 selection:text-sky-200">
-      <GlobalNetworkCanvas />
+    <main>
       <Navbar />
       <Hero />
       <Products />
+      <RoiCalculator />
       <HowItWorks />
       <WhyDevor />
       <FAQ />

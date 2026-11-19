@@ -1,109 +1,219 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
-
 const FOOTER_LINKS = {
   Empresa: [
-    { label: "Nosotros", href: "/#por-que-devor" },
-    { label: "Servicios", href: "/#cigo" },
+    { label: "Inicio", href: "/" },
+    { label: "Soluciones", href: "/#productos" },
+    { label: "Clientes y Documentos", href: "/#documentacion-cigo" },
     { label: "Contacto", href: "/#contacto" },
   ],
   Productos: [
-    { label: "CIGO - Transporte & SUNAT", href: "/cigo" },
-    { label: "ASYS IA - Agentes WhatsApp", href: "/asys-ia" },
-    { label: "Desarrollo a Medida", href: "/#contacto" },
+    { label: "CIGO (Control de Flotas)", href: "/cigo" },
+    { label: "📄 Carta de Presentación CIGO", href: "/cigo/carta-presentacion-cigo.pdf" },
+    { label: "📘 Brochure Comercial CIGO", href: "/cigo/brochure-cigo.pdf" },
+    { label: "ASYS IA (Ventas WhatsApp)", href: "/asys-ia" },
   ],
   Legal: [
-    { label: "Términos de uso", href: "#" },
-    { label: "Privacidad de datos", href: "#" },
-    { label: "Seguridad Cloud", href: "#" },
+    { label: "Términos del Servicio", href: "/cigo#terminos" },
+    { label: "Protección de Datos (Ley 29733)", href: "/cigo#terminos" },
   ],
 };
 
 export default function Footer() {
   return (
-    <footer className="bg-slate-950 text-slate-400 py-16 px-4 sm:px-6 relative overflow-hidden border-t border-slate-900">
-      {/* Background ambient subtle glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-gradient-to-r from-transparent via-sky-500/30 to-transparent" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-36 bg-sky-500/5 blur-3xl rounded-full pointer-events-none" />
+    <footer
+      style={{
+        background: "#0D0820",
+        color: "rgba(255,255,255,0.65)",
+        padding: "4rem 1.5rem 2rem",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      {/* Background glow */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "600px",
+          height: "1px",
+          background: "linear-gradient(90deg, transparent, rgba(91,78,255,0.5), rgba(224,64,251,0.5), transparent)",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          top: "-100px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "500px",
+          height: "200px",
+          background: "radial-gradient(ellipse, rgba(91,78,255,0.08) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }}
+      />
 
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* Main Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-10 mb-12">
-          {/* Brand Info */}
-          <div className="md:col-span-2">
-            <Link href="/" className="inline-flex items-center gap-2.5 mb-4 group">
-              <div className="transition-transform duration-200 group-hover:scale-105">
-                <Image
-                  src="/devorq-logo.png"
-                  alt="Devorq Logo"
-                  width={34}
-                  height={34}
-                  className="w-8 h-8 object-contain"
-                />
-              </div>
-              <span className="text-xl font-extrabold tracking-tight text-white flex items-center gap-1.5">
+      <div style={{ maxWidth: "1200px", margin: "0 auto", position: "relative" }}>
+        {/* Top: Logo + links */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "2fr repeat(3, 1fr)",
+            gap: "3rem",
+            marginBottom: "3rem",
+          }}
+          className="footer-grid"
+        >
+          {/* Brand column */}
+          <div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.6rem",
+                marginBottom: "1rem",
+              }}
+            >
+              <img
+                src="/devorq-isotype.png"
+                alt="Devorq Logo"
+                style={{
+                  width: "38px",
+                  height: "38px",
+                  borderRadius: "10px",
+                  objectFit: "contain",
+                }}
+              />
+              <span
+                style={{
+                  fontSize: "1.45rem",
+                  fontWeight: 800,
+                  letterSpacing: "-0.03em",
+                  color: "white",
+                }}
+              >
                 Devorq
-                <span className="text-sky-400 text-xs px-2 py-0.5 rounded-full bg-sky-950 border border-sky-800 font-semibold">
-                  Systems
-                </span>
               </span>
-            </Link>
+            </div>
 
-            <p className="text-sm text-slate-400 leading-relaxed max-w-sm mb-6">
-              Ingeniería de software de alta fidelidad, plataformas empresariales y agentes de inteligencia artificial para acelerar el crecimiento corporativo en Latinoamérica.
+            <p
+              style={{
+                fontSize: "0.875rem",
+                lineHeight: 1.75,
+                maxWidth: "280px",
+                marginBottom: "0.75rem",
+              }}
+            >
+              Devorq Systems — Software empresarial para operaciones de transporte, finanzas y atención por WhatsApp en el Perú.
             </p>
+            <div style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.8)", lineHeight: 1.6, marginBottom: "1.25rem" }}>
+              <div>WhatsApp: +51 929 222 980 / +51 935 351 768</div>
+              <div>Correo: contacto@devorq.com</div>
+            </div>
 
-            {/* Social Icons (Clean inline SVGs) */}
-            <div className="flex items-center gap-2">
-              <a
-                href="#"
-                aria-label="LinkedIn"
-                className="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 hover:border-slate-700 transition-all active:scale-95"
-              >
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                  <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
-                </svg>
-              </a>
-              <a
-                href="#"
-                aria-label="Twitter"
-                className="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 hover:border-slate-700 transition-all active:scale-95"
-              >
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-              </a>
-              <a
-                href="#"
-                aria-label="Instagram"
-                className="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 hover:border-slate-700 transition-all active:scale-95"
-              >
-                <svg className="w-4 h-4 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-                </svg>
-              </a>
+            {/* Social icons */}
+            <div style={{ display: "flex", gap: "0.75rem" }}>
+              {[
+                {
+                  label: "LinkedIn",
+                  href: "#",
+                  icon: (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z" />
+                      <circle cx="4" cy="4" r="2" />
+                    </svg>
+                  ),
+                },
+                {
+                  label: "Twitter/X",
+                  href: "#",
+                  icon: (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                    </svg>
+                  ),
+                },
+                {
+                  label: "Instagram",
+                  href: "#",
+                  icon: (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                    </svg>
+                  ),
+                },
+              ].map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  aria-label={social.label}
+                  style={{
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "8px",
+                    background: "rgba(255,255,255,0.06)",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "rgba(255,255,255,0.5)",
+                    textDecoration: "none",
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.background = "rgba(91,78,255,0.2)";
+                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(91,78,255,0.4)";
+                    (e.currentTarget as HTMLElement).style.color = "white";
+                    (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.06)";
+                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.08)";
+                    (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.5)";
+                    (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+                  }}
+                >
+                  {social.icon}
+                </a>
+              ))}
             </div>
           </div>
 
-          {/* Nav Categories */}
+          {/* Link columns */}
           {Object.entries(FOOTER_LINKS).map(([category, links]) => (
             <div key={category}>
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4">
+              <h4
+                style={{
+                  fontSize: "0.8125rem",
+                  fontWeight: 700,
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase",
+                  color: "rgba(255,255,255,0.35)",
+                  marginBottom: "1rem",
+                }}
+              >
                 {category}
               </h4>
-              <ul className="space-y-2.5 text-sm">
+              <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.625rem" }}>
                 {links.map((link) => (
                   <li key={link.label}>
-                    <Link
+                    <a
                       href={link.href}
-                      className="text-slate-400 hover:text-sky-400 transition-colors"
+                      style={{
+                        fontSize: "0.875rem",
+                        color: "rgba(255,255,255,0.55)",
+                        textDecoration: "none",
+                        transition: "color 0.2s ease",
+                      }}
+                      onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "white")}
+                      onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "rgba(255,255,255,0.55)")}
                     >
                       {link.label}
-                    </Link>
+                    </a>
                   </li>
                 ))}
               </ul>
@@ -111,15 +221,42 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>© 2026 Devorq Systems. Todos los derechos reservados.</p>
-          <div className="flex items-center gap-1.5">
-            <span>Diseñado y construido con precisión técnica en</span>
-            <span className="text-slate-300 font-medium">Perú 🇵🇪</span>
+        {/* Divider */}
+        <div style={{ height: "1px", background: "rgba(255,255,255,0.06)", marginBottom: "1.5rem" }} />
+
+        {/* Bottom bar */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: "1rem",
+          }}
+        >
+          <p style={{ fontSize: "0.8125rem" }}>
+            © {new Date().getFullYear()} Devorq Systems. Todos los derechos reservados.
+          </p>
+          <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+            <span style={{ fontSize: "0.8125rem" }}>Hecho con</span>
+            <span style={{ fontSize: "1rem" }}>❤️</span>
+            <span style={{ fontSize: "0.8125rem" }}>en Perú 🇵🇪</span>
           </div>
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 900px) {
+          .footer-grid {
+            grid-template-columns: 1fr 1fr !important;
+          }
+        }
+        @media (max-width: 560px) {
+          .footer-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </footer>
   );
 }

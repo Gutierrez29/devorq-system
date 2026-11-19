@@ -1,32 +1,66 @@
 "use client";
 
-import { useState } from "react";
-import {
-  Send,
-  CheckCircle,
-  Copy,
-  Sparkles,
-  Shield,
-  Clock,
-} from "lucide-react";
+import { useRef, useEffect, useState, useId } from "react";
 
-const PROJECT_TYPES = [
-  "Plataforma Web a Medida",
-  "Agente de IA / Automatización",
-  "Implementación CIGO",
-  "Solución ASYS IA",
-  "Auditoría & Optimización",
-];
+function useInView(threshold = 0.05) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) setInView(true); },
+      { threshold }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [threshold]);
+  return { ref, inView };
+}
 
 export default function Waitlist() {
-  const [selectedType, setSelectedType] = useState(PROJECT_TYPES[0]);
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [details, setDetails] = useState("");
+  const { ref, inView } = useInView();
   const [copied, setCopied] = useState(false);
-  const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
+
+  // Form State
+  const [name, setName] = useState("");
+  const [company, setCompany] = useState("");
+  const [phone, setPhone] = useState("");
+  const [product, setProduct] = useState<"cigo" | "asys" | "ambos">("cigo");
+  const [note, setNote] = useState("");
+
+  const nameId = useId();
+  const companyId = useId();
+  const phoneId = useId();
+  const noteId = useId();
 
   const emailAddress = "contacto@devorq.com";
+
+  const getProductLabel = () => {
+    if (product === "cigo") return "CIGO (Auditoría de Combustible & Telemetría)";
+    if (product === "asys") return "ASYS IA (Procesamiento de Documentos & Facturas)";
+    return "CIGO y ASYS IA (Ecosistema Completo)";
+  };
+
+  const buildMessage = () => {
+    let msg = `Hola Devorq, deseo coordinar una demostración técnica:\n`;
+    if (name) msg += `· Nombre: ${name}\n`;
+    if (company) msg += `· Empresa / Flota: ${company}\n`;
+    if (phone) msg += `· WhatsApp de contacto: ${phone}\n`;
+    msg += `· Solución de Interés: ${getProductLabel()}\n`;
+    if (note) msg += `· Detalle operativo: ${note}\n`;
+    return msg;
+  };
+
+  const handleWhatsAppSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const text = encodeURIComponent(buildMessage());
+    window.open(`https://wa.me/51929222980?text=${text}`, "_blank");
+  };
+
+  const handleGmailSubmit = () => {
+    const subject = encodeURIComponent(`Solicitud de Demostración - ${company || name || "Devorq Systems"}`);
+    const body = encodeURIComponent(buildMessage());
+    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${emailAddress}&su=${subject}&body=${body}`, "_blank");
+  };
 
   const copyEmail = () => {
     navigator.clipboard.writeText(emailAddress);
@@ -34,195 +68,361 @@ export default function Waitlist() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-
-    setStatus("submitting");
-
-    // Simular preparación y canal de envío instantáneo
-    setTimeout(() => {
-      setStatus("success");
-      const subject = encodeURIComponent(`Consulta de Proyecto [${selectedType}] - ${fullName || "Empresa"}`);
-      const body = encodeURIComponent(
-        `Hola equipo Devorq,\n\n` +
-        `Mi nombre: ${fullName}\n` +
-        `Correo: ${email}\n` +
-        `Tipo de Solución: ${selectedType}\n\n` +
-        `Requerimiento:\n${details || "Deseo agendar una sesión exploratoria para mi empresa."}\n\n` +
-        `Saludos.`
-      );
-      // Abrir cliente preferido en una ventana o pestaña limpia
-      window.open(`mailto:${emailAddress}?subject=${subject}&body=${body}`, "_blank");
-    }, 600);
-  };
-
   return (
-    <section id="contacto" className="py-20 md:py-28 bg-transparent text-white relative overflow-hidden z-10">
-      {/* Background radial glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-sky-500/10 blur-[120px] rounded-full pointer-events-none" />
+    <section
+      id="contacto"
+      style={{
+        padding: "6rem 1.5rem",
+        background: "var(--bg)",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      {/* Background glow */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "radial-gradient(ellipse 70% 50% at 50% 50%, rgba(91,78,255,0.06) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }}
+      />
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
-        {/* Header Badge & Title */}
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-800 border border-slate-700/80 text-sky-400 text-xs font-semibold uppercase tracking-wider mb-4">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Contacto Directo & Cotizaciones</span>
+      <div
+        ref={ref}
+        style={{
+          maxWidth: "760px",
+          margin: "0 auto",
+          position: "relative",
+          zIndex: 1,
+          transition: "all 0.7s ease",
+          opacity: inView ? 1 : 0,
+          transform: inView ? "translateY(0)" : "translateY(40px)",
+        }}
+      >
+        <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+          <div className="section-label" style={{ margin: "0 auto 1rem" }}>
+            <span className="radar-live" />
+            Contacto & Pilotos B2B
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white mb-4">
-            Construyamos el próximo nivel de tu{" "}
-            <span className="bg-gradient-to-r from-sky-400 via-sky-300 to-indigo-300 bg-clip-text text-transparent">
-              infraestructura digital
-            </span>
+
+          <h2
+            style={{
+              fontSize: "clamp(2rem, 4.5vw, 2.85rem)",
+              fontWeight: 900,
+              letterSpacing: "-0.035em",
+              lineHeight: 1.15,
+              marginBottom: "1rem",
+              color: "var(--fg)",
+            }}
+          >
+            Hablemos sobre <span className="gradient-text">tu Operación</span>
           </h2>
-          <p className="text-slate-400 text-base sm:text-lg leading-relaxed">
-            Conversemos sobre tu producto o requerimiento técnico. Diseñamos soluciones personalizadas que escalan sin fisuras.
+
+          <p
+            style={{
+              fontSize: "1.0625rem",
+              color: "var(--fg-muted)",
+              lineHeight: 1.7,
+              maxWidth: "560px",
+              margin: "0 auto",
+            }}
+          >
+            Solicita tu Prueba Gratis de 7 días (hasta 10 unidades en ruta activa) o coordina una demostración en vivo para tu equipo de operaciones y contabilidad.
+          </p>
+          <p style={{ fontSize: "0.9rem", color: "#0284C7", fontWeight: 700, marginTop: "0.6rem" }}>
+            Atención directa: +51 929 222 980 · +51 935 351 768 · contacto@devorq.com
           </p>
         </div>
 
-        {/* Lead Form Card */}
-        <div className="bg-slate-950/80 backdrop-blur-xl border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl shadow-black/40">
-          {status === "success" ? (
-            <div className="text-center py-10 animate-in fade-in zoom-in-95 duration-300">
-              <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mx-auto mb-5">
-                <CheckCircle className="w-8 h-8" />
-              </div>
-              <h3 className="text-2xl font-bold text-white mb-2">¡Requerimiento Iniciado!</h3>
-              <p className="text-slate-400 text-sm max-w-md mx-auto mb-6">
-                Hemos preparado el borrador con los detalles de tu consulta. Tu cliente de correo se ha abierto o puedes contactarnos directamente a{" "}
-                <span className="text-sky-400 font-mono font-medium">{emailAddress}</span>.
-              </p>
-              <button
-                onClick={() => setStatus("idle")}
-                className="px-6 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-semibold transition-all"
-              >
-                Enviar otro mensaje
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Project Type Selector */}
+        {/* Interactive Form Card */}
+        <div
+          style={{
+            background: "#FFFFFF",
+            borderRadius: "24px",
+            border: "1px solid #E2E8F0",
+            boxShadow: "0 16px 48px rgba(15, 23, 42, 0.06)",
+            padding: "2.5rem 2rem",
+          }}
+        >
+          <form onSubmit={handleWhatsAppSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+            {/* Row 1: Name and Company */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1.25rem" }}>
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3">
-                  ¿Qué tipo de solución buscas?
+                <label htmlFor={nameId} style={{ display: "block", fontSize: "0.84rem", fontWeight: 700, color: "#334155", marginBottom: "0.4rem" }}>
+                  Tu Nombre y Cargo *
                 </label>
-                <div className="flex flex-wrap gap-2">
-                  {PROJECT_TYPES.map((type) => (
-                    <button
-                      type="button"
-                      key={type}
-                      onClick={() => setSelectedType(type)}
-                      className={`text-xs sm:text-sm font-medium px-4 py-2 rounded-xl transition-all cursor-pointer ${
-                        selectedType === type
-                          ? "bg-sky-500 text-white shadow-md shadow-sky-500/30 font-semibold"
-                          : "bg-slate-900 text-slate-400 hover:text-slate-200 hover:bg-slate-850 border border-slate-800"
-                      }`}
-                    >
-                      {type}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Input Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label htmlFor="fullName" className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-                    Tu Nombre o Empresa
-                  </label>
-                  <input
-                    id="fullName"
-                    type="text"
-                    placeholder="Ej. Martín Vega / Logística Andina"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    required
-                    className="w-full bg-slate-900/90 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="email" className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-                    Correo Electrónico Corporativo
-                  </label>
-                  <input
-                    id="email"
-                    type="email"
-                    placeholder="martin@empresa.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="w-full bg-slate-900/90 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all"
-                  />
-                </div>
-              </div>
-
-              {/* Details textarea */}
-              <div>
-                <label htmlFor="details" className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-                  Cuéntanos sobre tu objetivo o desafío técnico
-                </label>
-                <textarea
-                  id="details"
-                  rows={3}
-                  placeholder="Describe brevemente el flujo, los volúmenes o las características clave que deseas implementar..."
-                  value={details}
-                  onChange={(e) => setDetails(e.target.value)}
-                  className="w-full bg-slate-900/90 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all resize-none"
+                <input
+                  id={nameId}
+                  type="text"
+                  required
+                  placeholder="Ej: Carlos Silva - Gerente de Operaciones"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  style={{
+                    width: "100%",
+                    padding: "0.75rem 1rem",
+                    borderRadius: "12px",
+                    border: "1.5px solid #E2E8F0",
+                    fontSize: "0.9375rem",
+                    outline: "none",
+                    background: "#F8FAFC",
+                    transition: "border-color 0.2s ease, background 0.2s ease",
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.borderColor = "#5B4EFF";
+                    e.currentTarget.style.background = "#FFFFFF";
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.borderColor = "#E2E8F0";
+                    e.currentTarget.style.background = "#F8FAFC";
+                  }}
                 />
               </div>
 
-              {/* Submit CTA */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
-                <div className="flex items-center gap-4 text-xs text-slate-400">
-                  <span className="flex items-center gap-1.5">
-                    <Clock className="w-4 h-4 text-sky-400" />
-                    Respuesta en &lt;24 horas
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Shield className="w-4 h-4 text-emerald-400" />
-                    Confidencialidad garantizada
-                  </span>
+              <div>
+                <label htmlFor={companyId} style={{ display: "block", fontSize: "0.84rem", fontWeight: 700, color: "#334155", marginBottom: "0.4rem" }}>
+                  Empresa / Tamaño de Flota *
+                </label>
+                <input
+                  id={companyId}
+                  type="text"
+                  required
+                  placeholder="Ej: Transportes del Norte (14 tractos)"
+                  value={company}
+                  onChange={(e) => setCompany(e.target.value)}
+                  style={{
+                    width: "100%",
+                    padding: "0.75rem 1rem",
+                    borderRadius: "12px",
+                    border: "1.5px solid #E2E8F0",
+                    fontSize: "0.9375rem",
+                    outline: "none",
+                    background: "#F8FAFC",
+                    transition: "border-color 0.2s ease, background 0.2s ease",
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.borderColor = "#5B4EFF";
+                    e.currentTarget.style.background = "#FFFFFF";
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.borderColor = "#E2E8F0";
+                    e.currentTarget.style.background = "#F8FAFC";
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Row 2: WhatsApp phone and Product selection */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1.25rem" }}>
+              <div>
+                <label htmlFor={phoneId} style={{ display: "block", fontSize: "0.84rem", fontWeight: 700, color: "#334155", marginBottom: "0.4rem" }}>
+                  Teléfono / WhatsApp *
+                </label>
+                <input
+                  id={phoneId}
+                  type="tel"
+                  required
+                  placeholder="+51 987 654 321"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  style={{
+                    width: "100%",
+                    padding: "0.75rem 1rem",
+                    borderRadius: "12px",
+                    border: "1.5px solid #E2E8F0",
+                    fontSize: "0.9375rem",
+                    outline: "none",
+                    background: "#F8FAFC",
+                    transition: "border-color 0.2s ease, background 0.2s ease",
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.borderColor = "#5B4EFF";
+                    e.currentTarget.style.background = "#FFFFFF";
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.borderColor = "#E2E8F0";
+                    e.currentTarget.style.background = "#F8FAFC";
+                  }}
+                />
+              </div>
+
+              <div>
+                <label style={{ display: "block", fontSize: "0.84rem", fontWeight: 700, color: "#334155", marginBottom: "0.4rem" }}>
+                  Solución de Interés
+                </label>
+                <div style={{ display: "flex", gap: "0.5rem" }}>
+                  <button
+                    type="button"
+                    onClick={() => setProduct("cigo")}
+                    style={{
+                      flex: 1,
+                      padding: "0.65rem 0.5rem",
+                      borderRadius: "10px",
+                      fontSize: "0.8125rem",
+                      fontWeight: 700,
+                      cursor: "pointer",
+                      border: product === "cigo" ? "1.5px solid #0EA5E9" : "1.5px solid #E2E8F0",
+                      background: product === "cigo" ? "#E0F2FE" : "#F8FAFC",
+                      color: product === "cigo" ? "#0284C7" : "#64748B",
+                      transition: "all 0.2s ease",
+                    }}
+                  >
+                    ⛽ CIGO Flota
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setProduct("asys")}
+                    style={{
+                      flex: 1,
+                      padding: "0.65rem 0.5rem",
+                      borderRadius: "10px",
+                      fontSize: "0.8125rem",
+                      fontWeight: 700,
+                      cursor: "pointer",
+                      border: product === "asys" ? "1.5px solid #5B4EFF" : "1.5px solid #E2E8F0",
+                      background: product === "asys" ? "rgba(91, 78, 255, 0.08)" : "#F8FAFC",
+                      color: product === "asys" ? "#5B4EFF" : "#64748B",
+                      transition: "all 0.2s ease",
+                    }}
+                  >
+                    🤖 ASYS IA
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setProduct("ambos")}
+                    style={{
+                      flex: 1,
+                      padding: "0.65rem 0.5rem",
+                      borderRadius: "10px",
+                      fontSize: "0.8125rem",
+                      fontWeight: 700,
+                      cursor: "pointer",
+                      border: product === "ambos" ? "1.5px solid #10B981" : "1.5px solid #E2E8F0",
+                      background: product === "ambos" ? "rgba(16, 185, 129, 0.08)" : "#F8FAFC",
+                      color: product === "ambos" ? "#059669" : "#64748B",
+                      transition: "all 0.2s ease",
+                    }}
+                  >
+                    ✨ Ambas
+                  </button>
                 </div>
+              </div>
+            </div>
+
+            {/* Row 3: Notes / Message */}
+            <div>
+              <label htmlFor={noteId} style={{ display: "block", fontSize: "0.84rem", fontWeight: 700, color: "#334155", marginBottom: "0.4rem" }}>
+                Mensaje o Requerimiento Operativo (Opcional)
+              </label>
+              <textarea
+                id={noteId}
+                rows={3}
+                placeholder="Cuéntanos sobre tus rutas, problemas con viáticos o volumen mensual de facturas..."
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                style={{
+                  width: "100%",
+                  padding: "0.75rem 1rem",
+                  borderRadius: "12px",
+                  border: "1.5px solid #E2E8F0",
+                  fontSize: "0.9375rem",
+                  outline: "none",
+                  background: "#F8FAFC",
+                  resize: "vertical",
+                  transition: "border-color 0.2s ease, background 0.2s ease",
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = "#5B4EFF";
+                  e.currentTarget.style.background = "#FFFFFF";
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = "#E2E8F0";
+                  e.currentTarget.style.background = "#F8FAFC";
+                }}
+              />
+            </div>
+
+            {/* Actions Grid */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem", marginTop: "0.5rem" }}>
+              <button
+                type="submit"
+                style={{
+                  width: "100%",
+                  padding: "1rem 1.75rem",
+                  borderRadius: "14px",
+                  background: "#25D366",
+                  color: "#FFFFFF",
+                  fontWeight: 800,
+                  fontSize: "1.0625rem",
+                  border: "none",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "0.6rem",
+                  boxShadow: "0 8px 24px rgba(37, 211, 102, 0.35)",
+                  transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                  e.currentTarget.style.boxShadow = "0 12px 30px rgba(37, 211, 102, 0.45)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "0 8px 24px rgba(37, 211, 102, 0.35)";
+                }}
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.698.08-2.008-.466-1.545-.644-2.529-2.22-2.607-2.324-.076-.104-.633-.842-.633-1.608 0-.766.4-1.144.542-1.301.143-.158.312-.198.416-.198.104 0 .208.002.299.006.096.004.225-.036.352.269.13.313.443 1.077.481 1.156.039.078.065.17.013.273-.052.104-.078.17-.156.26-.078.092-.163.204-.234.274-.078.078-.16.163-.069.319.091.156.404.667.868 1.08 1.026.914 1.35 1.026 1.542 1.104.192.078.305.068.418-.063.113-.13.484-.564.614-.757.13-.193.26-.16.437-.095.177.065 1.12.528 1.315.626.195.097.325.146.372.228.047.081.047.47-.097.876z"/>
+                </svg>
+                Solicitar Demostración por WhatsApp
+              </button>
+
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", flexWrap: "wrap", marginTop: "0.25rem" }}>
+                <button
+                  type="button"
+                  onClick={handleGmailSubmit}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    color: "#EA4335",
+                    fontWeight: 700,
+                    fontSize: "0.85rem",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.4rem",
+                  }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.272H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L12 9.545l8.073-6.052C21.69 2.28 24 3.434 24 5.457z"/>
+                  </svg>
+                  Prefiero enviar por Gmail
+                </button>
+
+                <span style={{ color: "#CBD5E1" }}>·</span>
 
                 <button
-                  type="submit"
-                  disabled={status === "submitting"}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-bold text-sm shadow-lg shadow-sky-500/25 hover:shadow-sky-500/40 transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
+                  type="button"
+                  onClick={copyEmail}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    color: copied ? "#10B981" : "#64748B",
+                    fontWeight: 600,
+                    fontSize: "0.85rem",
+                  }}
                 >
-                  <Send className="w-4 h-4" />
-                  <span>{status === "submitting" ? "Procesando..." : "Solicitar Propuesta Técnica"}</span>
+                  {copied ? "✓ contacto@devorq.com copiado" : `Copiar correo (${emailAddress})`}
                 </button>
               </div>
-            </form>
-          )}
-
-          {/* Quick Direct Actions Footer */}
-          <div className="mt-8 pt-6 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-4 text-xs">
-            <div className="text-slate-400">
-              ¿Prefieres escribirnos directamente?
             </div>
-
-            <div className="flex items-center gap-2">
-              <span className="font-mono text-slate-300">{emailAddress}</span>
-              <button
-                onClick={copyEmail}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition-all active:scale-95 cursor-pointer font-medium"
-              >
-                {copied ? (
-                  <>
-                    <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
-                    <span className="text-emerald-400">¡Copiado!</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="w-3.5 h-3.5 text-slate-400" />
-                    <span>Copiar</span>
-                  </>
-                )}
-              </button>
-            </div>
-          </div>
+          </form>
         </div>
       </div>
     </section>

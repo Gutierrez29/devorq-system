@@ -338,14 +338,46 @@ export default function AsysIaPage() {
             <p style={{ fontSize: "1rem", color: "rgba(255,255,255,0.85)", lineHeight: 1.7, marginBottom: "2rem" }}>
               Cuéntanos de tu negocio y te mostramos cómo ASYS IA puede atender a tus clientes desde el primer día.
             </p>
-            <a href="mailto:contacto@devorq.com" style={{
-              display: "inline-flex", alignItems: "center", gap: "0.5rem",
-              background: "white", color: "#7C3AED", fontWeight: 700,
-              padding: "0.875rem 2rem", borderRadius: "100px", textDecoration: "none",
-              fontSize: "1rem", boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
-            }}>
-              Escribirnos al correo →
-            </a>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.85rem" }}>
+              <a
+                href="https://wa.me/51929222980?text=Hola%20Devorq%2C%20quiero%20conocer%20m%C3%A1s%20sobre%20ASYS%20IA%20y%20agendar%20una%20demostraci%C3%B3n."
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                  background: "#25D366",
+                  color: "white",
+                  fontWeight: 800,
+                  padding: "0.875rem 2.25rem",
+                  borderRadius: "100px",
+                  textDecoration: "none",
+                  fontSize: "1rem",
+                  boxShadow: "0 8px 24px rgba(0,0,0,0.25)",
+                  transition: "transform 0.2s ease",
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
+              >
+                Solicitar Demo por WhatsApp →
+              </a>
+
+              <a
+                href="https://mail.google.com/mail/?view=cm&fs=1&to=contacto@devorq.com&su=Consulta%20sobre%20ASYS%20IA%20-%20Devorq%20Systems"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  color: "white",
+                  fontSize: "0.85rem",
+                  fontWeight: 600,
+                  textDecoration: "underline",
+                  opacity: 0.9,
+                }}
+              >
+                O contáctanos por Gmail (contacto@devorq.com)
+              </a>
+            </div>
           </div>
         </div>
       </section>

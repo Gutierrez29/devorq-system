@@ -2,90 +2,91 @@
 
 import { useRef, useEffect, useState, useCallback } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import RoiCalculator from "@/components/RoiCalculator";
 
-const GMAIL_URL = "https://mail.google.com/mail/?view=cm&fs=1&to=contacto@devorq.com&su=Solicitud%20de%20Demo%20CIGO%20-%20Devorq%20Systems";
+const WSP_URL = "https://wa.me/51929222980?text=Hola%20Devorq%2C%20quiero%20solicitar%20la%20Prueba%20Gratis%20de%207%20d%C3%ADas%20de%20CIGO%20para%20mi%20flota.";
+const GMAIL_URL = "https://mail.google.com/mail/?view=cm&fs=1&to=contacto@devorq.com&su=Solicitud%20de%20Prueba%20Gratis%207%20D%C3%ADas%20CIGO%20-%20Devorq%20Systems";
 
 const MODULES = [
   {
     id: "01",
-    shortName: "Inicio de Sesión",
-    badge: "ACCESO & SEGURIDAD MULTI-EMPRESA",
-    title: "Inicio de Sesión & Autenticación",
-    desc: "Autenticación centralizada por empresa con encriptación de datos y aislamiento estricto de sesiones operativas.",
-    logro: "Protección total de la información contable y prevención de accesos no autorizados.",
-    auto: "Validación instantánea de credenciales y asignación automática de permisos según el nivel del usuario.",
-    img: "/cigo/01-login.webp"
+    shortName: "Rutas & Combustible",
+    badge: "CONTROL DE CONSUMO EN RUTA",
+    title: "Control de Rutas & Combustible (Km/Galón)",
+    desc: "Asignación de viajes con origen y destino, registro de lecturas de odómetro y cálculo del rendimiento en Km/galón u Horas/galón en cada abastecimiento.",
+    logro: "Seguimiento oportuno del consumo de combustible y avance de rendición durante el viaje sin esperar el retorno a base.",
+    auto: "Cálculo automático del ratio de Km/galón contra el kilometraje reportado y verificación de consistencia en importes.",
+    img: "/cigo/02-dashboard.webp"
   },
   {
     id: "02",
-    shortName: "Dashboard",
-    badge: "VISIBILIDAD FINANCIERA EN TIEMPO REAL",
-    title: "Dashboard Operativo & Métricas",
-    desc: "Consolidado visual de egresos, totales auditados y resumen de gastos por vehículo y ruta en una sola vista gerencial.",
-    logro: "Toma de decisiones gerenciales respaldada por números reales actualizados en tiempo real.",
-    auto: "Consolidación automática de métricas diarias, gráficas de tendencias y alertas presupuestales.",
+    shortName: "Dashboard Flota",
+    badge: "VISIBILIDAD OPERATIVA GERENCIAL",
+    title: "Panel Operativo de Flota y Gastos",
+    desc: "Consolidado visual de egresos, abastecimientos de combustible, comprobantes registrados y saldos por viaje en una sola vista gerencial.",
+    logro: "Visibilidad clara de los costos operativos por viaje, conductor y unidad antes del cierre de fin de mes.",
+    auto: "Consolidación continua de los gastos reportados desde carretera y alertas ante variaciones de consumo.",
     img: "/cigo/02-dashboard.webp"
   },
   {
     id: "03",
-    shortName: "Choferes & Flotas",
-    badge: "CONTROL DE VIÁTICOS POR CONDUCTOR",
-    title: "Módulo de Choferes & Flotas",
-    desc: "Directorio de la planilla de choferes, asignación de placas vehiculares y trazabilidad completa de licencias y viáticos por viaje.",
-    logro: "Orden absoluto sobre el dinero asignado a cada conductor para peajes, combustible y viáticos.",
-    auto: "Cálculo en vivo de saldo entregado vs. rendido, identificando liquidaciones pendientes sin errores.",
+    shortName: "Choferes & Viáticos",
+    badge: "CONTROL DE SALDO ENTREGADO VS RENDIDO",
+    title: "Padrón de Choferes & Rendición de Viáticos",
+    desc: "Directorio de conductores habilitados en WhatsApp, asignación de unidades y seguimiento de transferencias de viáticos por viaje.",
+    logro: "Control ordenado del dinero entregado a cada conductor para peajes, combustible, alimentación y gastos de ruta.",
+    auto: "Cálculo continuo de saldo entregado frente a gastos sustentados, identificando liquidaciones pendientes.",
     img: "/cigo/03-choferes.webp"
   },
   {
     id: "04",
-    shortName: "Auditoría SUNAT",
-    badge: "AUDITORÍA TRIBUTARIA AUTOMÁTICA",
-    title: "Auditoría SUNAT & Comprobantes",
-    desc: "Recepción y filtrado automático de gastos operativos con verificación oficial de Constancia de Recepción (CDR) ante SUNAT.",
-    logro: "Eliminación total de gastos no deducibles por comprobantes falsos, anulados o fuera de fecha.",
-    auto: "Consulta automática de CDR en SUNAT y bloqueo inmediato de comprobantes duplicados por serie/número.",
+    shortName: "Revisión SUNAT",
+    badge: "CONSULTA TRIBUTARIA Y CONTROL DE DUPLICADOS",
+    title: "Revisión de Comprobantes & Consulta SUNAT",
+    desc: "Recepción de fotos de boletas y facturas por WhatsApp con consulta de RUC emisor (Activo/Habido), estado del comprobante electrónico y alerta de documentos repetidos.",
+    logro: "Ordenamiento fiscal previo al cierre contable y prevención de doble registro de un mismo comprobante.",
+    auto: "Consulta automatizada del estado del comprobante electrónico y detección de duplicidades por serie y correlativo.",
     img: "/cigo/04-comprobantes.webp"
   },
   {
     id: "05",
-    shortName: "Reportes SIRE",
-    badge: "INTEGRACIÓN CONTABLE DIRECTA",
-    title: "Reportes & Exportación SIRE",
-    desc: "Generación de archivos estructurados para la integración inmediata con SUNAT SIRE y exportación en Excel en 1 clic.",
-    logro: "Cierre contable mensual sin requerir digitación manual ni revisión hoja por hoja.",
-    auto: "Formateo de archivos compatibles con SIRE y exportaciones automáticas organizadas.",
+    shortName: "Reportes & SIRE",
+    badge: "EXPORTACIÓN CONTABLE EN EXCEL, SIRE Y ZIP",
+    title: "Reportes Contables, Liquidación Excel & SIRE SUNAT",
+    desc: "Descarga de reportes operativos en Excel, planillas de liquidación por viaje, archivo TXT estructurado para el Registro de Compras Electrónico (SIRE) y paquete ZIP de evidencias.",
+    logro: "Reducción de horas de digitación manual para el equipo contable con respaldos fotográficos ordenados por periodo.",
+    auto: "Generación estructurada de hojas de cálculo Excel, archivo TXT SIRE Compras y carpeta comprimida ZIP de comprobantes.",
     img: "/cigo/05-reportes.webp"
   },
   {
     id: "06",
-    shortName: "Usuarios & Permisos",
-    badge: "ADMINISTRACIÓN DE ROLES & PERMISOS",
-    title: "Gestión de Usuarios & Permisos",
-    desc: "Administración jerárquica de roles (Administrador Maestro, Auditor, Conductor, Contador) para una delegación de tareas 100% segura.",
-    logro: "Delegación segura de responsabilidades donde cada colaborador accede únicamente a sus funciones correspondientes.",
-    auto: "Aplicación automática de restricciones por perfil impidiendo modificaciones no autorizadas.",
+    shortName: "Tractos & Carretas",
+    badge: "PADRÓN DE UNIDADES Y TABLEROS",
+    title: "Gestión de Flota, Tractos y Semirremolques",
+    desc: "Padrón de tractocamiones y carretas/semirremolques con registro fotográfico de tableros de kilometraje (odómetro) y horas de motor (horómetro).",
+    logro: "Historial ordenado de kilometraje y abastecimientos asociado a cada placa vehicular y viaje.",
+    auto: "Extracción asistida por IA de la lectura del odómetro u horómetro desde la fotografía enviada por el conductor.",
     img: "/cigo/06-usuarios.webp"
   },
   {
     id: "07",
-    shortName: "Configuración",
-    badge: "REGLAS DE NEGOCIO & PARÁMETROS",
-    title: "Configuración del Sistema",
-    desc: "Personalización de categorías contables de gasto, centros de costos, reglas de negocio y topes presupuestarios de la empresa.",
-    logro: "Alineación exacta de la plataforma CIGO a los requerimientos contables específicos de tu empresa.",
-    auto: "Aplicación continua de topes máximos de gasto y validación automática de reglas de negocio en cada registro.",
+    shortName: "Reglas & Topes",
+    badge: "PARÁMETROS OPERATIVOS Y TOPES",
+    title: "Configuración de Topes & Categorías de Gasto",
+    desc: "Definición de parámetros operativos, categorías de gasto y topes referenciales para peajes, alimentación, hospedaje y combustible.",
+    logro: "Mayor control sobre los límites presupuestados para cada categoría de gasto en carretera.",
+    auto: "Marcado automático de gastos con observaciones cuando superan los parámetros configurados por la empresa.",
     img: "/cigo/07-configuracion.webp"
   },
   {
     id: "08",
-    shortName: "Perfil de Usuario",
-    badge: "SEGURIDAD & BITÁCORA INDIVIDUAL",
-    title: "Perfil de Usuario",
-    desc: "Gestión individual de credenciales de acceso, cambio de contraseña y seguimiento de la bitácora de actividad de cada usuario.",
-    logro: "Trazabilidad y responsabilidad total sobre las operaciones y aprobaciones realizadas por cada usuario.",
-    auto: "Registro automático en la bitácora de auditoría de cada acción ejecutada en el sistema.",
-    img: "/cigo/08-perfil.webp"
+    shortName: "Seguridad & Roles",
+    badge: "ENTORNO PRIVADO MULTI-ROL",
+    title: "Privacidad por Empresa & Perfiles de Acceso",
+    desc: "Entorno independiente por empresa con perfiles diferenciados para Gerencia General, Jefatura de Operaciones y Contabilidad.",
+    logro: "Reserva comercial conforme a la Ley N° 29733 donde cada área accede a las funciones que le corresponden.",
+    auto: "Registro de actividad operativa y almacenamiento organizado de evidencias digitales en la nube.",
+    img: "/cigo/01-login.webp"
   }
 ];
 
@@ -106,6 +107,9 @@ function useInView(threshold = 0.1) {
 export default function CigoPage() {
   const [activeModuleIndex, setActiveModuleIndex] = useState(0);
   const [showTerms, setShowTerms] = useState(false);
+  const [activeChatTab, setActiveChatTab] = useState<"combustible" | "audio" | "peaje">("combustible");
+  const [isPaused, setIsPaused] = useState(false);
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
   const scrollToContent = () => {
     const el = document.getElementById("whatsapp-feature");
@@ -124,13 +128,29 @@ export default function CigoPage() {
     setActiveModuleIndex((prev) => (prev - 1 + MODULES.length) % MODULES.length);
   }, []);
 
-  // Auto-play timer every 10 seconds (10000ms)
+  // Auto-play timer every 9 seconds; pauses when user hovers or touches
   useEffect(() => {
+    if (isPaused) return;
     const timer = setInterval(() => {
       nextModule();
-    }, 10000);
+    }, 9000);
     return () => clearInterval(timer);
-  }, [nextModule, activeModuleIndex]);
+  }, [nextModule, isPaused, activeModuleIndex]);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.touches[0].clientX);
+    setIsPaused(true);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX !== null) {
+      const deltaX = e.changedTouches[0].clientX - touchStartX;
+      if (deltaX < -50) nextModule();
+      else if (deltaX > 50) prevModule();
+    }
+    setTouchStartX(null);
+    setIsPaused(false);
+  };
 
   const { ref: heroRef, inView: heroInView } = useInView();
   const { ref: wspRef, inView: wspInView } = useInView();
@@ -158,11 +178,9 @@ export default function CigoPage() {
       >
         {/* Devorq Logo */}
         <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "0.6rem" }}>
-          <Image
+          <img
             src="/devorq-isotype.png"
             alt="Devorq Logo"
-            width={32}
-            height={32}
             style={{
               width: "32px",
               height: "32px",
@@ -175,29 +193,65 @@ export default function CigoPage() {
           </span>
         </Link>
 
-        {/* Back Link */}
-        <Link
-          href="/"
-          style={{
-            fontSize: "0.875rem",
-            color: "#64748B",
-            textDecoration: "none",
-            fontWeight: 600,
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "0.35rem",
-          }}
-        >
-          ← Volver al Inicio
-        </Link>
+        {/* Top Right Links: Carta, Brochure & Back */}
+        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
+          <a
+            href="/cigo/carta-presentacion-cigo.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              fontSize: "0.82rem",
+              fontWeight: 700,
+              color: "#0284C7",
+              background: "#E0F2FE",
+              padding: "0.4rem 0.9rem",
+              borderRadius: "100px",
+              textDecoration: "none",
+              border: "1px solid rgba(14,165,233,0.3)",
+            }}
+          >
+            📄 Carta de Presentación (PDF)
+          </a>
+          <a
+            href="/cigo/brochure-cigo.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              fontSize: "0.82rem",
+              fontWeight: 700,
+              color: "#334155",
+              background: "#F8FAFC",
+              padding: "0.4rem 0.9rem",
+              borderRadius: "100px",
+              textDecoration: "none",
+              border: "1px solid #E2E8F0",
+            }}
+          >
+            📘 Brochure (PDF)
+          </a>
+          <Link
+            href="/"
+            style={{
+              fontSize: "0.875rem",
+              color: "#64748B",
+              textDecoration: "none",
+              fontWeight: 600,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.35rem",
+            }}
+          >
+            ← Volver al Inicio
+          </Link>
+        </div>
       </nav>
 
       {/* ── Hero Section ── */}
       <section
         ref={heroRef}
         style={{
-          background: "radial-gradient(ellipse 80% 60% at 50% -10%, rgba(14,165,233,0.14) 0%, #FFFFFF 80%)",
-          padding: "5.5rem 1.5rem 4.5rem",
+          background: "radial-gradient(ellipse 80% 60% at 50% -10%, rgba(14,165,233,0.16) 0%, #FFFFFF 80%)",
+          padding: "5rem 1.5rem 4rem",
           textAlign: "center",
           position: "relative",
           overflow: "hidden",
@@ -206,22 +260,19 @@ export default function CigoPage() {
           transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
         }}
       >
-        <div style={{ maxWidth: "880px", margin: "0 auto", position: "relative", zIndex: 1 }}>
+        <div style={{ maxWidth: "900px", margin: "0 auto", position: "relative", zIndex: 1 }}>
           {/* CIGO LOGO IN LARGE FIRST ITEM */}
-          <div style={{ marginBottom: "1.75rem" }}>
-            <Image
+          <div style={{ marginBottom: "1.5rem" }}>
+            <img
               src="/cigo-logo.webp"
               alt="CIGO Logo"
-              width={200}
-              height={82}
-              priority
               style={{
                 height: "82px",
                 width: "auto",
                 objectFit: "contain",
                 margin: "0 auto",
                 display: "block",
-                filter: "drop-shadow(0 6px 20px rgba(14, 165, 233, 0.18))",
+                filter: "drop-shadow(0 8px 24px rgba(14, 165, 233, 0.22))",
               }}
             />
           </div>
@@ -238,11 +289,11 @@ export default function CigoPage() {
               padding: "0.4rem 1.15rem",
               borderRadius: "100px",
               marginBottom: "1.5rem",
-              border: "1px solid rgba(14, 165, 233, 0.25)",
+              border: "1px solid rgba(14, 165, 233, 0.3)",
             }}
           >
-            <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#0EA5E9" }} />
-            Plataforma SaaS + Chatbot de WhatsApp para Choferes
+            <span className="radar-live" />
+            Control de Flotas B2B · WhatsApp Habitual sin instalar aplicaciones
           </div>
 
           <h1
@@ -255,58 +306,189 @@ export default function CigoPage() {
               color: "#0F172A",
             }}
           >
-            Control Inteligente de Gastos &{" "}
+            Control Total de tu Flota &{" "}
             <span style={{ background: "linear-gradient(135deg, #0EA5E9 0%, #06B6D4 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-              Auditoría Tributaria SUNAT
+              Combustible desde WhatsApp
             </span>
           </h1>
 
           <p
             style={{
               fontSize: "1.125rem",
-              color: "#64748B",
+              color: "#475569",
               lineHeight: 1.75,
               maxWidth: "760px",
               margin: "0 auto 2.5rem",
             }}
           >
-            Los choferes rinden enviando una foto por WhatsApp. CIGO registra los datos automáticamente en la plataforma y audita la validez tributaria ante SUNAT en la web oficial. Cero digitación manual y cero multas.
+            Control inteligente de combustible (Km/galón), viáticos de viaje y pre-liquidación contable desde carretera. Los conductores reportan por su WhatsApp habitual enviando fotos o notas de voz; la plataforma organiza cada gasto, consulta datos ante SUNAT y agiliza el cierre en oficina.
           </p>
 
-          {/* Circular Down Arrow Scroll Button */}
-          <div style={{ display: "flex", justifyContent: "center", marginTop: "1rem" }}>
-            <button
-              onClick={scrollToContent}
-              aria-label="Conocer el Chatbot de WhatsApp"
-              title="Conocer el Chatbot de WhatsApp"
+          {/* Action Buttons */}
+          <div style={{ display: "flex", gap: "0.85rem", justifyContent: "center", flexWrap: "wrap", marginBottom: "2rem" }}>
+            <a
+              href={WSP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               style={{
-                width: "50px",
-                height: "50px",
-                borderRadius: "50%",
-                background: "#FFFFFF",
-                border: "1.5px solid rgba(14, 165, 233, 0.35)",
-                boxShadow: "0 6px 20px rgba(14, 165, 233, 0.2)",
-                color: "#0EA5E9",
-                display: "flex",
+                display: "inline-flex",
                 alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                animation: "bounce-down 2s infinite",
-                transition: "all 0.25s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "scale(1.08)";
-                e.currentTarget.style.boxShadow = "0 8px 28px rgba(14, 165, 233, 0.35)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1)";
-                e.currentTarget.style.boxShadow = "0 6px 20px rgba(14, 165, 233, 0.2)";
+                gap: "0.6rem",
+                background: "#25D366",
+                color: "white",
+                fontWeight: 700,
+                fontSize: "0.95rem",
+                padding: "0.85rem 1.85rem",
+                borderRadius: "100px",
+                textDecoration: "none",
+                boxShadow: "0 8px 24px rgba(37,211,102,0.35)",
+                transition: "all 0.2s ease",
               }}
             >
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 5v14M5 12l7 7 7-7" />
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.698.08-2.008-.466-1.545-.644-2.529-2.22-2.607-2.324-.076-.104-.633-.842-.633-1.608 0-.766.4-1.144.542-1.301.143-.158.312-.198.416-.198.104 0 .208.002.299.006.096.004.225-.036.352.269.13.313.443 1.077.481 1.156.039.078.065.17.013.273-.052.104-.078.17-.156.26-.078.092-.163.204-.234.274-.078.078-.16.163-.069.319.091.156.404.667.868 1.08 1.026.914 1.35 1.026 1.542 1.104.192.078.305.068.418-.063.113-.13.484-.564.614-.757.13-.193.26-.16.437-.095.177.065 1.12.528 1.315.626.195.097.325.146.372.228.047.081.047.47-.097.876z"/>
               </svg>
+              Solicitar Prueba Gratis de 7 Días
+            </a>
+            <a
+              href="/cigo/carta-presentacion-cigo.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                background: "#0F172A",
+                color: "#FFFFFF",
+                fontWeight: 700,
+                fontSize: "0.92rem",
+                padding: "0.85rem 1.55rem",
+                borderRadius: "100px",
+                textDecoration: "none",
+                boxShadow: "0 8px 20px rgba(15,23,42,0.18)",
+                transition: "all 0.2s ease",
+              }}
+            >
+              📄 Ver Carta de Presentación (PDF)
+            </a>
+            <a
+              href="/cigo/brochure-cigo.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                background: "#FFFFFF",
+                color: "#0284C7",
+                fontWeight: 700,
+                fontSize: "0.92rem",
+                padding: "0.85rem 1.5rem",
+                borderRadius: "100px",
+                border: "1.5px solid #BAE6FD",
+                textDecoration: "none",
+                transition: "all 0.2s ease",
+              }}
+            >
+              📘 Brochure Comercial (PDF)
+            </a>
+            <button
+              onClick={scrollToContent}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                background: "#FFFFFF",
+                color: "#0F172A",
+                fontWeight: 700,
+                fontSize: "0.92rem",
+                padding: "0.85rem 1.45rem",
+                borderRadius: "100px",
+                border: "1.5px solid #E2E8F0",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+              }}
+            >
+              Ver Flujo en WhatsApp ↓
             </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ── PILARES DE VALOR PARA LA OPERACIÓN DE TRANSPORTE ── */}
+      <section
+        style={{
+          padding: "3.5rem 1.5rem",
+          background: "#FFFFFF",
+          borderTop: "1px solid #E2E8F0",
+          borderBottom: "1px solid #E2E8F0",
+        }}
+      >
+        <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
+          <div style={{ textAlign: "center", maxWidth: "800px", margin: "0 auto 2.5rem" }}>
+            <span style={{ fontSize: "0.78rem", fontWeight: 800, color: "#0284C7", textTransform: "uppercase", letterSpacing: "0.06em", background: "#E0F2FE", padding: "0.3rem 0.85rem", borderRadius: "100px" }}>
+              PILARES DE VALOR EN CARRETERA
+            </span>
+            <h2 style={{ fontSize: "clamp(1.75rem, 3.5vw, 2.35rem)", fontWeight: 900, color: "#0F172A", letterSpacing: "-0.035em", marginTop: "0.75rem", marginBottom: "0.5rem" }}>
+              Orden Operativo y Administrativo en Cada Viaje
+            </h2>
+            <p style={{ fontSize: "0.98rem", color: "#64748B", lineHeight: 1.65 }}>
+              Cuatro mejoras prácticas para la operación diaria de flotas de carga pesada:
+            </p>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1.5rem" }}>
+            {/* Card 1 */}
+            <div className="card-hover-glow" style={{ background: "#F8FAFC", padding: "1.75rem", borderRadius: "16px", border: "1px solid #E2E8F0" }}>
+              <div style={{ fontSize: "1.75rem", fontWeight: 900, color: "#0EA5E9", letterSpacing: "-0.03em", lineHeight: 1.15, marginBottom: "0.5rem" }}>
+                Digitalización en Ruta
+              </div>
+              <h3 style={{ fontSize: "1.05rem", fontWeight: 800, color: "#0F172A", marginBottom: "0.35rem" }}>
+                Respaldo Fotográfico de Comprobantes
+              </h3>
+              <p style={{ fontSize: "0.85rem", color: "#64748B", lineHeight: 1.55 }}>
+                Disminuye la pérdida de información por tickets térmicos borrados por el calor o extraviados, conservando la imagen digital desde la carretera.
+              </p>
+            </div>
+
+            {/* Card 2 */}
+            <div className="card-hover-glow" style={{ background: "#F8FAFC", padding: "1.75rem", borderRadius: "16px", border: "1px solid #E2E8F0" }}>
+              <div style={{ fontSize: "1.75rem", fontWeight: 900, color: "#10B981", letterSpacing: "-0.03em", lineHeight: 1.15, marginBottom: "0.5rem" }}>
+                Km / Galón
+              </div>
+              <h3 style={{ fontSize: "1.05rem", fontWeight: 800, color: "#0F172A", marginBottom: "0.35rem" }}>
+                Seguimiento de Galones y Odómetro
+              </h3>
+              <p style={{ fontSize: "0.85rem", color: "#64748B", lineHeight: 1.55 }}>
+                Permite contrastar el volumen de combustible reportado en las facturas de grifo frente a la lectura del tablero (odómetro u horómetro) del vehículo.
+              </p>
+            </div>
+
+            {/* Card 3 */}
+            <div className="card-hover-glow" style={{ background: "#F8FAFC", padding: "1.75rem", borderRadius: "16px", border: "1px solid #E2E8F0" }}>
+              <div style={{ fontSize: "1.75rem", fontWeight: 900, color: "#7C3AED", letterSpacing: "-0.03em", lineHeight: 1.15, marginBottom: "0.5rem" }}>
+                Liquidación Ágil
+              </div>
+              <h3 style={{ fontSize: "1.05rem", fontWeight: 800, color: "#0F172A", marginBottom: "0.35rem" }}>
+                Avance Continuo de Rendiciones
+              </h3>
+              <p style={{ fontSize: "0.85rem", color: "#64748B", lineHeight: 1.55 }}>
+                El registro de viáticos entregados frente a los gastos reportados se actualiza durante el trayecto, acortando los tiempos de cierre en oficina.
+              </p>
+            </div>
+
+            {/* Card 4 */}
+            <div className="card-hover-glow" style={{ background: "#F8FAFC", padding: "1.75rem", borderRadius: "16px", border: "1px solid #E2E8F0" }}>
+              <div style={{ fontSize: "1.75rem", fontWeight: 900, color: "#0284C7", letterSpacing: "-0.03em", lineHeight: 1.15, marginBottom: "0.5rem" }}>
+                Soporte Contable
+              </div>
+              <h3 style={{ fontSize: "1.05rem", fontWeight: 800, color: "#0F172A", marginBottom: "0.35rem" }}>
+                Ordenamiento Fiscal y Pre-Auditoría
+              </h3>
+              <p style={{ fontSize: "0.85rem", color: "#64748B", lineHeight: 1.55 }}>
+                Centraliza RUC, serie y montos de cada documento con consulta ante SUNAT y alerta de comprobantes duplicados para facilitar la revisión tributaria.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -316,9 +498,8 @@ export default function CigoPage() {
         id="whatsapp-feature"
         ref={wspRef}
         style={{
-          padding: "3.25rem 1.5rem 3rem",
+          padding: "3.5rem 1.5rem",
           background: "linear-gradient(180deg, #F0FDF4 0%, #FFFFFF 100%)",
-          borderTop: "1px solid #DCFCE7",
           borderBottom: "1px solid #E2E8F0",
           opacity: wspInView ? 1 : 0,
           transform: wspInView ? "translateY(0)" : "translateY(30px)",
@@ -328,13 +509,13 @@ export default function CigoPage() {
         <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
           <div style={{ textAlign: "center", maxWidth: "840px", margin: "0 auto 2.25rem" }}>
             <span style={{ fontSize: "0.78rem", fontWeight: 800, color: "#16A34A", textTransform: "uppercase", letterSpacing: "0.06em", background: "#DCFCE7", padding: "0.3rem 0.85rem", borderRadius: "100px" }}>
-              TECNOLOGÍA DE RENDICIÓN VÍA WHATSAPP
+              REPORTE EN RUTA VÍA WHATSAPP
             </span>
             <h2 style={{ fontSize: "clamp(1.65rem, 3.5vw, 2.25rem)", fontWeight: 900, color: "#0F172A", letterSpacing: "-0.035em", marginTop: "0.75rem", marginBottom: "0.6rem" }}>
-              Envío de Foto por WhatsApp → Confirmación e Ingreso a CIGO
+              El Conductor Envía Foto o Nota de Voz → CIGO Registra y Organiza
             </h2>
             <p style={{ fontSize: "0.98rem", color: "#475569", lineHeight: 1.65 }}>
-              Los números telefónicos de tus choferes están autorizados en CIGO. Durante sus viajes, el chofer solo envía la foto del peaje o factura por WhatsApp y recibe la confirmación con los datos clave. La validación CDR ante SUNAT se consolida automáticamente en el panel web.
+              Sin descargar aplicaciones adicionales ni recordar contraseñas. El conductor reporta desde su WhatsApp habitual.
             </p>
           </div>
 
@@ -343,79 +524,179 @@ export default function CigoPage() {
             <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
               <div style={{ background: "#FFFFFF", padding: "1.15rem 1.35rem", borderRadius: "14px", border: "1px solid #DCFCE7", boxShadow: "0 4px 16px rgba(22,163,74,0.05)" }}>
                 <div style={{ fontSize: "0.75rem", fontWeight: 800, color: "#16A34A", textTransform: "uppercase", marginBottom: "0.2rem" }}>
-                  PASO 1: ENVÍO DE FOTO VÍA WHATSAPP
+                  PASO 1: FOTO O NOTA DE VOZ POR WHATSAPP
                 </div>
                 <h3 style={{ fontSize: "1.05rem", fontWeight: 800, color: "#0F172A", marginBottom: "0.25rem" }}>
-                  El chofer envía la foto por WhatsApp
+                  Toma foto del comprobante y odómetro
                 </h3>
                 <p style={{ fontSize: "0.85rem", color: "#64748B", lineHeight: 1.55 }}>
-                  Sin escribir textos complejos ni llenar formularios. El chofer solo envía la imagen del peaje o ticket de combustible al bot de CIGO.
+                  Al abastecer combustible o pagar un gasto de viaje, el conductor envía la foto. Si pasa por un tramo sin señal, WhatsApp transmite el reporte al recuperar cobertura.
                 </p>
               </div>
 
               <div style={{ background: "#FFFFFF", padding: "1.15rem 1.35rem", borderRadius: "14px", border: "1px solid #DCFCE7", boxShadow: "0 4px 16px rgba(22,163,74,0.05)" }}>
                 <div style={{ fontSize: "0.75rem", fontWeight: 800, color: "#16A34A", textTransform: "uppercase", marginBottom: "0.2rem" }}>
-                  PASO 2: MENSAJE DE CONFIRMACIÓN CON DATOS CLAVE
+                  PASO 2: CÁLCULO DE KM/GALÓN Y CONSULTA SUNAT
                 </div>
                 <h3 style={{ fontSize: "1.05rem", fontWeight: 800, color: "#0F172A", marginBottom: "0.25rem" }}>
-                  Respuesta instantánea del Chatbot
+                  Extracción asistida y cálculo de consumo
                 </h3>
                 <p style={{ fontSize: "0.85rem", color: "#64748B", lineHeight: 1.55 }}>
-                  El Chatbot le responde de inmediato al chofer confirmando la recepción y mostrando los datos procesados (Proveedor, Serie, Número y Monto).
+                  CIGO extrae proveedor, RUC, galones, importes y kilometraje, respondiendo al conductor con la confirmación del registro y el rendimiento referencial del vehículo.
                 </p>
               </div>
 
               <div style={{ background: "#FFFFFF", padding: "1.15rem 1.35rem", borderRadius: "14px", border: "1px solid #DCFCE7", boxShadow: "0 4px 16px rgba(22,163,74,0.05)" }}>
                 <div style={{ fontSize: "0.75rem", fontWeight: 800, color: "#16A34A", textTransform: "uppercase", marginBottom: "0.2rem" }}>
-                  PASO 3: AUDITORÍA SUNAT EN PANEL CIGO
+                  PASO 3: CONTROL CENTRAL EN EL PANEL WEB
                 </div>
                 <h3 style={{ fontSize: "1.05rem", fontWeight: 800, color: "#0F172A", marginBottom: "0.25rem" }}>
-                  Verificación de CDR en la plataforma web
+                  Operaciones y Contabilidad supervisan en oficina
                 </h3>
                 <p style={{ fontSize: "0.85rem", color: "#64748B", lineHeight: 1.55 }}>
-                  El sistema CIGO realiza la consulta oficial de CDR en SUNAT en segundo plano, reflejando el estado tributario en el dashboard administrativo.
+                  Seguimiento del avance de liquidación durante la ruta, alertas ante variaciones y exportación en Excel, planilla de viaje, archivo TXT para SIRE y paquete ZIP.
                 </p>
               </div>
             </div>
 
-            {/* Right: WhatsApp Simulated Interface Window */}
+            {/* Right: WhatsApp Simulated Interactive Window */}
             <div
               style={{
                 background: "#0B141A",
                 borderRadius: "24px",
-                padding: "1.5rem",
-                boxShadow: "0 20px 50px rgba(0,0,0,0.3)",
+                padding: "1.25rem",
+                boxShadow: "0 20px 50px rgba(0,0,0,0.35)",
                 border: "1px solid #16A34A",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", borderBottom: "1px solid #202C33", paddingBottom: "0.75rem", marginBottom: "1rem" }}>
-                <div style={{ width: "38px", height: "38px", borderRadius: "50%", background: "#25D366", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontWeight: 900, fontSize: "0.9rem" }}>
-                  CIGO
+              {/* WhatsApp Header */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #202C33", paddingBottom: "0.75rem", marginBottom: "0.75rem" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                  <div style={{ width: "38px", height: "38px", borderRadius: "50%", background: "#25D366", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontWeight: 900, fontSize: "0.9rem" }}>
+                    CIGO
+                  </div>
+                  <div>
+                    <div style={{ fontSize: "0.9375rem", fontWeight: 800, color: "#E9EDEF" }}>CIGO Flotas Bot</div>
+                    <div style={{ fontSize: "0.75rem", color: "#25D366", fontWeight: 600 }}>● En línea · Rendición en Ruta</div>
+                  </div>
                 </div>
-                <div>
-                  <div style={{ fontSize: "0.9375rem", fontWeight: 800, color: "#E9EDEF" }}>CIGO Chatbot Choferes</div>
-                  <div style={{ fontSize: "0.75rem", color: "#25D366", fontWeight: 600 }}>● En línea · Registro de Gastos</div>
-                </div>
+                <span style={{ fontSize: "0.68rem", color: "#8696A0", background: "#1F2C34", padding: "0.2rem 0.5rem", borderRadius: "4px" }}>
+                  Verificado Meta
+                </span>
               </div>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem", fontSize: "0.84rem" }}>
-                <div style={{ background: "#005C4B", color: "#E9EDEF", padding: "0.75rem 1rem", borderRadius: "12px 12px 2px 12px", alignSelf: "flex-end", maxWidth: "85%", boxShadow: "0 2px 6px rgba(0,0,0,0.2)" }}>
-                  <div style={{ fontSize: "0.72rem", color: "#7AE3B5", fontWeight: 700, marginBottom: "0.2rem" }}>Diego Gutierrez (Chofer Placa ABC-123)</div>
-                  📷 [Foto de Boleta de Peaje]
-                </div>
+              {/* Chat Mode Switcher Tabs */}
+              <div style={{ display: "flex", gap: "0.35rem", marginBottom: "1rem", background: "#111B21", padding: "0.3rem", borderRadius: "8px" }}>
+                <button
+                  onClick={() => setActiveChatTab("combustible")}
+                  style={{
+                    flex: 1,
+                    padding: "0.4rem 0.5rem",
+                    borderRadius: "6px",
+                    border: "none",
+                    cursor: "pointer",
+                    fontSize: "0.7rem",
+                    fontWeight: 700,
+                    background: activeChatTab === "combustible" ? "#202C33" : "transparent",
+                    color: activeChatTab === "combustible" ? "#25D366" : "#8696A0",
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  ⛽ Combustible
+                </button>
+                <button
+                  onClick={() => setActiveChatTab("audio")}
+                  style={{
+                    flex: 1,
+                    padding: "0.4rem 0.5rem",
+                    borderRadius: "6px",
+                    border: "none",
+                    cursor: "pointer",
+                    fontSize: "0.7rem",
+                    fontWeight: 700,
+                    background: activeChatTab === "audio" ? "#202C33" : "transparent",
+                    color: activeChatTab === "audio" ? "#25D366" : "#8696A0",
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  🎙️ Audio Movilidad
+                </button>
+                <button
+                  onClick={() => setActiveChatTab("peaje")}
+                  style={{
+                    flex: 1,
+                    padding: "0.4rem 0.5rem",
+                    borderRadius: "6px",
+                    border: "none",
+                    cursor: "pointer",
+                    fontSize: "0.7rem",
+                    fontWeight: 700,
+                    background: activeChatTab === "peaje" ? "#202C33" : "transparent",
+                    color: activeChatTab === "peaje" ? "#25D366" : "#8696A0",
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  📄 Peaje
+                </button>
+              </div>
 
-                <div style={{ background: "#202C33", color: "#E9EDEF", padding: "0.85rem 1rem", borderRadius: "12px 12px 12px 2px", alignSelf: "flex-start", maxWidth: "90%", borderLeft: "3px solid #25D366" }}>
-                  <div style={{ fontWeight: 800, color: "#25D366", marginBottom: "0.4rem" }}>✓ Comprobante Registrado Exitosamente</div>
-                  <div style={{ lineHeight: 1.5 }}>
-                    • <strong>Proveedor:</strong> Autopista del Norte S.A.C.<br />
-                    • <strong>Comprobante:</strong> B001-004892<br />
-                    • <strong>Monto:</strong> S/. 45.00<br />
-                    • <strong>Tipo:</strong> Peaje
-                  </div>
-                  <div style={{ marginTop: "0.5rem", fontSize: "0.75rem", color: "#94A3B8" }}>
-                    Los datos han sido ingresados a tu rendición de viáticos en CIGO.
-                  </div>
-                </div>
+              {/* Dynamic Simulated Messages */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem", fontSize: "0.82rem", minHeight: "230px" }}>
+                {activeChatTab === "combustible" && (
+                  <>
+                    <div style={{ background: "#005C4B", color: "#E9EDEF", padding: "0.65rem 0.95rem", borderRadius: "12px 12px 2px 12px", alignSelf: "flex-end", maxWidth: "85%", boxShadow: "0 2px 6px rgba(0,0,0,0.2)" }}>
+                      <div style={{ fontSize: "0.7rem", color: "#7AE3B5", fontWeight: 700, marginBottom: "0.2rem" }}>Chofer Carlos M. (Tracto V1A-892)</div>
+                      📷 [Foto Ticket Repsol: 78.4 gal]<br />
+                      📷 [Foto Odómetro: 142,500 km]
+                    </div>
+                    <div style={{ background: "#202C33", color: "#E9EDEF", padding: "0.75rem 0.95rem", borderRadius: "12px 12px 12px 2px", alignSelf: "flex-start", maxWidth: "92%", borderLeft: "3px solid #25D366" }}>
+                      <div style={{ fontWeight: 800, color: "#25D366", marginBottom: "0.3rem" }}>✓ Carga Auditada & Válida SUNAT</div>
+                      <div style={{ lineHeight: 1.5, fontSize: "0.78rem" }}>
+                        • <strong>Proveedor:</strong> Repsol Combustible S.A.<br />
+                        • <strong>Carga:</strong> 78.4 gal DIESEL B5 (S/. 1,420.00)<br />
+                        • <strong>Odómetro:</strong> 142,500 km<br />
+                        • <strong>Rendimiento:</strong> <span style={{ color: "#38BDF8", fontWeight: 700 }}>3.84 km/gal (Óptimo)</span><br />
+                        • <strong>Saldo Restante Caja:</strong> S/. 1,280.00
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {activeChatTab === "audio" && (
+                  <>
+                    <div style={{ background: "#005C4B", color: "#E9EDEF", padding: "0.65rem 0.95rem", borderRadius: "12px 12px 2px 12px", alignSelf: "flex-end", maxWidth: "85%", boxShadow: "0 2px 6px rgba(0,0,0,0.2)" }}>
+                      <div style={{ fontSize: "0.7rem", color: "#7AE3B5", fontWeight: 700, marginBottom: "0.2rem" }}>Chofer Carlos M. (Tracto V1A-892)</div>
+                      🎙️ <em>&quot;Pagué 15 soles de cochera en Chimbote para pernoctar&quot;</em>
+                    </div>
+                    <div style={{ background: "#202C33", color: "#E9EDEF", padding: "0.75rem 0.95rem", borderRadius: "12px 12px 12px 2px", alignSelf: "flex-start", maxWidth: "92%", borderLeft: "3px solid #7C3AED" }}>
+                      <div style={{ fontWeight: 800, color: "#A855F7", marginBottom: "0.3rem" }}>✓ Gasto Informal Transcrito por IA</div>
+                      <div style={{ lineHeight: 1.5, fontSize: "0.78rem" }}>
+                        • <strong>Concepto:</strong> Cochera / Pernocte en Ruta<br />
+                        • <strong>Monto Extraído:</strong> S/. 15.00<br />
+                        • <strong>Destino:</strong> Planilla de Movilidad CIGO<br />
+                        • <strong>Estado:</strong> Declaración Jurada Generada
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {activeChatTab === "peaje" && (
+                  <>
+                    <div style={{ background: "#005C4B", color: "#E9EDEF", padding: "0.65rem 0.95rem", borderRadius: "12px 12px 2px 12px", alignSelf: "flex-end", maxWidth: "85%", boxShadow: "0 2px 6px rgba(0,0,0,0.2)" }}>
+                      <div style={{ fontSize: "0.7rem", color: "#7AE3B5", fontWeight: 700, marginBottom: "0.2rem" }}>Chofer Carlos M. (Tracto V1A-892)</div>
+                      📷 [Foto Boleta de Peaje Autopista del Norte]
+                    </div>
+                    <div style={{ background: "#202C33", color: "#E9EDEF", padding: "0.75rem 0.95rem", borderRadius: "12px 12px 12px 2px", alignSelf: "flex-start", maxWidth: "92%", borderLeft: "3px solid #0EA5E9" }}>
+                      <div style={{ fontWeight: 800, color: "#38BDF8", marginBottom: "0.3rem" }}>✓ Comprobante Consultando en SUNAT</div>
+                      <div style={{ lineHeight: 1.5, fontSize: "0.78rem" }}>
+                        • <strong>Comprobante:</strong> B001-004892<br />
+                        • <strong>Monto:</strong> S/. 45.00 (IGV S/. 6.86)<br />
+                        • <strong>Estado SUNAT:</strong> ACEPTADO (RUC Activo y Habido)<br />
+                        • <strong>Control Duplicado:</strong> Único en base
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -456,10 +737,10 @@ export default function CigoPage() {
                 </svg>
               </div>
               <h3 style={{ fontSize: "1.25rem", fontWeight: 800, color: "#0F172A", marginBottom: "0.6rem" }}>
-                0% Reparos Tributarios
+                Revisión Fiscal Previa
               </h3>
               <p style={{ fontSize: "0.9375rem", color: "#64748B", lineHeight: 1.65 }}>
-                Validación automática del CDR ante SUNAT. Cero facturas falsas, anuladas o no habidas.
+                Consulta del estado del RUC y comprobante electrónico ante SUNAT, detectando documentos con observaciones o duplicados antes del cierre.
               </p>
             </div>
 
@@ -470,10 +751,10 @@ export default function CigoPage() {
                 </svg>
               </div>
               <h3 style={{ fontSize: "1.25rem", fontWeight: 800, color: "#0F172A", marginBottom: "0.6rem" }}>
-                Ahorro de 15 Horas/Semana
+                Menos Digitación Manual
               </h3>
               <p style={{ fontSize: "0.9375rem", color: "#64748B", lineHeight: 1.65 }}>
-                Eliminación total de la digitación manual de facturas y la revisión hoja por hoja.
+                Reduce el tiempo invertido en transcribir recibos físicos hoja por hoja al centralizar los datos extraídos desde la ruta.
               </p>
             </div>
 
@@ -487,10 +768,10 @@ export default function CigoPage() {
                 </svg>
               </div>
               <h3 style={{ fontSize: "1.25rem", fontWeight: 800, color: "#0F172A", marginBottom: "0.6rem" }}>
-                Transparencia en Choferes
+                Transparencia en Viáticos
               </h3>
               <p style={{ fontSize: "0.9375rem", color: "#64748B", lineHeight: 1.65 }}>
-                Control exacto del saldo entregado vs. rendido por conductor, placa vehicular y ruta.
+                Seguimiento claro del dinero entregado frente a los gastos sustentados por cada conductor, placa vehicular y viaje.
               </p>
             </div>
 
@@ -503,10 +784,10 @@ export default function CigoPage() {
                 </svg>
               </div>
               <h3 style={{ fontSize: "1.25rem", fontWeight: 800, color: "#0F172A", marginBottom: "0.6rem" }}>
-                Cierre Contable SIRE en 1 Clic
+                Exportación en Excel, SIRE y ZIP
               </h3>
               <p style={{ fontSize: "0.9375rem", color: "#64748B", lineHeight: 1.65 }}>
-                Exportación automática de archivos en formato estructurado para SUNAT SIRE y Excel.
+                Descarga de reportes operativos en Excel, planillas de liquidación de viaje, archivo TXT para SIRE Compras y carpeta ZIP de evidencias.
               </p>
             </div>
           </div>
@@ -533,9 +814,26 @@ export default function CigoPage() {
           <h2 style={{ fontSize: "clamp(1.85rem, 4vw, 2.5rem)", fontWeight: 900, letterSpacing: "-0.03em", color: "#0F172A", marginTop: "0.75rem" }}>
             Explora los 8 Módulos de la Plataforma
           </h2>
-          <p style={{ fontSize: "1rem", color: "#64748B", marginTop: "0.4rem" }}>
-            Avance automático cada 10 segundos o selecciona un módulo.
-          </p>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.6rem", marginTop: "0.4rem", flexWrap: "wrap" }}>
+            <span style={{ fontSize: "0.95rem", color: "#64748B" }}>
+              Desliza en móvil o usa las flechas para navegar
+            </span>
+            <span
+              style={{
+                fontSize: "0.75rem",
+                background: isPaused ? "#FEF3C7" : "#E0F2FE",
+                color: isPaused ? "#B45309" : "#0284C7",
+                padding: "0.2rem 0.65rem",
+                borderRadius: "100px",
+                fontWeight: 700,
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.3rem",
+              }}
+            >
+              {isPaused ? "⏸ En pausa para lectura" : "▶ Rotación activa (9s)"}
+            </span>
+          </div>
         </div>
 
         {/* Horizontal Scrollable Tabs Header */}
@@ -582,6 +880,10 @@ export default function CigoPage() {
 
         {/* Balanced 2-Column Carousel Card */}
         <div
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
           style={{
             background: "#FFFFFF",
             borderRadius: "24px",
@@ -682,53 +984,117 @@ export default function CigoPage() {
 
             {/* Right Column: Perfectly Proportioned Screenshot Container */}
             <div style={{ borderRadius: "18px", overflow: "hidden", border: "1px solid #E2E8F0", boxShadow: "0 12px 32px rgba(0,0,0,0.06)", background: "#F8FAFC" }}>
-              <Image
+              <img
                 src={currentMod.img}
                 alt={currentMod.title}
-                width={700}
-                height={440}
                 style={{ width: "100%", height: "auto", maxHeight: "440px", objectFit: "contain", display: "block" }}
+                onError={(e) => { (e.target as HTMLElement).style.display = "none"; }}
               />
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Single Clean Conversion Footer CTA ── */}
-      <section style={{ padding: "5.5rem 1.5rem", background: "#FFFFFF", textAlign: "center", borderTop: "1px solid #E2E8F0" }}>
-        <div style={{ maxWidth: "640px", margin: "0 auto" }}>
-          <h2 style={{ fontSize: "clamp(1.75rem, 4vw, 2.5rem)", fontWeight: 900, color: "#0F172A", letterSpacing: "-0.035em", marginBottom: "1rem" }}>
-            Revoluciona el control de gastos de tu empresa
-          </h2>
+      {/* ── Direct ROI Calculator for Fleet Owners ── */}
+      <RoiCalculator />
 
-          <p style={{ fontSize: "1.0625rem", color: "#64748B", lineHeight: 1.75, marginBottom: "2.25rem" }}>
-            Solicita una presentación guiada para conocer CIGO funcionando en vivo con la estructura de tu empresa.
-          </p>
-
-          <a
-            href={GMAIL_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+      {/* ── High-Conversion Footer CTA ── */}
+      <section style={{ padding: "5.5rem 1.5rem", background: "#FFFFFF", textAlign: "center", borderTop: "1px solid #E2E8F0", position: "relative", overflow: "hidden" }}>
+        <div style={{ maxWidth: "780px", margin: "0 auto", position: "relative", zIndex: 1 }}>
+          <div
             style={{
               display: "inline-flex",
               alignItems: "center",
-              gap: "0.625rem",
-              padding: "1rem 2.5rem",
+              gap: "0.5rem",
+              background: "#DCFCE7",
+              color: "#16A34A",
+              fontWeight: 800,
+              fontSize: "0.8125rem",
+              padding: "0.4rem 1.25rem",
               borderRadius: "100px",
-              background: "linear-gradient(135deg, #EA4335 0%, #C5221F 100%)",
-              color: "white",
-              fontWeight: 700,
-              fontSize: "1rem",
-              textDecoration: "none",
-              boxShadow: "0 10px 30px rgba(234, 67, 53, 0.35)",
-              transition: "transform 0.2s ease, box-shadow 0.2s ease",
+              marginBottom: "1.25rem",
             }}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.272H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L12 9.545l8.073-6.052C21.69 2.28 24 3.434 24 5.457z"/>
-            </svg>
-            Enviar correo desde Gmail
-          </a>
+            <span className="radar-live" />
+            PRUEBA DE CONCEPTO B2B
+          </div>
+
+          <h2 style={{ fontSize: "clamp(2rem, 4.5vw, 2.85rem)", fontWeight: 900, color: "#0F172A", letterSpacing: "-0.04em", marginBottom: "1rem" }}>
+            Prueba Gratis de 7 Días (1 Semana) para tu Flota
+          </h2>
+
+          <p style={{ fontSize: "1.08rem", color: "#475569", lineHeight: 1.75, marginBottom: "1.25rem" }}>
+            Habilitamos CIGO sin costo durante 7 días para hasta 10 unidades de tu empresa en ruta activa, con inducción para tus conductores y sin compromiso de permanencia.
+          </p>
+          <p style={{ fontSize: "0.95rem", color: "#0284C7", fontWeight: 700, marginBottom: "2.25rem" }}>
+            WhatsApp / Teléfonos: +51 929 222 980 · +51 935 351 768 · Correo: contacto@devorq.com
+          </p>
+
+          <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap", marginBottom: "2.5rem" }}>
+            <a
+              href={WSP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.65rem",
+                padding: "1rem 2.25rem",
+                borderRadius: "100px",
+                background: "#25D366",
+                color: "white",
+                fontWeight: 700,
+                fontSize: "1rem",
+                textDecoration: "none",
+                boxShadow: "0 10px 30px rgba(37, 211, 102, 0.35)",
+                transition: "all 0.2s ease",
+              }}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.698.08-2.008-.466-1.545-.644-2.529-2.22-2.607-2.324-.076-.104-.633-.842-.633-1.608 0-.766.4-1.144.542-1.301.143-.158.312-.198.416-.198.104 0 .208.002.299.006.096.004.225-.036.352.269.13.313.443 1.077.481 1.156.039.078.065.17.013.273-.052.104-.078.17-.156.26-.078.092-.163.204-.234.274-.078.078-.16.163-.069.319.091.156.404.667.868 1.08 1.026.914 1.35 1.026 1.542 1.104.192.078.305.068.418-.063.113-.13.484-.564.614-.757.13-.193.26-.16.437-.095.177.065 1.12.528 1.315.626.195.097.325.146.372.228.047.081.047.47-.097.876z"/>
+              </svg>
+              Solicitar 7 Días Gratis por WhatsApp
+            </a>
+
+            <a
+              href={GMAIL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.625rem",
+                padding: "1rem 2.25rem",
+                borderRadius: "100px",
+                background: "#FFFFFF",
+                color: "#0F172A",
+                border: "1.5px solid #E2E8F0",
+                fontWeight: 700,
+                fontSize: "1rem",
+                textDecoration: "none",
+                boxShadow: "0 4px 16px rgba(0,0,0,0.04)",
+                transition: "all 0.2s ease",
+              }}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#EA4335">
+                <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.272H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L12 9.545l8.073-6.052C21.69 2.28 24 3.434 24 5.457z"/>
+              </svg>
+              Contactar por Correo
+            </a>
+          </div>
+
+          {/* Real Exports Badges */}
+          <div style={{ paddingTop: "1.75rem", borderTop: "1px solid #F1F5F9" }}>
+            <div style={{ fontSize: "0.78rem", fontWeight: 700, color: "#94A3B8", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.75rem" }}>
+              Formatos de Exportación Disponibles en el Panel Web:
+            </div>
+            <div style={{ display: "flex", justifyContent: "center", gap: "1.25rem", flexWrap: "wrap", fontSize: "0.85rem", fontWeight: 700, color: "#475569" }}>
+              <span>• Reporte Operativo Excel (.xlsx)</span>
+              <span>• Planilla de Liquidación por Viaje (.xlsx)</span>
+              <span style={{ color: "#0EA5E9" }}>• Archivo TXT SIRE Compras SUNAT</span>
+              <span>• Paquete ZIP de Evidencias Fotográficas</span>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -759,11 +1125,11 @@ export default function CigoPage() {
               TÉRMINOS Y CONDICIONES DEL SERVICIO &quot;CIGO&quot;
             </h2>
             <p style={{ fontSize: "0.85rem", color: "#64748B", marginBottom: "1.5rem", fontWeight: 600 }}>
-              Última actualización: Julio 2026
+              Última actualización: Noviembre 2026
             </p>
 
             <p style={{ marginBottom: "1rem" }}>
-              El presente documento establece los Términos y Condiciones de Uso del software y servicio digital denominado &quot;CIGO&quot;, comercializado y operado bajo la marca comercial Devorq Systems por el titular registrado ante la SUNAT como Persona Natural con Negocio bajo RUC N° [TU-RUC-10-AQUÍ] (en adelante, &quot;EL PRESTADOR&quot;).
+              El presente documento establece los Términos y Condiciones de Uso del software y servicio digital denominado &quot;CIGO&quot;, comercializado y operado bajo la marca comercial Devorq Systems por el prestador debidamente registrado y facultado ante la SUNAT (en adelante, &quot;EL PRESTADOR&quot;).
             </p>
 
             <p style={{ marginBottom: "1.75rem" }}>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import "./globals.css";
 
 const inter = Inter({
@@ -60,7 +61,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className={inter.className}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <FloatingWhatsApp />
+      </body>
     </html>
   );
 }
+
