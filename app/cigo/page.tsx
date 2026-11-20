@@ -93,8 +93,8 @@ const CIGO_FAQS = [
     a: "Solo ingresa directamente a cigo.devorq.com/registro, completa los datos básicos de tu empresa y en menos de 1 minuto queda activa tu cuenta gratuita por 7 días para hasta 5 camiones en ruta, sin tarjeta de crédito y sin compromiso de permanencia.",
   },
   {
-    q: "¿Cómo funciona el pricing por volumen y los precios incluyen IGV?",
-    a: "Sí. Todos nuestros precios mensuales por vehículo incluyen IGV en el Perú y emitimos Factura Electrónica: S/ 29 (5–10 camiones), S/ 27 (11–20), S/ 25 (21–50), S/ 23 (51–100) y S/ 20 (101+ camiones). Todos los tramos incluyen conductores ilimitados por WhatsApp.",
+    q: "¿Cómo funcionan los planes, el IGV y el beneficio por Pago Anual?",
+    a: "Ofrecemos tres planes con Factura Electrónica en Perú: Plan Micro (1 a 4 cupos) a S/ 100.00 + IGV/mes fijo (S/ 118.00 inc. IGV, pago trimestral o anual); Plan Flota (5 a 50 cupos) a S/ 25.00 + IGV/cupo (S/ 29.50 inc. IGV, pago mensual, trimestral o anual); y Plan Corporativo (+50 cupos) a medida desde S/ 21.00 + IGV/cupo (S/ 24.78 inc. IGV, pago semestral o anual). Con Pago Anual (aplica a Micro y Flota) pagas 10 meses y llevas 12 (16.7% de descuento), reduciendo el Plan Flota a S/ 20.83 + IGV/camión al mes (S/ 24.58 inc. IGV).",
   },
   {
     q: "¿Cómo asiste CIGO en la revisión de comprobantes ante SUNAT?",
@@ -675,7 +675,7 @@ export default function CigoPage() {
                     5. PAGOS, FACTURACIÓN Y SUSPENSIÓN DEL SERVICIO
                   </h3>
                   <p>
-                    5.1. El servicio se factura de forma mensual según la cantidad de vehículos/unidades activas contratadas conforme al tramo vigente del tarifario (con IGV incluido en Perú). 5.2. Las facturas emitidas cuentan con un plazo máximo de pago de cinco (5) días calendario desde su emisión. 5.3. El incumplimiento del pago faculta a EL PRESTADOR a suspender temporalmente el procesamiento hasta regularizar el saldo adeudado.
+                    5.1. El servicio se factura según el plan y la modalidad de pago adelantado contratada (mensual, trimestral, semestral o anual) conforme al tarifario vigente y la cantidad de cupos activos contratados, emitiéndose Factura Electrónica con el IGV correspondiente en el Perú. 5.2. Las facturas emitidas cuentan con un plazo máximo de pago de cinco (5) días calendario desde su emisión. 5.3. El incumplimiento del pago faculta a EL PRESTADOR a suspender temporalmente el procesamiento hasta regularizar el saldo adeudado.
                   </p>
                 </div>
 
