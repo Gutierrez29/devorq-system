@@ -1,334 +1,243 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import {
-  Truck,
-  Fuel,
-  ShieldCheck,
-  Mic,
-  Receipt,
-  CheckCircle2,
-  Gauge,
-  FileSpreadsheet,
-  MapPin,
-  Sparkles,
-} from "lucide-react";
+import { Check, FileSpreadsheet, Fuel, Mic, Receipt } from "lucide-react";
 
-interface LiveScenario {
+interface DispatchEvent {
   id: string;
-  label: string;
-  driver: string;
+  tabLabel: string;
   plate: string;
+  driver: string;
   route: string;
-  routeProgress: number;
-  waMessage: string;
-  waSub: string;
-  aiExtract: string;
-  sunatStatus: string;
+  sentAt: string;
+  channelType: string;
+  driverInput: string;
+  rows: { label: string; value: string; mono?: boolean; verified?: boolean }[];
   kpiLabel: string;
   kpiValue: string;
-  kpiBadge: string;
-  balanceAfter: string;
+  balanceLeft: string;
   icon: "fuel" | "toll" | "audio";
 }
 
-const SCENARIOS: LiveScenario[] = [
+const DISPATCH_EVENTS: DispatchEvent[] = [
   {
     id: "fuel",
-    label: "Combustible",
-    driver: "Carlos M.",
+    tabLabel: "Combustible",
     plate: "V1A-892",
-    route: "Lima → Trujillo",
-    routeProgress: 64,
-    waMessage: "Foto Ticket Repsol + Tablero Odómetro",
-    waSub: "78.4 gal Diésel B5 · S/ 1,420.00 · 142,500 km",
-    aiExtract: "RUC 20503840121 · Factura F042-0019284",
-    sunatStatus: "SUNAT Aceptado · RUC Activo y Habido",
-    kpiLabel: "Rendimiento real",
+    driver: "Carlos Mendoza",
+    route: "Lima — Trujillo",
+    sentAt: "10:14",
+    channelType: "Foto de ticket y odómetro por WhatsApp",
+    driverInput: "Repsol Km 312 · 78.4 gal Diésel B5 + foto tablero 142,500 km",
+    rows: [
+      { label: "Emisor", value: "Repsol Combustible S.A." },
+      { label: "Comprobante", value: "F042-0019284 · RUC 20503840121", mono: true },
+      { label: "Importe", value: "S/ 1,420.00 (78.4 gal)", mono: true },
+      { label: "Validación SUNAT", value: "Aceptado · Activo y Habido", verified: true },
+    ],
+    kpiLabel: "Rendimiento calculado",
     kpiValue: "3.84 km/gal",
-    kpiBadge: "Dentro de meta",
-    balanceAfter: "S/ 1,280.00",
+    balanceLeft: "S/ 1,280.00",
     icon: "fuel",
   },
   {
     id: "toll",
-    label: "Peaje & Viáticos",
-    driver: "Jorge R.",
+    tabLabel: "Peaje SUNAT",
     plate: "B4K-719",
-    route: "Chimbote → Piura",
-    routeProgress: 82,
-    waMessage: "Foto Boleta Peaje Autopista del Norte",
-    waSub: "Boleta B001-004892 · S/ 45.00 (IGV S/ 6.86)",
-    aiExtract: "Control duplicado: comprobante único",
-    sunatStatus: "Validado en vivo · Listo para SIRE TXT",
-    kpiLabel: "Liquidación viaje",
+    driver: "Jorge Rojas",
+    route: "Chimbote — Piura",
+    sentAt: "11:42",
+    channelType: "Foto de boleta electrónica por WhatsApp",
+    driverInput: "Boleta Peaje Autopista del Norte · Estación Virú",
+    rows: [
+      { label: "Emisor", value: "Autopista del Norte S.A.C." },
+      { label: "Comprobante", value: "B001-004892", mono: true },
+      { label: "Importe", value: "S/ 45.00 (IGV S/ 6.86)", mono: true },
+      { label: "Control fiscal", value: "Único en base · Listo para SIRE", verified: true },
+    ],
+    kpiLabel: "Estado de liquidación",
     kpiValue: "92% rendido",
-    kpiBadge: "Sin observaciones",
-    balanceAfter: "S/ 310.00",
+    balanceLeft: "S/ 310.00",
     icon: "toll",
   },
   {
     id: "audio",
-    label: "Nota de Voz IA",
-    driver: "Luis P.",
+    tabLabel: "Nota de voz",
     plate: "T9M-405",
-    route: "Arequipa → Matarani",
-    routeProgress: 45,
-    waMessage: 'Audio: "Cochera S/ 20 y parchado S/ 25"',
-    waSub: "Transcrito automáticamente desde WhatsApp",
-    aiExtract: "2 egresos menores -> Planilla de Movilidad",
-    sunatStatus: "Registrado con fecha y hora de ruta",
-    kpiLabel: "Tiempo de cierre",
-    kpiValue: "Al instante",
-    kpiBadge: "0 digitación manual",
-    balanceAfter: "S/ 640.00",
+    driver: "Luis Paredes",
+    route: "Arequipa — Matarani",
+    sentAt: "18:05",
+    channelType: "Audio de WhatsApp transcrito por IA",
+    driverInput: "“Pagué 20 soles de cochera en Matarani y 25 de parchado de llanta.”",
+    rows: [
+      { label: "Clasificación", value: "Planilla de Movilidad y Gastos Menores" },
+      { label: "Registros", value: "Cochera S/ 20.00 · Llanta S/ 25.00", mono: true },
+      { label: "Total gasto", value: "S/ 45.00", mono: true },
+      { label: "Trazabilidad", value: "Vinculado al viaje activo", verified: true },
+    ],
+    kpiLabel: "Digitación manual",
+    kpiValue: "0 minutos",
+    balanceLeft: "S/ 640.00",
     icon: "audio",
   },
 ];
 
 export default function CigoHeroCockpit() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
+  const [selectedId, setSelectedId] = useState<string>(DISPATCH_EVENTS[0].id);
+  const current =
+    DISPATCH_EVENTS.find((ev) => ev.id === selectedId) ?? DISPATCH_EVENTS[0];
 
-  useEffect(() => {
-    if (paused) return;
-    const timer = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % SCENARIOS.length);
-    }, 4500);
-    return () => clearInterval(timer);
-  }, [paused]);
-
-  const current = SCENARIOS[activeIndex];
-
-  const renderScenarioIcon = (type: LiveScenario["icon"]) => {
-    if (type === "fuel") return <Fuel className="w-4 h-4 text-sky-400" />;
-    if (type === "toll") return <Receipt className="w-4 h-4 text-emerald-400" />;
-    return <Mic className="w-4 h-4 text-violet-400" />;
+  const renderIcon = (kind: DispatchEvent["icon"]) => {
+    if (kind === "fuel") return <Fuel className="w-4 h-4" strokeWidth={1.75} />;
+    if (kind === "toll") return <Receipt className="w-4 h-4" strokeWidth={1.75} />;
+    return <Mic className="w-4 h-4" strokeWidth={1.75} />;
   };
 
   return (
-    <div
-      className="relative w-full max-w-[580px] mx-auto lg:mx-0"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-    >
-      {/* Subtle Ambient Aura */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -inset-4 rounded-3xl bg-gradient-to-tr from-sky-500/20 via-cyan-400/10 to-emerald-500/20 blur-2xl opacity-80"
-      />
-
-      {/* Main Command-Center Glass Frame */}
-      <div className="relative rounded-2xl border border-sky-400/25 bg-slate-950/90 backdrop-blur-xl shadow-2xl overflow-hidden">
-        {/* Window Chrome Bar */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800/90 bg-slate-900/80">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-400/80" />
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400/80" />
-            <span className="ml-2 text-[11px] font-mono font-semibold text-slate-400">
-              cigo.devorq.com · Flota en Vivo
-            </span>
-          </div>
-          <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-2.5 py-0.5 rounded-full">
-            <span className="radar-live" />
-            Tiempo real
-          </span>
-        </div>
-
-        {/* Interactive Scenario Switcher Pills */}
-        <div className="px-4 pt-3.5 pb-2 flex items-center gap-1.5 overflow-x-auto">
-          {SCENARIOS.map((sc, idx) => {
-            const active = idx === activeIndex;
+    <div className="bg-white border border-[#D8D6CE] rounded-xl overflow-hidden shadow-[0_18px_40px_-24px_rgba(20,24,29,0.22)]">
+      {/* Top Dispatch Selector Strip */}
+      <div className="flex flex-wrap items-center justify-between gap-3 px-4 sm:px-6 py-3 bg-[#F0EFE9] border-b border-[#D8D6CE]">
+        <div className="flex flex-wrap items-center gap-1.5" role="tablist" aria-label="Ejemplos de reporte en ruta">
+          {DISPATCH_EVENTS.map((ev) => {
+            const active = ev.id === current.id;
             return (
               <button
-                key={sc.id}
+                key={ev.id}
                 type="button"
-                onClick={() => setActiveIndex(idx)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap border ${
+                role="tab"
+                aria-selected={active}
+                onClick={() => setSelectedId(ev.id)}
+                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors cursor-pointer ${
                   active
-                    ? "bg-sky-500/20 text-sky-300 border-sky-400/50 shadow-sm"
-                    : "bg-slate-900/70 text-slate-400 border-slate-800 hover:text-slate-200 hover:border-slate-700"
+                    ? "bg-[#14181D] text-white"
+                    : "text-[#4E5661] hover:text-[#14181D] hover:bg-white/80"
                 }`}
               >
-                {renderScenarioIcon(sc.icon)}
-                <span>{sc.label}</span>
+                {renderIcon(ev.icon)}
+                <span>{ev.tabLabel}</span>
+                <span
+                  className={`font-cigo-mono text-[11px] ${
+                    active ? "text-[#A7B2C2]" : "text-[#717B88]"
+                  }`}
+                >
+                  {ev.plate}
+                </span>
               </button>
             );
           })}
         </div>
 
-        {/* Live Telemetry Body */}
-        <div key={current.id} className="p-4 space-y-3.5 cigo-fade-up">
-          {/* 1. Active Route Telemetry Strip */}
-          <div className="rounded-xl bg-slate-900/85 border border-slate-800 p-3.5">
-            <div className="flex items-center justify-between gap-2 text-xs mb-2.5">
-              <div className="flex items-center gap-2 font-bold text-white">
-                <span className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-sky-500/15 border border-sky-400/30 text-sky-400">
-                  <Truck className="w-4 h-4" />
-                </span>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span>Tracto {current.plate}</span>
-                    <span className="text-[10px] font-mono text-slate-400 font-semibold">
-                      · {current.driver}
-                    </span>
-                  </div>
-                  <div className="text-[11px] font-medium text-sky-300 flex items-center gap-1">
-                    <MapPin className="w-3 h-3" />
-                    {current.route}
-                  </div>
+        <span className="font-cigo-mono text-[11px] text-[#5B6470]">
+          Ejemplo interactivo de ingreso en ruta
+        </span>
+      </div>
+
+      {/* Main 12-Col Workbench: Left Live Ledger + Right Real CIGO Dashboard */}
+      <div className="grid grid-cols-1 lg:grid-cols-12">
+        {/* Left: Structured Route Entry */}
+        <div
+          key={current.id}
+          className="lg:col-span-5 p-5 sm:p-6 border-b lg:border-b-0 lg:border-r border-[#E4E2DA] flex flex-col justify-between gap-5 cigo-swap"
+        >
+          <div className="space-y-4">
+            <div className="flex items-start justify-between gap-3 pb-3.5 border-b border-[#ECEAE3]">
+              <div>
+                <div className="font-cigo-mono text-xs font-semibold text-[#0A58CA]">
+                  {current.plate} — {current.route}
+                </div>
+                <div className="text-sm font-semibold text-[#14181D] mt-0.5">
+                  {current.driver}
                 </div>
               </div>
-              <div className="text-right">
-                <div className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">
-                  Saldo viático
-                </div>
-                <div className="text-sm font-black font-mono text-emerald-400">
-                  {current.balanceAfter}
-                </div>
-              </div>
-            </div>
-
-            {/* Animated SVG Route Progress Track */}
-            <div className="relative h-5 flex items-center">
-              <svg
-                viewBox="0 0 400 20"
-                className="w-full h-5 overflow-visible"
-                aria-hidden="true"
-              >
-                <line
-                  x1="6"
-                  y1="10"
-                  x2="394"
-                  y2="10"
-                  stroke="#1E293B"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                />
-                <line
-                  x1="6"
-                  y1="10"
-                  x2={Math.round(6 + (388 * current.routeProgress) / 100)}
-                  y2="10"
-                  stroke="#38BDF8"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  className="cigo-route-dash"
-                />
-                <circle cx="6" cy="10" r="4" fill="#38BDF8" />
-                <circle
-                  cx={Math.round(6 + (388 * current.routeProgress) / 100)}
-                  cy="10"
-                  r="5.5"
-                  fill="#10B981"
-                  stroke="#022C22"
-                  strokeWidth="2"
-                />
-                <circle cx="394" cy="10" r="4" fill="#475569" />
-              </svg>
-            </div>
-          </div>
-
-          {/* 2. Live Pipeline: WhatsApp Driver -> AI/SUNAT Engine */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 relative">
-            {/* Step A: Driver WhatsApp Report */}
-            <div className="rounded-xl bg-emerald-950/40 border border-emerald-500/30 p-3 space-y-1.5">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-400">
-                  1. Reporte WhatsApp
-                </span>
-                <span className="text-[10px] font-mono text-emerald-300/80">
-                  Hace 2s
-                </span>
-              </div>
-              <div className="text-xs font-bold text-white leading-snug">
-                {current.waMessage}
-              </div>
-              <div className="text-[11px] text-slate-300 leading-snug">
-                {current.waSub}
-              </div>
-            </div>
-
-            {/* Step B: AI + SUNAT Auto-Verification */}
-            <div className="rounded-xl bg-sky-950/40 border border-sky-400/30 p-3 space-y-1.5 relative overflow-hidden">
-              {/* Shimmering analysis beam */}
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-sky-400/15 to-transparent cigo-beam"
-              />
-              <div className="flex items-center justify-between relative z-10">
-                <span className="text-[10px] font-extrabold uppercase tracking-wider text-sky-300 flex items-center gap-1">
-                  <Sparkles className="w-3 h-3" />
-                  2. IA + SUNAT
-                </span>
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-              </div>
-              <div className="text-xs font-bold text-white leading-snug relative z-10">
-                {current.aiExtract}
-              </div>
-              <div className="text-[11px] text-emerald-300 font-semibold leading-snug relative z-10">
-                {current.sunatStatus}
-              </div>
-            </div>
-          </div>
-
-          {/* 3. Real Panel Web Preview + Live KPI Readout */}
-          <div className="rounded-xl bg-slate-900/90 border border-slate-800 p-3 flex flex-col sm:flex-row items-center gap-3">
-            <div className="w-full sm:w-44 h-24 rounded-lg overflow-hidden border border-slate-700/80 bg-slate-950 shrink-0 relative">
-              <Image
-                src="/cigo/02-dashboard.webp"
-                alt="Vista real del Panel Gerencial CIGO"
-                fill
-                priority
-                sizes="(max-width: 640px) 100vw, 176px"
-                className="object-cover object-top"
-              />
-              <span className="absolute bottom-1.5 left-1.5 z-10 text-[9px] font-bold bg-slate-950/85 text-sky-300 px-1.5 py-0.5 rounded border border-sky-400/30">
-                Panel Web Real
+              <span className="font-cigo-mono text-xs text-[#5B6470] bg-[#F6F5F1] border border-[#E4E2DA] px-2 py-0.5 rounded">
+                {current.sentAt}
               </span>
             </div>
 
-            <div className="flex-1 w-full space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-1">
-                  <Gauge className="w-3.5 h-3.5 text-sky-400" />
-                  {current.kpiLabel}
-                </span>
-                <span className="text-[10px] font-bold text-emerald-300 bg-emerald-500/15 border border-emerald-500/25 px-2 py-0.5 rounded-full">
-                  {current.kpiBadge}
-                </span>
+            <div className="bg-[#F6F5F1] border border-[#E4E2DA] rounded-lg p-3.5">
+              <div className="text-[11px] font-medium text-[#5B6470] mb-1">
+                {current.channelType}
               </div>
-              <div className="text-xl font-black text-white tracking-tight">
+              <div className="text-sm font-medium text-[#14181D] leading-snug">
+                {current.driverInput}
+              </div>
+            </div>
+
+            <dl className="divide-y divide-[#ECEAE3] text-xs">
+              {current.rows.map((row) => (
+                <div
+                  key={row.label}
+                  className="py-2.5 flex items-baseline justify-between gap-3"
+                >
+                  <dt className="text-[#5B6470] shrink-0">{row.label}</dt>
+                  <dd
+                    className={`text-right font-medium ${
+                      row.verified
+                        ? "text-[#147A4B] inline-flex items-center gap-1 font-semibold"
+                        : row.mono
+                        ? "font-cigo-mono text-[#14181D]"
+                        : "text-[#14181D]"
+                    }`}
+                  >
+                    {row.verified && <Check className="w-3.5 h-3.5 shrink-0" strokeWidth={2.25} />}
+                    <span>{row.value}</span>
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 pt-4 border-t border-[#E4E2DA]">
+            <div>
+              <div className="text-[11px] text-[#5B6470]">{current.kpiLabel}</div>
+              <div className="font-cigo-display text-lg font-bold text-[#14181D] cigo-tabular mt-0.5">
                 {current.kpiValue}
               </div>
-              <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-semibold text-slate-300">
-                <span className="inline-flex items-center gap-1 bg-slate-800/90 px-2 py-0.5 rounded border border-slate-700">
-                  <ShieldCheck className="w-3 h-3 text-emerald-400" />
-                  SUNAT OK
-                </span>
-                <span className="inline-flex items-center gap-1 bg-slate-800/90 px-2 py-0.5 rounded border border-slate-700">
-                  <FileSpreadsheet className="w-3 h-3 text-sky-400" />
-                  Excel + SIRE + ZIP
-                </span>
+            </div>
+            <div className="text-right">
+              <div className="text-[11px] text-[#5B6470]">Saldo viático restante</div>
+              <div className="font-cigo-mono text-lg font-semibold text-[#147A4B] mt-0.5">
+                {current.balanceLeft}
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Subtle Floating Telemetry Pill (Desktop only, non-intrusive) */}
-      <div className="hidden xl:flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-slate-900/95 border border-emerald-400/30 shadow-xl absolute -bottom-5 -left-6 badge-float-1">
-        <span className="w-8 h-8 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center">
-          <ShieldCheck className="w-4 h-4" />
-        </span>
-        <div>
-          <div className="text-[11px] font-extrabold text-white leading-tight">
-            0 Boletas Duplicadas
+        {/* Right: Real Uncropped CIGO Web Dashboard */}
+        <div className="lg:col-span-7 bg-[#FAF9F6] p-4 sm:p-6 flex flex-col justify-between gap-4">
+          <div className="flex items-center justify-between gap-3 text-xs text-[#5B6470]">
+            <span className="font-medium text-[#14181D]">
+              Vista real del panel web de administración
+            </span>
+            <span className="font-cigo-mono text-[11px] text-[#5B6470]">
+              cigo.devorq.com
+            </span>
           </div>
-          <div className="text-[10px] text-slate-400">
-            Validación automática de serie y RUC
+
+          <div className="rounded-lg border border-[#D8D6CE] overflow-hidden bg-white">
+            <Image
+              src="/cigo/02-dashboard.webp"
+              alt="Panel web real de CIGO mostrando control de combustible, viáticos y comprobantes"
+              width={1037}
+              height={720}
+              priority
+              sizes="(max-width: 1024px) 100vw, 720px"
+              className="w-full h-auto block"
+            />
+          </div>
+
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-1 text-xs text-[#4E5661]">
+            <span className="inline-flex items-center gap-1.5 font-medium text-[#14181D]">
+              <FileSpreadsheet className="w-4 h-4 text-[#0A58CA]" strokeWidth={1.75} />
+              Listo para contabilidad:
+            </span>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-cigo-mono text-[11px] text-[#4E5661]">
+              <span>Excel (.xlsx)</span>
+              <span>Liquidación por viaje</span>
+              <span>TXT SIRE SUNAT</span>
+              <span>Evidencias (.zip)</span>
+            </div>
           </div>
         </div>
       </div>

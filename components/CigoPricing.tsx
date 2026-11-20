@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
+import { ArrowRight, Check, Minus, Plus } from "lucide-react";
 
 const REGISTER_URL = "https://cigo.devorq.com/registro";
 
@@ -62,9 +63,9 @@ const INCLUDED_ITEMS = [
   "Conductores ilimitados por WhatsApp (sin instalar aplicaciones)",
   "Validación SUNAT en vivo (RUC activo/habido y control de duplicados)",
   "Cálculo de rendimiento Km/galón y registro fotográfico de odómetros",
-  "Exportación contable Excel, Liquidación por viaje, TXT SIRE y ZIP",
+  "Exportación contable Excel, liquidación por viaje, TXT SIRE y ZIP",
   "Factura electrónica con IGV incluido en Perú y soporte directo",
-  "Puesta en marcha en 24–48 h · Sin permanencia forzosa",
+  "Puesta en marcha en 24–48 horas y sin permanencia forzosa",
 ];
 
 function resolveTier(trucks: number): PricingTier {
@@ -75,24 +76,7 @@ function resolveTier(trucks: number): PricingTier {
   );
 }
 
-function useInView(threshold = 0.08) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setInView(true);
-      },
-      { threshold }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [threshold]);
-  return { ref, inView };
-}
-
 export default function CigoPricing() {
-  const { ref, inView } = useInView();
   const [trucks, setTrucks] = useState<number>(15);
 
   const activeTier = resolveTier(trucks);
@@ -104,517 +88,215 @@ export default function CigoPricing() {
   )}`;
 
   return (
-    <section
-      id="planes"
-      style={{
-        padding: "5.5rem 1.5rem",
-        background: "linear-gradient(180deg, #090D16 0%, #0F172A 100%)",
-        color: "#F8FAFC",
-        borderTop: "1px solid rgba(56, 189, 248, 0.16)",
-        borderBottom: "1px solid rgba(56, 189, 248, 0.16)",
-      }}
-    >
-      <div
-        ref={ref}
-        style={{
-          maxWidth: "1120px",
-          margin: "0 auto",
-          opacity: inView ? 1 : 0,
-          transform: inView ? "translateY(0)" : "translateY(28px)",
-          transition: "all 0.7s cubic-bezier(0.16, 1, 0.3, 1)",
-        }}
-      >
-        {/* Header */}
-        <div style={{ textAlign: "center", maxWidth: "760px", margin: "0 auto 3rem" }}>
-          <span
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.45rem",
-              fontSize: "0.76rem",
-              fontWeight: 800,
-              color: "#38BDF8",
-              textTransform: "uppercase",
-              letterSpacing: "0.06em",
-              background: "rgba(56, 189, 248, 0.12)",
-              padding: "0.35rem 0.95rem",
-              borderRadius: "100px",
-              border: "1px solid rgba(56, 189, 248, 0.3)",
-              marginBottom: "1rem",
-            }}
-          >
-            INVERSIÓN TRANSPARENTE POR VOLUMEN
-          </span>
-          <h2
-            style={{
-              fontSize: "clamp(1.9rem, 4vw, 2.7rem)",
-              fontWeight: 900,
-              color: "#FFFFFF",
-              letterSpacing: "-0.035em",
-              lineHeight: 1.15,
-              marginBottom: "0.75rem",
-            }}
-          >
-            CIGO — Pricing de expansión
-          </h2>
-          <p
-            style={{
-              fontSize: "1.02rem",
-              color: "#94A3B8",
-              lineHeight: 1.65,
-              margin: 0,
-            }}
-          >
-            Precio mensual por vehículo · <strong style={{ color: "#E2E8F0" }}>IGV incluido en Perú</strong>. Empieza gratis 7 días y paga solo por las unidades activas de tu flota.
-          </p>
+    <section id="planes" className="py-20 sm:py-24 px-5 sm:px-8 bg-[#14181D] text-white">
+      <div className="max-w-[1240px] mx-auto">
+        {/* Left-Aligned Header */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end pb-10 mb-10 border-b border-[#2B333E]">
+          <div className="lg:col-span-7">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-[-0.025em] text-white leading-[1.12]">
+              CIGO — Pricing de expansión
+            </h2>
+            <p className="text-base text-[#B8C1CE] mt-3 leading-relaxed max-w-[60ch]">
+              Precio mensual por vehículo con <strong className="text-white font-semibold">IGV incluido en Perú</strong>. Empiezas gratis durante 7 días y pagas únicamente por las unidades activas de tu flota.
+            </p>
+          </div>
+          <div className="lg:col-span-5 lg:text-right">
+            <span className="font-cigo-mono text-xs text-[#6EE7B7]">
+              Factura electrónica deducible · Sin costos de implementación
+            </span>
+          </div>
         </div>
 
-        {/* 2-Column Layout: Pricing Table + Interactive Estimator */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-            gap: "1.75rem",
-            alignItems: "stretch",
-          }}
-        >
-          {/* Left: Escalated Pricing Table (Exact 5 Tiers) */}
-          <div
-            style={{
-              background: "#0B1120",
-              borderRadius: "22px",
-              border: "1px solid rgba(148, 163, 184, 0.18)",
-              padding: "1.5rem 1.75rem",
-              boxShadow: "0 20px 50px rgba(0, 0, 0, 0.35)",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
-          >
-            <div>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  paddingBottom: "1rem",
-                  marginBottom: "0.5rem",
-                  borderBottom: "1px solid rgba(148, 163, 184, 0.16)",
-                }}
-              >
-                <div>
-                  <div style={{ fontSize: "1.05rem", fontWeight: 800, color: "#FFFFFF" }}>
-                    Escala por tamaño de flota
-                  </div>
-                  <div style={{ fontSize: "0.8rem", color: "#94A3B8", marginTop: "0.15rem" }}>
-                    Precio mensual por vehículo · IGV incluido en Perú
-                  </div>
+        {/* 2-Column Layout: Exact 5-Tier Volume Schedule + Fleet Estimator */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Left 6 cols: Clean Industrial Schedule Table */}
+          <div className="lg:col-span-6 border border-[#2B333E] rounded-xl bg-[#1A2027] overflow-hidden">
+            <div className="px-6 py-4 border-b border-[#2B333E] flex items-center justify-between gap-3">
+              <div>
+                <div className="text-sm font-bold text-white">
+                  Escala mensual por tamaño de flota
                 </div>
-                <span
-                  style={{
-                    fontSize: "0.72rem",
-                    fontWeight: 700,
-                    color: "#34D399",
-                    background: "rgba(16, 185, 129, 0.12)",
-                    border: "1px solid rgba(16, 185, 129, 0.3)",
-                    padding: "0.25rem 0.65rem",
-                    borderRadius: "100px",
-                    whiteSpace: "nowrap",
-                  }}
+                <div className="text-xs text-[#94A1B2] mt-0.5">
+                  Precio mensual por vehículo · IGV incluido en Perú
+                </div>
+              </div>
+              <span className="font-cigo-mono text-[11px] text-[#94A1B2]">
+                PEN / mes
+              </span>
+            </div>
+
+            <div className="divide-y divide-[#2B333E]">
+              {PRICING_TIERS.map((tier) => {
+                const isSelected = activeTier.id === tier.id;
+                return (
+                  <button
+                    key={tier.id}
+                    type="button"
+                    onClick={() => setTrucks(tier.minTrucks)}
+                    className={`w-full px-6 py-4 flex items-center justify-between gap-4 text-left transition-colors cursor-pointer ${
+                      isSelected
+                        ? "bg-[#232C37]"
+                        : "hover:bg-[#1F262F]"
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-center gap-2.5">
+                        <span
+                          className={`font-cigo-display text-base font-bold ${
+                            isSelected ? "text-[#60A5FA]" : "text-white"
+                          }`}
+                        >
+                          {tier.rangeLabel}
+                        </span>
+                        {tier.highlight && (
+                          <span className="text-[11px] font-medium text-[#60A5FA] border border-[#60A5FA]/40 px-2 py-0.5 rounded">
+                            Tramo frecuente
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-xs text-[#94A1B2] mt-0.5">
+                        {tier.category}
+                      </div>
+                    </div>
+
+                    <div className="text-right shrink-0">
+                      <div
+                        className={`font-cigo-mono text-xl font-semibold ${
+                          isSelected ? "text-[#60A5FA]" : "text-white"
+                        }`}
+                      >
+                        S/ {tier.pricePerTruck}
+                      </div>
+                      <div className="text-[11px] text-[#94A1B2]">por camión</div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="px-6 py-3.5 bg-[#151A20] border-t border-[#2B333E] text-xs text-[#94A1B2]">
+              Mínimo operativo de entrada: 5 camiones. Haz clic en cualquier tramo para simular tu monto mensual.
+            </div>
+          </div>
+
+          {/* Right 6 cols: Interactive Calculator + Included Scope */}
+          <div className="lg:col-span-6 border border-[#2B333E] rounded-xl bg-[#1A2027] p-6 sm:p-8 space-y-6">
+            {/* Stepper + Range Control */}
+            <div className="pb-6 border-b border-[#2B333E]">
+              <div className="flex items-center justify-between gap-4 mb-4">
+                <label
+                  htmlFor="cigo-fleet-range"
+                  className="text-sm font-semibold text-white"
                 >
-                  Factura electrónica
-                </span>
+                  ¿Cuántos camiones operas?
+                </label>
+
+                <div className="inline-flex items-center border border-[#384352] rounded-md overflow-hidden bg-[#14181D]">
+                  <button
+                    type="button"
+                    aria-label="Reducir camiones"
+                    onClick={() => setTrucks((prev) => Math.max(5, prev - 1))}
+                    className="w-9 h-9 flex items-center justify-center text-[#D1D8E0] hover:bg-[#232C37] cursor-pointer transition-colors"
+                  >
+                    <Minus className="w-4 h-4" strokeWidth={2} />
+                  </button>
+                  <span className="font-cigo-mono text-base font-semibold text-white px-4 min-w-[60px] text-center">
+                    {trucks}
+                  </span>
+                  <button
+                    type="button"
+                    aria-label="Aumentar camiones"
+                    onClick={() => setTrucks((prev) => Math.min(250, prev + 1))}
+                    className="w-9 h-9 flex items-center justify-center text-[#D1D8E0] hover:bg-[#232C37] cursor-pointer transition-colors"
+                  >
+                    <Plus className="w-4 h-4" strokeWidth={2} />
+                  </button>
+                </div>
               </div>
 
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                {PRICING_TIERS.map((tier, idx) => {
-                  const isSelected = activeTier.id === tier.id;
-                  return (
-                    <button
-                      key={tier.id}
-                      type="button"
-                      onClick={() => setTrucks(tier.minTrucks)}
-                      style={{
-                        width: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        gap: "1rem",
-                        padding: "1.05rem 0.9rem",
-                        background: isSelected
-                          ? "rgba(14, 165, 233, 0.14)"
-                          : "transparent",
-                        border: "none",
-                        borderBottom:
-                          idx < PRICING_TIERS.length - 1
-                            ? "1px solid rgba(148, 163, 184, 0.14)"
-                            : "none",
-                        borderRadius: isSelected ? "12px" : "0",
-                        cursor: "pointer",
-                        textAlign: "left",
-                        transition: "all 0.2s ease",
-                      }}
-                    >
-                      <div>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "0.5rem",
-                            fontSize: "1.02rem",
-                            fontWeight: 800,
-                            color: isSelected ? "#38BDF8" : "#F8FAFC",
-                          }}
-                        >
-                          <span>{tier.rangeLabel}</span>
-                          {tier.highlight && (
-                            <span
-                              style={{
-                                fontSize: "0.66rem",
-                                fontWeight: 800,
-                                textTransform: "uppercase",
-                                background: "rgba(56, 189, 248, 0.2)",
-                                color: "#7DD3FC",
-                                padding: "0.12rem 0.5rem",
-                                borderRadius: "100px",
-                              }}
-                            >
-                              Más elegido
-                            </span>
-                          )}
-                        </div>
-                        <div
-                          style={{
-                            fontSize: "0.82rem",
-                            color: "#94A3B8",
-                            marginTop: "0.18rem",
-                          }}
-                        >
-                          {tier.category}
-                        </div>
-                      </div>
+              <input
+                id="cigo-fleet-range"
+                type="range"
+                min={5}
+                max={130}
+                step={1}
+                value={Math.min(130, trucks)}
+                onChange={(e) => setTrucks(Number(e.target.value) || 5)}
+                className="w-full cursor-pointer cigo-range"
+              />
 
-                      <div style={{ textAlign: "right", flexShrink: 0 }}>
-                        <span
-                          style={{
-                            fontSize: "1.35rem",
-                            fontWeight: 900,
-                            color: isSelected ? "#38BDF8" : "#FFFFFF",
-                            letterSpacing: "-0.02em",
-                          }}
-                        >
-                          S/ {tier.pricePerTruck}
-                        </span>
-                        <span
-                          style={{
-                            display: "block",
-                            fontSize: "0.7rem",
-                            color: "#94A3B8",
-                          }}
-                        >
-                          / vehículo / mes
-                        </span>
-                      </div>
-                    </button>
-                  );
-                })}
+              <div className="flex justify-between font-cigo-mono text-[11px] text-[#94A1B2] mt-2">
+                <span>5</span>
+                <span>25</span>
+                <span>60</span>
+                <span>101+ unid.</span>
               </div>
             </div>
 
-            <p
-              style={{
-                fontSize: "0.76rem",
-                color: "#64748B",
-                marginTop: "1rem",
-                marginBottom: 0,
-              }}
-            >
-              * Mínimo operativo de entrada: 5 camiones. Haz clic en cualquier tramo para simular tu inversión mensual.
-            </p>
-          </div>
+            {/* Monthly Output Readout */}
+            <div className="flex flex-wrap items-end justify-between gap-4 pb-6 border-b border-[#2B333E]">
+              <div>
+                <div className="text-xs text-[#94A1B2]">
+                  Inversión mensual estimada (IGV incluido)
+                </div>
+                <div className="font-cigo-mono text-3xl sm:text-4xl font-semibold text-white mt-1">
+                  S/ {monthlyTotal.toLocaleString("es-PE")}
+                  <span className="text-sm font-normal text-[#94A1B2]"> / mes</span>
+                </div>
+              </div>
 
-          {/* Right: Interactive Estimator & Included Features */}
-          <div
-            style={{
-              background: "linear-gradient(155deg, #0F172A 0%, #0C2D48 100%)",
-              borderRadius: "22px",
-              border: "1px solid rgba(56, 189, 248, 0.3)",
-              padding: "1.75rem",
-              boxShadow: "0 20px 50px rgba(14, 165, 233, 0.14)",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              gap: "1.5rem",
-            }}
-          >
+              <div className="sm:text-right">
+                <div className="font-cigo-mono text-sm font-semibold text-[#60A5FA]">
+                  S/ {activeTier.pricePerTruck} × {trucks} camiones
+                </div>
+                {savingsVsEntry > 0 ? (
+                  <div className="font-cigo-mono text-xs text-[#6EE7B7] mt-0.5">
+                    Ahorro por volumen: S/ {savingsVsEntry.toLocaleString("es-PE")}/mes
+                  </div>
+                ) : (
+                  <div className="text-xs text-[#94A1B2] mt-0.5">
+                    Tramo: {activeTier.rangeLabel}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Included Scope */}
             <div>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  gap: "0.75rem",
-                  marginBottom: "1rem",
-                  flexWrap: "wrap",
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: "0.76rem",
-                    fontWeight: 800,
-                    color: "#7DD3FC",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.05em",
-                  }}
-                >
-                  Simulador de Flota
-                </span>
-                <span
-                  style={{
-                    fontSize: "0.75rem",
-                    fontWeight: 700,
-                    color: "#38BDF8",
-                    background: "rgba(56, 189, 248, 0.14)",
-                    padding: "0.2rem 0.65rem",
-                    borderRadius: "100px",
-                  }}
-                >
-                  Tramo: {activeTier.rangeLabel}
-                </span>
+              <div className="text-xs font-semibold text-[#D1D8E0] mb-3">
+                Incluido en todos los tramos
               </div>
-
-              {/* Fleet Size Controls */}
-              <div
-                style={{
-                  background: "rgba(15, 23, 42, 0.65)",
-                  borderRadius: "16px",
-                  padding: "1.15rem 1.25rem",
-                  border: "1px solid rgba(148, 163, 184, 0.2)",
-                  marginBottom: "1.25rem",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    marginBottom: "0.75rem",
-                    gap: "1rem",
-                  }}
-                >
-                  <label
-                    htmlFor="cigo-fleet-range"
-                    style={{ fontSize: "0.88rem", fontWeight: 700, color: "#E2E8F0" }}
-                  >
-                    ¿Cuántos camiones operas?
-                  </label>
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.45rem" }}>
-                    <button
-                      type="button"
-                      aria-label="Reducir camiones"
-                      onClick={() => setTrucks((prev) => Math.max(5, prev - 1))}
-                      style={{
-                        width: "30px",
-                        height: "30px",
-                        borderRadius: "8px",
-                        border: "1px solid rgba(148, 163, 184, 0.35)",
-                        background: "rgba(255,255,255,0.06)",
-                        color: "#FFFFFF",
-                        fontWeight: 800,
-                        cursor: "pointer",
-                      }}
-                    >
-                      −
-                    </button>
-                    <span
-                      style={{
-                        minWidth: "62px",
-                        textAlign: "center",
-                        fontSize: "1.25rem",
-                        fontWeight: 900,
-                        color: "#38BDF8",
-                      }}
-                    >
-                      {trucks}
-                    </span>
-                    <button
-                      type="button"
-                      aria-label="Aumentar camiones"
-                      onClick={() => setTrucks((prev) => Math.min(250, prev + 1))}
-                      style={{
-                        width: "30px",
-                        height: "30px",
-                        borderRadius: "8px",
-                        border: "1px solid rgba(148, 163, 184, 0.35)",
-                        background: "rgba(255,255,255,0.06)",
-                        color: "#FFFFFF",
-                        fontWeight: 800,
-                        cursor: "pointer",
-                      }}
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-
-                <input
-                  id="cigo-fleet-range"
-                  type="range"
-                  min={5}
-                  max={130}
-                  step={1}
-                  value={Math.min(130, trucks)}
-                  onChange={(e) => setTrucks(Number(e.target.value) || 5)}
-                  style={{
-                    width: "100%",
-                    accentColor: "#38BDF8",
-                    cursor: "pointer",
-                  }}
-                />
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    fontSize: "0.7rem",
-                    color: "#94A3B8",
-                    marginTop: "0.3rem",
-                  }}
-                >
-                  <span>5 unid.</span>
-                  <span>25 unid.</span>
-                  <span>60 unid.</span>
-                  <span>101+ unid.</span>
-                </div>
-              </div>
-
-              {/* Estimated Monthly Summary */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "flex-end",
-                  justifyContent: "space-between",
-                  gap: "1rem",
-                  flexWrap: "wrap",
-                  paddingBottom: "1.25rem",
-                  marginBottom: "1.25rem",
-                  borderBottom: "1px solid rgba(148, 163, 184, 0.18)",
-                }}
-              >
-                <div>
-                  <div style={{ fontSize: "0.78rem", color: "#94A3B8", fontWeight: 600 }}>
-                    Inversión mensual estimada (IGV incluido)
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "2.25rem",
-                      fontWeight: 900,
-                      color: "#FFFFFF",
-                      lineHeight: 1.1,
-                      letterSpacing: "-0.03em",
-                      marginTop: "0.2rem",
-                    }}
-                  >
-                    S/ {monthlyTotal.toLocaleString("es-PE")}
-                    <span style={{ fontSize: "0.92rem", fontWeight: 600, color: "#94A3B8" }}>
-                      {" "}/ mes
-                    </span>
-                  </div>
-                </div>
-
-                <div style={{ textAlign: "right" }}>
-                  <div style={{ fontSize: "0.86rem", fontWeight: 800, color: "#38BDF8" }}>
-                    S/ {activeTier.pricePerTruck} × {trucks} camiones
-                  </div>
-                  {savingsVsEntry > 0 ? (
-                    <div style={{ fontSize: "0.76rem", fontWeight: 700, color: "#34D399" }}>
-                      Ahorro por volumen: S/ {savingsVsEntry.toLocaleString("es-PE")}/mes
-                    </div>
-                  ) : (
-                    <div style={{ fontSize: "0.75rem", color: "#94A3B8" }}>
-                      {activeTier.category}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Included List */}
-              <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "#E2E8F0", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: "0.65rem" }}>
-                Incluido en todos los planes:
-              </div>
-              <ul
-                style={{
-                  listStyle: "none",
-                  padding: 0,
-                  margin: 0,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "0.5rem",
-                }}
-              >
+              <ul className="space-y-2">
                 {INCLUDED_ITEMS.map((item) => (
-                  <li
-                    key={item}
-                    style={{
-                      display: "flex",
-                      alignItems: "flex-start",
-                      gap: "0.55rem",
-                      fontSize: "0.84rem",
-                      color: "#CBD5E1",
-                      lineHeight: 1.45,
-                    }}
-                  >
-                    <span style={{ color: "#34D399", fontWeight: 900, flexShrink: 0 }}>✓</span>
+                  <li key={item} className="flex items-start gap-2.5 text-sm text-[#B8C1CE]">
+                    <Check
+                      className="w-4 h-4 text-[#6EE7B7] shrink-0 mt-0.5"
+                      strokeWidth={2}
+                    />
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* CTAs */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.65rem" }}>
+            {/* Direct CTAs */}
+            <div className="pt-2 flex flex-col sm:flex-row gap-3">
               <a
                 href={REGISTER_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  width: "100%",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "0.55rem",
-                  background: "linear-gradient(135deg, #10B981 0%, #059669 100%)",
-                  color: "#FFFFFF",
-                  fontWeight: 800,
-                  fontSize: "0.95rem",
-                  padding: "0.95rem 1.5rem",
-                  borderRadius: "14px",
-                  textDecoration: "none",
-                  boxShadow: "0 10px 28px rgba(16, 185, 129, 0.35)",
-                }}
+                className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-md bg-[#147A4B] hover:bg-[#10643D] text-white text-sm font-bold transition-colors"
               >
-                Comenzar Prueba Gratis de 7 Días (S/ 0 hoy) →
+                Probar 7 días gratis (S/ 0 hoy)
+                <ArrowRight className="w-4 h-4" strokeWidth={2} />
               </a>
               <a
                 href={wspQuoteUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  width: "100%",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "0.5rem",
-                  background: "rgba(255, 255, 255, 0.08)",
-                  color: "#E2E8F0",
-                  fontWeight: 700,
-                  fontSize: "0.86rem",
-                  padding: "0.75rem 1.25rem",
-                  borderRadius: "12px",
-                  border: "1px solid rgba(148, 163, 184, 0.25)",
-                  textDecoration: "none",
-                }}
+                className="inline-flex items-center justify-center px-5 py-3.5 rounded-md bg-transparent hover:bg-white/5 border border-[#384352] text-white text-sm font-semibold transition-colors"
               >
-                Solicitar Propuesta Formal por WhatsApp ({trucks} camiones)
+                Cotizar {trucks} camiones
               </a>
             </div>
           </div>

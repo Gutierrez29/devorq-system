@@ -4,28 +4,14 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  Activity,
-  AlertTriangle,
   ArrowLeft,
   ArrowRight,
-  Building2,
-  Check,
-  CheckCircle2,
   ChevronDown,
-  Clock,
-  EyeOff,
-  FileSpreadsheet,
   FileText,
-  FileWarning,
-  Fuel,
   Mail,
   Menu,
   MessageCircle,
-  MessageSquare,
-  ShieldCheck,
-  Sparkles,
   X,
-  XCircle,
 } from "lucide-react";
 import CigoHeroCockpit from "@/components/CigoHeroCockpit";
 import CigoWhatsAppDemo from "@/components/CigoWhatsAppDemo";
@@ -39,88 +25,56 @@ const WSP_DEMO_URL =
 const GMAIL_URL =
   "https://mail.google.com/mail/?view=cm&fs=1&to=contacto@devorq.com&su=Solicitud%20de%20Demostraci%C3%B3n%20CIGO%20-%20Devorq%20Systems";
 
-const PROBLEMS = [
+const OPERATIONAL_GAPS = [
   {
-    num: "01",
-    title: "Boletas térmicas perdidas o borradas",
-    desc: "Los recibos de grifo y peaje en papel térmico se borran por el calor o se extravían en ruta, provocando pérdida directa de crédito fiscal (IGV) y gasto deducible.",
-    tag: "Pérdida tributaria",
-    icon: FileWarning,
+    issue: "Boletas térmicas perdidas o borradas en cabina",
+    before: "Los recibos de grifo y peaje en papel térmico se borran por el calor o se extravían, perdiendo crédito fiscal (IGV) y gasto deducible.",
+    after: "El chofer fotografía el ticket en el grifo y CIGO conserva imagen, serie, RUC y montos en la nube.",
   },
   {
-    num: "02",
-    title: "Demoras al liquidar viáticos y caja chica",
-    desc: "Administración espera días o semanas hasta que el camión regrese a base con un sobre de recibos físicos para cuadrar saldos pendientes.",
-    tag: "Cuello de botella",
-    icon: Clock,
+    issue: "Liquidaciones de viáticos atrasadas por semanas",
+    before: "Administración espera que el tracto vuelva a base con un sobre de papeles físicos para recién cuadrar caja chica y saldos.",
+    after: "Cada entrega y gasto se descuenta en vivo mientras el camión sigue en ruta.",
   },
   {
-    num: "03",
-    title: "Sobreconsumos en combustible y peajes",
-    desc: "Cuando las facturas se revisan recién a fin de mes es tarde para detectar fugas, cobros alterados o caídas en el rendimiento Km/galón de cada tracto.",
-    tag: "Fugas en ruta",
-    icon: Fuel,
+    issue: "Sobreconsumos de diésel detectados tarde",
+    before: "Al revisar facturas recién a fin de mes es imposible reaccionar ante desvíos de rendimiento Km/galón o cargas atípicas.",
+    after: "Cálculo por abastecimiento con foto de odómetro y alertas automáticas cuando el rendimiento cae fuera de meta.",
   },
   {
-    num: "04",
-    title: "Cero visibilidad mientras el camión viaja",
-    desc: "Sin herramientas simples para el chofer, gerencia opera a ciegas respecto al dinero entregado frente al gasto realmente ejecutado en carretera.",
-    tag: "Sin trazabilidad",
-    icon: EyeOff,
+    issue: "Digitación manual y riesgo de boletas duplicadas",
+    before: "Horas pasando comprobantes uno por uno a Excel sin validar si el emisor está Habido en SUNAT o si la serie ya se rindió antes.",
+    after: "Consulta automática de RUC/comprobante, bloqueo de duplicados y descarga directa en Excel, SIRE TXT y ZIP.",
   },
 ] as const;
 
-const COMPARISON_ROWS = [
+const ROLE_OUTCOMES = [
   {
-    before: "Sobres con recibos térmicos borrosos al volver a base",
-    after: "Foto inmediata por WhatsApp con respaldo en la nube",
+    role: "Gerencia General",
+    headline: "Visibilidad de costos por viaje y placa sin esperar el cierre de mes.",
+    points: [
+      "Control real de margen operativo en cada ruta nacional.",
+      "Reducción de fugas en combustible, peajes y gastos no autorizados.",
+      "Información privada y auditable bajo Ley N° 29733.",
+    ],
   },
   {
-    before: "Horas digitando facturas en Excel al cierre de mes",
-    after: "Extracción IA y descarga Excel, SIRE TXT y ZIP en 1 clic",
+    role: "Jefatura de Operaciones",
+    headline: "Adopción inmediata por tus conductores sin instalar aplicaciones.",
+    points: [
+      "Los choferes reportan por su WhatsApp habitual (foto o nota de voz).",
+      "Seguimiento continuo del saldo entregado frente a lo rendido.",
+      "Alertas de desvíos Km/galón y reglas de topes por categoría.",
+    ],
   },
   {
-    before: "Riesgo de boletas duplicadas o RUC No Habido sin detectar",
-    after: "Validación automática ante SUNAT y alerta de duplicados",
-  },
-  {
-    before: "Sin control real del rendimiento Km/galón por tracto",
-    after: "Cálculo por abastecimiento y alertas ante desvíos de consumo",
-  },
-] as const;
-
-const KEY_BENEFITS = [
-  {
-    kpi: "Tiempo Real",
-    title: "Control de viáticos, combustible y peajes en ruta",
-    desc: "Visualiza saldos entregados frente a gastos rendidos por viaje, chofer y placa mientras la unidad sigue en carretera.",
-    icon: Activity,
-    accentClass: "bg-sky-100 text-sky-700 border-sky-200",
-    iconWrapClass: "bg-sky-50 text-sky-600 border-sky-100",
-  },
-  {
-    kpi: "Menos Fugas",
-    title: "Validación SUNAT y alerta de duplicados",
-    desc: "Consulta automática de RUC (Activo/Habido), detección de boletas repetidas y alertas ante desvíos en combustible Km/galón.",
-    icon: ShieldCheck,
-    accentClass: "bg-emerald-100 text-emerald-700 border-emerald-200",
-    iconWrapClass: "bg-emerald-50 text-emerald-600 border-emerald-100",
-  },
-  {
-    kpi: "Cierre Ágil",
-    title: "Ahorro de horas administrativas y contables",
-    desc: "Elimina la digitación manual desde sobres de papel. Descarga reportes Excel, liquidaciones de viaje, TXT SIRE y fotos en ZIP.",
-    icon: FileSpreadsheet,
-    accentClass: "bg-violet-100 text-violet-700 border-violet-200",
-    iconWrapClass: "bg-violet-50 text-violet-600 border-violet-100",
-  },
-  {
-    kpi: "0 Apps Extra",
-    title: "Adopción inmediata por tus conductores",
-    desc: "Opera 100% desde el WhatsApp habitual del chofer con lectura por IA de tickets térmicos, tableros y notas de voz.",
-    icon: MessageSquare,
-    accentClass: "bg-cyan-100 text-cyan-700 border-cyan-200",
-    iconWrapClass: "bg-cyan-50 text-cyan-600 border-cyan-100",
+    role: "Contabilidad y Auditoría",
+    headline: "Cierre ágil con respaldos ordenados y listos para SUNAT.",
+    points: [
+      "Validación de RUC (Activo/Habido) y detección de series duplicadas.",
+      "Exportación en Excel, liquidación por viaje y TXT SIRE Compras.",
+      "Carpeta ZIP descargable con las fotografías de respaldo por periodo.",
+    ],
   },
 ] as const;
 
@@ -152,10 +106,11 @@ const CIGO_FAQS = [
 ] as const;
 
 const NAV_ITEMS = [
-  { id: "problema", label: "El Problema" },
-  { id: "whatsapp-feature", label: "Cómo Funciona" },
+  { id: "problema", label: "El problema" },
+  { id: "whatsapp-feature", label: "Cómo opera" },
   { id: "modulos-carousel", label: "Módulos" },
-  { id: "planes", label: "Planes" },
+  { id: "documentacion-cigo", label: "Clientes y PDF" },
+  { id: "planes", label: "Tarifas" },
   { id: "faq", label: "FAQ" },
 ] as const;
 
@@ -192,79 +147,74 @@ export default function CigoPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900">
-      {/* ── Dark Product Navbar (Distinct CIGO Identity) ── */}
-      <header className="sticky top-0 z-50 bg-[#070D19]/92 backdrop-blur-xl border-b border-slate-800/80">
+    <div className="min-h-screen bg-[#F6F5F1] text-[#14181D]">
+      {/* ── Header Bar (Warm Industrial Paper + Crisp Hairline) ── */}
+      <header className="sticky top-0 z-50 bg-[#F6F5F1]/95 backdrop-blur-md border-b border-[#D8D6CE]">
         <nav
           aria-label="Navegación principal CIGO"
-          className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4"
+          className="max-w-[1240px] mx-auto px-5 sm:px-8 h-16 flex items-center justify-between gap-4"
         >
-          {/* Brand + Product Pill */}
+          {/* Brand Lockup */}
           <div className="flex items-center gap-3 min-w-0">
             <Link
               href="/"
-              className="flex items-center gap-2 text-white hover:opacity-90 transition-opacity shrink-0"
+              className="inline-flex items-center gap-2 text-[#4E5661] hover:text-[#14181D] transition-colors shrink-0"
+              title="Volver a Devorq Systems"
             >
               <Image
                 src="/devorq-isotype.png"
-                alt="Devorq Systems Logo"
-                width={32}
-                height={32}
+                alt="Devorq Systems"
+                width={26}
+                height={26}
                 priority
-                className="w-8 h-8 rounded-lg object-contain bg-white/10 p-0.5"
+                className="w-[26px] h-[26px] rounded object-contain"
               />
-              <span className="text-base font-black tracking-tight text-white">
-                Devorq <span className="text-sky-400">Systems</span>
-              </span>
+              <span className="hidden sm:inline text-xs font-semibold">Devorq</span>
             </Link>
-            <span className="hidden sm:inline-block h-5 w-px bg-slate-700" aria-hidden="true" />
-            <span className="hidden sm:inline-flex items-center gap-1.5 text-xs font-extrabold tracking-wide text-emerald-300 bg-emerald-500/10 border border-emerald-500/25 px-2.5 py-0.5 rounded-full">
-              <span className="radar-live" />
-              CIGO Flotas
-            </span>
+            <span className="h-4 w-px bg-[#C9C6BC]" aria-hidden="true" />
+            <Image
+              src="/cigo-logo.webp"
+              alt="CIGO — Control Inteligente de Gastos Operativos"
+              width={110}
+              height={45}
+              priority
+              className="h-7 w-auto object-contain"
+            />
           </div>
 
-          {/* Desktop Section Links */}
-          <div className="hidden lg:flex items-center gap-1">
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center gap-6">
             {NAV_ITEMS.map((item) => (
               <button
                 key={item.id}
                 type="button"
                 onClick={() => scrollToSection(item.id)}
-                className="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors cursor-pointer"
+                className="text-xs font-medium text-[#4E5661] hover:text-[#14181D] transition-colors cursor-pointer"
               >
                 {item.label}
               </button>
             ))}
           </div>
 
-          {/* Desktop Action CTAs */}
-          <div className="hidden md:flex items-center gap-2.5 shrink-0">
+          {/* Desktop Actions */}
+          <div className="hidden md:flex items-center gap-3 shrink-0">
             <a
               href="/cigo/carta-presentacion-cigo.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-200 bg-slate-800/80 hover:bg-slate-800 border border-slate-700 transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#14181D] hover:text-[#0A58CA] transition-colors"
             >
-              <FileText className="w-3.5 h-3.5 text-sky-400" />
+              <FileText className="w-3.5 h-3.5" strokeWidth={1.75} />
               Dossier PDF
             </a>
             <a
               href={REGISTER_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-extrabold text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 shadow-lg shadow-emerald-500/25 transition-all"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-xs font-bold text-white bg-[#147A4B] hover:bg-[#10643D] transition-colors"
             >
-              Prueba Gratis
-              <ArrowRight className="w-3.5 h-3.5" />
+              Probar 7 días gratis
             </a>
-            <Link
-              href="/"
-              className="inline-flex items-center gap-1 text-xs font-semibold text-slate-400 hover:text-white transition-colors pl-1"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              Inicio
-            </Link>
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -273,51 +223,55 @@ export default function CigoPage() {
             onClick={() => setMobileMenuOpen((prev) => !prev)}
             aria-expanded={mobileMenuOpen}
             aria-label={mobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
-            className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl border border-slate-700 bg-slate-900 text-slate-200 cursor-pointer"
+            className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-md border border-[#D8D6CE] bg-white text-[#14181D] cursor-pointer"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileMenuOpen ? (
+              <X className="w-5 h-5" strokeWidth={1.75} />
+            ) : (
+              <Menu className="w-5 h-5" strokeWidth={1.75} />
+            )}
           </button>
         </nav>
 
         {/* Mobile Drawer */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-slate-800 bg-[#070D19] px-4 py-4 space-y-2 cigo-fade-up">
+          <div className="md:hidden border-t border-[#D8D6CE] bg-[#F6F5F1] px-5 py-4 space-y-1.5">
             {NAV_ITEMS.map((item) => (
               <button
                 key={item.id}
                 type="button"
                 onClick={() => scrollToSection(item.id)}
-                className="block w-full text-left px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 cursor-pointer"
+                className="block w-full text-left py-2.5 text-sm font-medium text-[#14181D] border-b border-[#E4E2DA] cursor-pointer"
               >
                 {item.label}
               </button>
             ))}
-            <div className="pt-2 border-t border-slate-800 flex flex-col gap-2">
+            <div className="pt-3 flex flex-col gap-2.5">
               <a
                 href={REGISTER_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl text-sm font-extrabold text-white bg-gradient-to-r from-emerald-500 to-emerald-600"
+                className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 rounded-md text-sm font-bold text-white bg-[#147A4B]"
               >
-                Comenzar Prueba Gratis (7 días)
-                <ArrowRight className="w-4 h-4" />
+                Probar 7 días gratis
+                <ArrowRight className="w-4 h-4" strokeWidth={2} />
               </a>
               <div className="grid grid-cols-2 gap-2">
                 <a
                   href="/cigo/carta-presentacion-cigo.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold text-slate-200 bg-slate-800 border border-slate-700"
+                  className="inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-md text-xs font-semibold text-[#14181D] bg-white border border-[#D8D6CE]"
                 >
-                  <FileText className="w-3.5 h-3.5 text-sky-400" />
+                  <FileText className="w-3.5 h-3.5" strokeWidth={1.75} />
                   Dossier PDF
                 </a>
                 <Link
                   href="/"
-                  className="inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold text-slate-300 bg-slate-900 border border-slate-800"
+                  className="inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-md text-xs font-semibold text-[#4E5661] bg-white border border-[#D8D6CE]"
                 >
-                  <ArrowLeft className="w-3.5 h-3.5" />
-                  Devorq Inicio
+                  <ArrowLeft className="w-3.5 h-3.5" strokeWidth={1.75} />
+                  Devorq
                 </Link>
               </div>
             </div>
@@ -326,317 +280,208 @@ export default function CigoPage() {
       </header>
 
       <main>
-        {/* ── 1. DARK COMMAND-CENTER SPLIT HERO ── */}
-        <section className="relative overflow-hidden bg-[#070D19] text-white border-b border-slate-800/90">
-          {/* Technical Telemetry Grid & Subtle Ambient Glows */}
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 cigo-grid-bg opacity-85" />
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -top-40 left-1/4 w-[520px] h-[520px] rounded-full bg-sky-500/15 blur-3xl"
-          />
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -bottom-32 right-0 w-[440px] h-[440px] rounded-full bg-emerald-500/12 blur-3xl"
-          />
-
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-12 pb-16 lg:pt-18 lg:pb-20">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
-              {/* Left: Value Proposition + Direct CTAs */}
-              <div className="lg:col-span-6 space-y-6 cigo-fade-up">
-                <div className="flex flex-wrap items-center gap-3">
-                  <div className="inline-flex items-center bg-white/95 px-3.5 py-1.5 rounded-xl shadow-lg shadow-sky-500/10">
-                    <Image
-                      src="/cigo-logo.webp"
-                      alt="CIGO — Control Inteligente de Gastos Operativos"
-                      width={195}
-                      height={80}
-                      priority
-                      className="h-8 w-auto object-contain"
-                    />
-                  </div>
-                  <span className="inline-flex items-center gap-2 text-xs font-bold text-sky-300 bg-sky-500/10 border border-sky-400/25 px-3.5 py-1.5 rounded-full">
-                    <span className="radar-live" />
-                    Control de Flotas B2B · Sin Instalar Apps
-                  </span>
-                </div>
-
-                <h1 className="text-4xl sm:text-5xl xl:text-[3.35rem] font-black tracking-tight leading-[1.06] text-white">
-                  Frena las fugas en ruta y{" "}
-                  <span className="bg-gradient-to-r from-sky-400 via-cyan-300 to-emerald-400 bg-clip-text text-transparent">
-                    liquida combustible y viáticos en tiempo real
-                  </span>
+        {/* ── 1. EDITORIAL ASYMMETRIC HERO + LIVE PRODUCT WORKBENCH ── */}
+        <section className="pt-12 pb-16 sm:pt-16 sm:pb-20 px-5 sm:px-8 bg-[#F6F5F1] border-b border-[#D8D6CE]">
+          <div className="max-w-[1240px] mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-end mb-12 sm:mb-14 cigo-enter">
+              {/* Left 7 cols: Commanding Editorial Headline & Direct Actions */}
+              <div className="lg:col-span-7 space-y-6">
+                <h1 className="text-4xl sm:text-5xl lg:text-[3.45rem] font-extrabold tracking-[-0.03em] leading-[1.06] text-[#14181D]">
+                  Controla el combustible y los viáticos de tu flota desde el WhatsApp de tus choferes.
                 </h1>
 
-                <p className="text-base sm:text-lg text-slate-300 leading-relaxed max-w-xl">
-                  Tus conductores envían fotos de boletas, odómetro o notas de voz desde su{" "}
-                  <strong className="text-white font-semibold">WhatsApp habitual</strong>. CIGO valida ante{" "}
-                  <strong className="text-white font-semibold">SUNAT</strong>, controla el rendimiento{" "}
-                  <strong className="text-sky-300 font-semibold">Km/galón</strong> y entrega tu liquidación contable lista.
+                <p className="text-base sm:text-lg text-[#4E5661] leading-relaxed max-w-[60ch]">
+                  Tus conductores envían fotos de tickets, lecturas de odómetro o notas de voz sin descargar ninguna aplicación. CIGO valida comprobantes ante SUNAT, calcula el rendimiento Km/galón y entrega tu cierre contable listo.
                 </p>
 
-                {/* Primary & Secondary Action Buttons */}
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1">
                   <a
                     href={REGISTER_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full text-sm sm:text-base font-extrabold text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 shadow-xl shadow-emerald-500/25 transition-all hover:-translate-y-0.5"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md text-sm sm:text-base font-bold text-white bg-[#147A4B] hover:bg-[#10643D] transition-colors"
                   >
-                    Comenzar Prueba Gratis de 7 Días
-                    <ArrowRight className="w-4 h-4" />
+                    Probar 7 días gratis
+                    <ArrowRight className="w-4 h-4" strokeWidth={2} />
                   </a>
-
                   <a
                     href={WSP_DEMO_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full text-sm font-bold text-slate-100 bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-sky-400/50 transition-all"
+                    className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-md text-sm font-semibold text-[#14181D] bg-white hover:bg-[#ECEAE3] border border-[#C9C6BC] transition-colors"
                   >
-                    <MessageCircle className="w-4 h-4 text-emerald-400" />
-                    Agendar Demo 15 min
+                    <MessageCircle className="w-4 h-4 text-[#147A4B]" strokeWidth={1.75} />
+                    Agendar demo de 15 min
                   </a>
                 </div>
 
-                {/* Friction Reducers */}
-                <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs font-semibold text-slate-300">
-                  <span className="inline-flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                    Hasta 5 camiones gratis · Sin tarjeta
-                  </span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                    Factura electrónica con IGV
-                  </span>
-                  <a
-                    href="/cigo/brochure-cigo.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-sky-300 hover:text-sky-200 underline underline-offset-4"
-                  >
-                    <FileText className="w-3.5 h-3.5" />
-                    Brochure PDF
-                  </a>
-                </div>
-
-                {/* 3-Step Instant Clarity Strip */}
-                <div className="grid grid-cols-3 gap-3 pt-4 border-t border-slate-800/90 max-w-xl">
-                  <div className="rounded-xl bg-slate-900/70 border border-slate-800 p-3">
-                    <div className="text-xs font-extrabold text-emerald-400">WhatsApp</div>
-                    <div className="text-[11px] text-slate-400 mt-0.5 leading-snug">
-                      Foto o audio del chofer en ruta
-                    </div>
-                  </div>
-                  <div className="rounded-xl bg-slate-900/70 border border-slate-800 p-3">
-                    <div className="text-xs font-extrabold text-sky-400">IA + SUNAT</div>
-                    <div className="text-[11px] text-slate-400 mt-0.5 leading-snug">
-                      RUC, duplicados y Km/galón
-                    </div>
-                  </div>
-                  <div className="rounded-xl bg-slate-900/70 border border-slate-800 p-3">
-                    <div className="text-xs font-extrabold text-violet-400">Excel · SIRE</div>
-                    <div className="text-[11px] text-slate-400 mt-0.5 leading-snug">
-                      Liquidación y ZIP contable
-                    </div>
-                  </div>
-                </div>
+                <p className="text-xs text-[#5B6470]">
+                  Hasta 5 camiones activos durante la prueba sin tarjeta de crédito. Factura electrónica con IGV incluido en Perú.
+                </p>
               </div>
 
-              {/* Right: Live Interactive Telemetry Cockpit */}
-              <div className="lg:col-span-6 lg:pl-4">
-                <CigoHeroCockpit />
+              {/* Right 5 cols: Operational Spec Sheet (Replaces generic stat cards) */}
+              <div className="lg:col-span-5 border-t border-[#14181D]">
+                <dl className="divide-y divide-[#D8D6CE] text-sm">
+                  <div className="py-3.5 flex items-baseline justify-between gap-4">
+                    <dt className="text-xs font-medium text-[#5B6470]">Canal en carretera</dt>
+                    <dd className="text-right font-semibold text-[#14181D]">
+                      WhatsApp habitual (0 apps extra)
+                    </dd>
+                  </div>
+                  <div className="py-3.5 flex items-baseline justify-between gap-4">
+                    <dt className="text-xs font-medium text-[#5B6470]">Auditoría fiscal</dt>
+                    <dd className="text-right font-semibold text-[#14181D]">
+                      Consulta RUC SUNAT y duplicados
+                    </dd>
+                  </div>
+                  <div className="py-3.5 flex items-baseline justify-between gap-4">
+                    <dt className="text-xs font-medium text-[#5B6470]">Entregables contables</dt>
+                    <dd className="text-right font-semibold text-[#14181D]">
+                      Excel, Liquidación, SIRE TXT y ZIP
+                    </dd>
+                  </div>
+                  <div className="py-3.5 flex items-baseline justify-between gap-4">
+                    <dt className="text-xs font-medium text-[#5B6470]">Flotas operando</dt>
+                    <dd className="text-right font-semibold text-[#0A58CA]">
+                      TRANSYACU S.A.C. y DIFEYA S.A.C.
+                    </dd>
+                  </div>
+                </dl>
               </div>
             </div>
 
-            {/* Bottom Trust Strip */}
-            <div className="mt-14 pt-7 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-2 text-xs font-semibold text-slate-400">
-                <Building2 className="w-4 h-4 text-sky-400 shrink-0" />
-                <span>En operación activa con empresas de transporte de carga pesada en el Perú:</span>
-              </div>
-              <div className="flex flex-wrap items-center justify-center gap-3">
-                <span className="text-xs font-extrabold tracking-wide text-slate-200 bg-slate-900 border border-slate-700/90 px-3.5 py-1.5 rounded-full">
-                  GRUPO TRANSYACU — TRANSYACU S.A.C.
-                </span>
-                <span className="text-xs font-extrabold tracking-wide text-slate-200 bg-slate-900 border border-slate-700/90 px-3.5 py-1.5 rounded-full">
-                  DIFEYA S.A.C.
-                </span>
-                <button
-                  type="button"
-                  onClick={() => scrollToSection("planes")}
-                  className="text-xs font-bold text-sky-400 hover:text-sky-300 underline underline-offset-4 cursor-pointer pl-1"
-                >
-                  Ver Pricing por Volumen ↓
-                </button>
-              </div>
+            {/* Authored Centerpiece: Live Interactive Dispatch Workbench + Real Dashboard */}
+            <div className="cigo-enter-delay">
+              <CigoHeroCockpit />
             </div>
           </div>
         </section>
 
-        {/* ── 2. EL PROBLEMA ACTUAL + COMPARATIVA ANTES VS. CON CIGO ── */}
-        <section id="problema" className="py-18 sm:py-22 px-4 sm:px-6 bg-white border-b border-slate-200">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center max-w-3xl mx-auto mb-12">
-              <span className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-rose-700 bg-rose-50 border border-rose-200 px-3.5 py-1 rounded-full">
-                <AlertTriangle className="w-3.5 h-3.5" />
-                El Problema Actual en Carretera
-              </span>
-              <h2 className="mt-4 text-3xl sm:text-4xl font-black tracking-tight text-slate-950">
-                Lo que hoy le cuesta dinero y horas a tu flota
+        {/* ── 2. EL PROBLEMA VS. CIGO (EDITORIAL HAIRLINE LEDGER) ── */}
+        <section id="problema" className="py-20 sm:py-24 px-5 sm:px-8 bg-white border-b border-[#D8D6CE]">
+          <div className="max-w-[1240px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+            {/* Left Sticky Summary */}
+            <div className="lg:col-span-4 lg:sticky lg:top-24 space-y-4">
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-[-0.025em] text-[#14181D] leading-[1.12]">
+                Cuatro fugas que el sobre de papel esconde hasta fin de mes.
               </h2>
-              <p className="mt-3 text-base text-slate-600 leading-relaxed">
-                Gestionar viajes con sobres de papel, hojas sueltas y rendiciones tardías abre cuatro frentes críticos cada mes.
+              <p className="text-sm sm:text-base text-[#4E5661] leading-relaxed">
+                Gestionar viajes con recibos térmicos sueltos y hojas manuales encarece cada ruta y sobrecarga al área administrativa. Así cambia la operación al pasar a CIGO.
               </p>
             </div>
 
-            {/* Side-by-Side Operational Contrast */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
-              <div className="rounded-2xl bg-rose-50/60 border border-rose-200 p-6">
-                <div className="text-xs font-extrabold uppercase tracking-wider text-rose-700 mb-3 flex items-center gap-2">
-                  <XCircle className="w-4 h-4" />
-                  Método tradicional (Sobres + Excel)
-                </div>
-                <ul className="space-y-2.5">
-                  {COMPARISON_ROWS.map((row) => (
-                    <li key={row.before} className="flex items-start gap-2.5 text-sm text-slate-700">
-                      <XCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
-                      <span>{row.before}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="rounded-2xl bg-emerald-50/60 border border-emerald-200 p-6">
-                <div className="text-xs font-extrabold uppercase tracking-wider text-emerald-700 mb-3 flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4" />
-                  Operación controlada con CIGO
-                </div>
-                <ul className="space-y-2.5">
-                  {COMPARISON_ROWS.map((row) => (
-                    <li key={row.after} className="flex items-start gap-2.5 text-sm font-medium text-slate-900">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                      <span>{row.after}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* 4 Detailed Pain Point Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {PROBLEMS.map((p) => {
-                const Icon = p.icon;
-                return (
-                  <article
-                    key={p.num}
-                    className="group rounded-2xl bg-slate-50/70 hover:bg-white border border-slate-200 hover:border-rose-300 p-5 transition-all hover:shadow-lg flex flex-col justify-between gap-3"
-                  >
+            {/* Right Editorial Contrast Ledger */}
+            <div className="lg:col-span-8 border-t border-[#14181D] divide-y divide-[#D8D6CE]">
+              {OPERATIONAL_GAPS.map((row) => (
+                <article key={row.issue} className="py-7 space-y-4">
+                  <h3 className="text-lg sm:text-xl font-bold text-[#14181D] tracking-[-0.015em]">
+                    {row.issue}
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                      <div className="flex items-center justify-between gap-2 mb-3.5">
-                        <span className="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center group-hover:scale-105 transition-transform">
-                          <Icon className="w-5 h-5" />
-                        </span>
-                        <span className="text-[11px] font-bold text-rose-700 bg-rose-50 border border-rose-200 px-2.5 py-0.5 rounded-full">
-                          {p.tag}
-                        </span>
+                      <div className="text-xs font-semibold text-[#9F2D2D] mb-1">
+                        Operación en papel
                       </div>
-                      <h3 className="text-base font-extrabold text-slate-950 leading-snug mb-2">
-                        {p.title}
-                      </h3>
-                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                        {p.desc}
+                      <p className="text-sm text-[#4E5661] leading-relaxed">
+                        {row.before}
                       </p>
                     </div>
-                    <div className="text-[11px] font-mono font-bold text-slate-400 pt-2 border-t border-slate-200/70">
-                      DOLOR #{p.num}
+                    <div>
+                      <div className="text-xs font-semibold text-[#147A4B] mb-1">
+                        Con CIGO en ruta
+                      </div>
+                      <p className="text-sm text-[#14181D] leading-relaxed font-medium">
+                        {row.after}
+                      </p>
                     </div>
-                  </article>
-                );
-              })}
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* ── 3. LA SOLUCIÓN INTERACTIVA (WHATSAPP + METODOLOGÍA 48H) ── */}
+        {/* ── 3. SIMULADOR WHATSAPP → REGISTRO CONTABLE + SECUENCIA 48H ── */}
         <CigoWhatsAppDemo />
 
-        {/* ── 4. BENEFICIOS CLAVE BENTO GRID ── */}
-        <section id="beneficios" className="py-18 sm:py-22 px-4 sm:px-6 bg-white">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center max-w-3xl mx-auto mb-12">
-              <span className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-sky-700 bg-sky-50 border border-sky-200 px-3.5 py-1 rounded-full">
-                <Sparkles className="w-3.5 h-3.5" />
-                Beneficios Clave para tu Empresa
-              </span>
-              <h2 className="mt-4 text-3xl sm:text-4xl font-black tracking-tight text-slate-950">
-                Diseñado para Gerencia, Operaciones y Contabilidad
+        {/* ── 4. IMPACTO POR ÁREA (3-COLUMN EDITORIAL MATRIX, NO BENTO CARDS) ── */}
+        <section id="beneficios" className="py-20 sm:py-24 px-5 sm:px-8 bg-[#FAF9F6] border-b border-[#D8D6CE]">
+          <div className="max-w-[1240px] mx-auto">
+            <div className="max-w-2xl mb-12">
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-[-0.025em] text-[#14181D] leading-[1.12]">
+                Un mismo dato sirve a gerencia, operaciones y contabilidad.
               </h2>
-              <p className="mt-3 text-base text-slate-600 leading-relaxed">
-                Cada área recibe información estructurada sin duplicar esfuerzos ni perseguir comprobantes en papel.
+              <p className="text-base text-[#4E5661] mt-3 leading-relaxed">
+                Sin reescribir planillas entre departamentos ni perseguir comprobantes cuando el camión ya salió a otro viaje.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {KEY_BENEFITS.map((b) => {
-                const Icon = b.icon;
-                return (
-                  <article
-                    key={b.title}
-                    className="rounded-2xl bg-slate-50/70 hover:bg-white border border-slate-200 hover:border-sky-300 p-6 transition-all hover:shadow-lg flex flex-col gap-3.5"
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <span
-                        className={`w-11 h-11 rounded-xl border flex items-center justify-center ${b.iconWrapClass}`}
-                      >
-                        <Icon className="w-5 h-5" />
-                      </span>
-                      <span
-                        className={`text-[11px] font-extrabold uppercase tracking-wide px-2.5 py-0.5 rounded-full border ${b.accentClass}`}
-                      >
-                        {b.kpi}
-                      </span>
-                    </div>
-                    <h3 className="text-base font-extrabold text-slate-950 leading-snug">
-                      {b.title}
-                    </h3>
-                    <p className="text-sm text-slate-600 leading-relaxed">
-                      {b.desc}
-                    </p>
-                  </article>
-                );
-              })}
+            <div className="grid grid-cols-1 lg:grid-cols-3 border-t border-[#14181D] divide-y lg:divide-y-0 lg:divide-x divide-[#D8D6CE]">
+              {ROLE_OUTCOMES.map((col, idx) => (
+                <article
+                  key={col.role}
+                  className={
+                    idx === 0
+                      ? "py-7 lg:pr-8"
+                      : idx === 1
+                      ? "py-7 lg:px-8"
+                      : "py-7 lg:pl-8"
+                  }
+                >
+                  <div className="font-cigo-mono text-xs font-semibold text-[#0A58CA] mb-2">
+                    {col.role}
+                  </div>
+                  <h3 className="text-xl font-bold text-[#14181D] tracking-[-0.015em] leading-snug mb-4">
+                    {col.headline}
+                  </h3>
+                  <ul className="space-y-2.5 text-sm text-[#4E5661] leading-relaxed">
+                    {col.points.map((pt) => (
+                      <li key={pt} className="flex items-start gap-2.5">
+                        <span className="text-[#147A4B] font-bold" aria-hidden="true">
+                          /
+                        </span>
+                        <span>{pt}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* ── 5. TOUR INTERACTIVO DE LOS 8 MÓDULOS ── */}
+        {/* ── 5. EXPLORADOR DE LOS 8 MÓDULOS REALES ── */}
         <CigoModulesShowcase />
 
-        {/* ── 6. CLIENTES REALES + DOCUMENTACIÓN OFICIAL (DOSSIER, BROCHURE, VIDEO) ── */}
+        {/* ── 6. CLIENTES EN OPERACIÓN Y DOCUMENTACIÓN EJECUTIVA ── */}
         <RoiCalculator />
 
-        {/* ── 7. PRICING DE EXPANSIÓN POR VOLUMEN (IGV INCLUIDO) ── */}
+        {/* ── 7. PRICING DE EXPANSIÓN (SINGLE CARBON ANCHOR BAND) ── */}
         <CigoPricing />
 
-        {/* ── 8. PREGUNTAS FRECUENTES (FAQ) ── */}
-        <section id="faq" className="py-18 sm:py-22 px-4 sm:px-6 bg-slate-50 border-b border-slate-200">
-          <div className="max-w-3xl mx-auto">
-            <div className="text-center mb-10">
-              <span className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-sky-700 bg-sky-100 border border-sky-200 px-3.5 py-1 rounded-full">
-                Preguntas Frecuentes · CIGO
-              </span>
-              <h2 className="mt-4 text-3xl sm:text-4xl font-black tracking-tight text-slate-950">
-                Dudas Operativas, Planes y Prueba Gratuita
+        {/* ── 8. PREGUNTAS FRECUENTES (2-COL EDITORIAL SPLIT) ── */}
+        <section id="faq" className="py-20 sm:py-24 px-5 sm:px-8 bg-white border-b border-[#D8D6CE]">
+          <div className="max-w-[1240px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+            <div className="lg:col-span-4 space-y-4">
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-[-0.025em] text-[#14181D] leading-[1.12]">
+                Preguntas frecuentes sobre CIGO.
               </h2>
-              <p className="mt-2.5 text-base text-slate-600">
-                Respuestas claras sobre el registro gratuito, precios con IGV, consultas SUNAT y exportaciones SIRE.
+              <p className="text-sm sm:text-base text-[#4E5661] leading-relaxed">
+                Detalles claros sobre la prueba gratuita de 7 días, tarifas con IGV, consultas SUNAT y exportaciones SIRE.
               </p>
+              <div className="pt-4 border-t border-[#E4E2DA] space-y-1.5 text-xs text-[#4E5661]">
+                <div className="font-semibold text-[#14181D]">Atención directa en Perú</div>
+                <div className="font-cigo-mono">+51 929 222 980 / +51 935 351 768</div>
+                <div className="font-cigo-mono">contacto@devorq.com</div>
+              </div>
             </div>
 
-            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm divide-y divide-slate-100 px-5 sm:px-8">
+            <div className="lg:col-span-8 border-t border-[#14181D] divide-y divide-[#D8D6CE]">
               {CIGO_FAQS.map((faq, idx) => {
                 const isOpen = openFaqIndex === idx;
                 return (
-                  <div key={faq.q} className="py-4 sm:py-5">
+                  <div key={faq.q} className="py-5">
                     <button
                       type="button"
                       onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
@@ -644,24 +489,23 @@ export default function CigoPage() {
                       className="w-full flex items-center justify-between gap-4 text-left cursor-pointer group"
                     >
                       <span
-                        className={`text-sm sm:text-base font-bold transition-colors ${
-                          isOpen ? "text-sky-700" : "text-slate-900 group-hover:text-sky-700"
+                        className={`text-base font-semibold transition-colors ${
+                          isOpen
+                            ? "text-[#0A58CA]"
+                            : "text-[#14181D] group-hover:text-[#0A58CA]"
                         }`}
                       >
                         {faq.q}
                       </span>
-                      <span
-                        className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-all ${
-                          isOpen
-                            ? "bg-sky-100 text-sky-700 rotate-180"
-                            : "bg-slate-100 text-slate-500"
+                      <ChevronDown
+                        className={`w-4 h-4 text-[#5B6470] shrink-0 transition-transform ${
+                          isOpen ? "rotate-180 text-[#0A58CA]" : ""
                         }`}
-                      >
-                        <ChevronDown className="w-4 h-4" />
-                      </span>
+                        strokeWidth={2}
+                      />
                     </button>
                     {isOpen && (
-                      <p className="mt-3 text-sm text-slate-600 leading-relaxed pr-8 cigo-fade-up">
+                      <p className="mt-3 text-sm text-[#4E5661] leading-relaxed max-w-[68ch] cigo-swap">
                         {faq.a}
                       </p>
                     )}
@@ -672,116 +516,82 @@ export default function CigoPage() {
           </div>
         </section>
 
-        {/* ── 9. CIERRE Y LLAMADO A LA ACCIÓN (DARK COMMAND FINALE) ── */}
-        <section className="py-18 sm:py-22 px-4 sm:px-6 bg-white">
-          <div className="max-w-5xl mx-auto">
-            <div className="relative overflow-hidden rounded-3xl bg-[#070D19] text-white border border-sky-400/25 shadow-2xl px-6 py-12 sm:px-12 sm:py-16 text-center">
-              <div aria-hidden="true" className="pointer-events-none absolute inset-0 cigo-grid-bg opacity-70" />
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[480px] h-[240px] rounded-full bg-emerald-500/20 blur-3xl"
-              />
+        {/* ── 9. CIERRE DIRECTO DE CONVERSIÓN ── */}
+        <section className="py-20 sm:py-24 px-5 sm:px-8 bg-[#F6F5F1]">
+          <div className="max-w-[1240px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+            <div className="lg:col-span-7 space-y-4">
+              <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-extrabold tracking-[-0.03em] text-[#14181D] leading-[1.08]">
+                Activa tu prueba gratis de 7 días con hasta 5 camiones hoy mismo.
+              </h2>
+              <p className="text-base text-[#4E5661] leading-relaxed max-w-[58ch]">
+                Crea tu cuenta en{" "}
+                <strong className="text-[#14181D] font-semibold">cigo.devorq.com/registro</strong> sin tarjeta de crédito, o coordina una demostración de 15 minutos con nuestro equipo técnico.
+              </p>
+            </div>
 
-              <div className="relative z-10 max-w-3xl mx-auto">
-                <span className="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 px-4 py-1.5 rounded-full">
-                  <span className="radar-live" />
-                  Activación Inmediata · Sin Tarjeta de Crédito
-                </span>
+            <div className="lg:col-span-5 flex flex-col sm:flex-row lg:flex-col xl:flex-row gap-3 lg:justify-end">
+              <a
+                href={REGISTER_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md text-sm font-bold text-white bg-[#147A4B] hover:bg-[#10643D] transition-colors"
+              >
+                Registrar mi flota gratis
+                <ArrowRight className="w-4 h-4" strokeWidth={2} />
+              </a>
+              <a
+                href={WSP_DEMO_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-md text-sm font-semibold text-[#14181D] bg-white hover:bg-[#ECEAE3] border border-[#C9C6BC] transition-colors"
+              >
+                <MessageCircle className="w-4 h-4 text-[#147A4B]" strokeWidth={1.75} />
+                Demo por WhatsApp
+              </a>
+              <a
+                href={GMAIL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-md text-sm font-semibold text-[#4E5661] hover:text-[#14181D] bg-white border border-[#D8D6CE] transition-colors"
+              >
+                <Mail className="w-4 h-4" strokeWidth={1.75} />
+                Correo
+              </a>
+            </div>
+          </div>
 
-                <h2 className="mt-5 text-3xl sm:text-4xl lg:text-[2.65rem] font-black tracking-tight leading-tight text-white">
-                  Empieza tu Prueba Gratis de 7 Días Hoy Mismo
-                </h2>
-
-                <p className="mt-4 text-base text-slate-300 leading-relaxed">
-                  Registra tu empresa directamente en{" "}
-                  <strong className="text-white">cigo.devorq.com/registro</strong> para probar con hasta 5 camiones en ruta, o agenda una demostración gratuita de 15 minutos con nuestro equipo.
-                </p>
-
-                <p className="mt-3 text-sm font-bold text-sky-300">
-                  WhatsApp / Teléfonos: +51 929 222 980 · +51 935 351 768 · Correo: contacto@devorq.com
-                </p>
-
-                <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3">
-                  <a
-                    href={REGISTER_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-sm sm:text-base font-extrabold text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 shadow-xl shadow-emerald-500/30 transition-all hover:-translate-y-0.5"
-                  >
-                    Registrar mi Flota Gratis (7 Días)
-                    <ArrowRight className="w-4 h-4" />
-                  </a>
-
-                  <a
-                    href={WSP_DEMO_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full text-sm font-bold text-white bg-[#25D366] hover:bg-[#22c55e] shadow-lg shadow-emerald-500/20 transition-all"
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                    Agendar Demo 15 min
-                  </a>
-
-                  <a
-                    href={GMAIL_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full text-sm font-bold text-slate-200 bg-slate-800/80 hover:bg-slate-800 border border-slate-700 transition-colors"
-                  >
-                    <Mail className="w-4 h-4 text-sky-400" />
-                    Correo
-                  </a>
-                </div>
-
-                <div className="mt-9 pt-7 border-t border-slate-800">
-                  <div className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-3">
-                    Formatos de Exportación Disponibles en el Panel Web
-                  </div>
-                  <div className="flex flex-wrap items-center justify-center gap-2.5 text-xs font-bold">
-                    <span className="inline-flex items-center gap-1.5 bg-slate-900/90 border border-slate-800 text-slate-200 px-3 py-1.5 rounded-lg">
-                      <Check className="w-3.5 h-3.5 text-emerald-400" />
-                      Reporte Operativo Excel (.xlsx)
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 bg-slate-900/90 border border-slate-800 text-slate-200 px-3 py-1.5 rounded-lg">
-                      <Check className="w-3.5 h-3.5 text-emerald-400" />
-                      Planilla de Liquidación por Viaje (.xlsx)
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 bg-sky-500/15 border border-sky-400/30 text-sky-300 px-3 py-1.5 rounded-lg">
-                      <Check className="w-3.5 h-3.5 text-sky-400" />
-                      Archivo TXT SIRE Compras SUNAT
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 bg-slate-900/90 border border-slate-800 text-slate-200 px-3 py-1.5 rounded-lg">
-                      <Check className="w-3.5 h-3.5 text-emerald-400" />
-                      Paquete ZIP de Evidencias Fotográficas
-                    </span>
-                  </div>
-                </div>
-              </div>
+          <div className="max-w-[1240px] mx-auto mt-12 pt-6 border-t border-[#D8D6CE] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-[#5B6470]">
+            <span>Formatos de exportación incluidos en el panel web:</span>
+            <div className="flex flex-wrap gap-x-5 gap-y-1 font-cigo-mono text-[#14181D]">
+              <span>Excel operativo (.xlsx)</span>
+              <span>Liquidación por viaje (.xlsx)</span>
+              <span>TXT SIRE Compras SUNAT</span>
+              <span>Respaldo fotográfico (.zip)</span>
             </div>
           </div>
         </section>
 
-        {/* ── Términos y Condiciones (Desplegable) ── */}
+        {/* ── Términos y Condiciones (Desplegable, #terminos) ── */}
         {showTerms && (
           <section
             id="terminos"
-            className="py-14 px-4 sm:px-6 bg-slate-50 border-t border-slate-200"
+            className="py-14 px-5 sm:px-8 bg-white border-t border-[#D8D6CE]"
           >
-            <div className="max-w-4xl mx-auto text-slate-700 text-sm leading-relaxed relative">
+            <div className="max-w-4xl mx-auto text-[#4E5661] text-sm leading-relaxed relative">
               <button
                 type="button"
                 onClick={() => setShowTerms(false)}
                 aria-label="Cerrar términos y condiciones"
-                className="absolute top-0 right-0 w-9 h-9 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-700 flex items-center justify-center cursor-pointer transition-colors"
+                className="absolute top-0 right-0 w-9 h-9 rounded-md border border-[#D8D6CE] bg-[#F6F5F1] hover:bg-[#ECEAE3] text-[#14181D] flex items-center justify-center cursor-pointer transition-colors"
                 title="Cerrar"
               >
-                <X className="w-4 h-4" />
+                <X className="w-4 h-4" strokeWidth={1.75} />
               </button>
 
-              <h2 className="text-2xl font-black text-slate-950 pr-12">
+              <h2 className="text-2xl font-bold text-[#14181D] pr-12">
                 TÉRMINOS Y CONDICIONES DEL SERVICIO &quot;CIGO&quot;
               </h2>
-              <p className="text-xs font-semibold text-slate-500 mt-1 mb-6">
+              <p className="font-cigo-mono text-xs text-[#5B6470] mt-1 mb-6">
                 Última actualización: Noviembre 2026
               </p>
 
@@ -795,7 +605,7 @@ export default function CigoPage() {
 
               <div className="space-y-5">
                 <div>
-                  <h3 className="text-base font-bold text-slate-950 mb-1.5">
+                  <h3 className="text-base font-bold text-[#14181D] mb-1.5">
                     1. NATURALEZA Y ALCANCE DEL SERVICIO
                   </h3>
                   <p>
@@ -804,7 +614,7 @@ export default function CigoPage() {
                 </div>
 
                 <div>
-                  <h3 className="text-base font-bold text-slate-950 mb-1.5">
+                  <h3 className="text-base font-bold text-[#14181D] mb-1.5">
                     2. DESLINDE DE RESPONSABILIDAD CONTABLE Y TRIBUTARIA
                   </h3>
                   <p>
@@ -813,7 +623,7 @@ export default function CigoPage() {
                 </div>
 
                 <div>
-                  <h3 className="text-base font-bold text-slate-950 mb-1.5">
+                  <h3 className="text-base font-bold text-[#14181D] mb-1.5">
                     3. DISPONIBILIDAD DEL SERVICIO (SLA Y PROVEEDORES TERCEROS)
                   </h3>
                   <p>
@@ -822,7 +632,7 @@ export default function CigoPage() {
                 </div>
 
                 <div>
-                  <h3 className="text-base font-bold text-slate-950 mb-1.5">
+                  <h3 className="text-base font-bold text-[#14181D] mb-1.5">
                     4. PROTECCIÓN DE DATOS PERSONALES (LEY N° 29733)
                   </h3>
                   <p>
@@ -831,7 +641,7 @@ export default function CigoPage() {
                 </div>
 
                 <div>
-                  <h3 className="text-base font-bold text-slate-950 mb-1.5">
+                  <h3 className="text-base font-bold text-[#14181D] mb-1.5">
                     5. PAGOS, FACTURACIÓN Y SUSPENSIÓN DEL SERVICIO
                   </h3>
                   <p>
@@ -840,7 +650,7 @@ export default function CigoPage() {
                 </div>
 
                 <div>
-                  <h3 className="text-base font-bold text-slate-950 mb-1.5">
+                  <h3 className="text-base font-bold text-[#14181D] mb-1.5">
                     6. JURISDICCIÓN Y LEY APLICABLE
                   </h3>
                   <p>
@@ -854,28 +664,29 @@ export default function CigoPage() {
       </main>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-slate-200 py-6 px-4 text-center bg-white">
-        <p className="text-xs text-slate-500">
-          © {new Date().getFullYear()} Devorq Systems · CIGO Control Inteligente de Gastos ·{" "}
-          <button
-            type="button"
-            onClick={() => {
-              setShowTerms((prev) => !prev);
-              if (!showTerms) {
-                setTimeout(() => {
-                  document.getElementById("terminos")?.scrollIntoView({ behavior: "smooth" });
-                }, 100);
-              }
-            }}
-            className="text-sky-600 hover:text-sky-700 font-semibold underline cursor-pointer"
-          >
-            {showTerms ? "Ocultar Términos y Condiciones" : "Términos y Condiciones"}
-          </button>{" "}
-          ·{" "}
-          <Link href="/" className="text-sky-600 hover:text-sky-700 font-semibold">
-            Volver a Devorq
-          </Link>
-        </p>
+      <footer className="border-t border-[#D8D6CE] py-7 px-5 sm:px-8 bg-[#F6F5F1]">
+        <div className="max-w-[1240px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#5B6470]">
+          <p>© {new Date().getFullYear()} Devorq Systems · CIGO Control Inteligente de Gastos Operativos</p>
+          <div className="flex items-center gap-4">
+            <button
+              type="button"
+              onClick={() => {
+                setShowTerms((prev) => !prev);
+                if (!showTerms) {
+                  setTimeout(() => {
+                    document.getElementById("terminos")?.scrollIntoView({ behavior: "smooth" });
+                  }, 100);
+                }
+              }}
+              className="text-[#14181D] hover:text-[#0A58CA] font-medium underline underline-offset-4 cursor-pointer"
+            >
+              {showTerms ? "Ocultar Términos y Condiciones" : "Términos y Condiciones"}
+            </button>
+            <Link href="/" className="text-[#14181D] hover:text-[#0A58CA] font-medium">
+              Volver a Devorq
+            </Link>
+          </div>
+        </div>
       </footer>
     </div>
   );
