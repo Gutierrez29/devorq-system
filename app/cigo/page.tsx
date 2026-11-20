@@ -60,10 +60,10 @@ const OPERATIONAL_GAPS = [
 const ROLE_OUTCOMES = [
   {
     role: "Gerencia General",
-    headline: "Visibilidad de costos por viaje y placa sin esperar el cierre de mes.",
+    headline: "Visibilidad de costos por viaje, placa y grupo empresarial en tiempo real.",
     points: [
-      "Control real de margen operativo en cada ruta nacional.",
-      "Reducción de fugas en combustible, peajes y gastos no autorizados.",
+      "Panel analítico con gasto por camión, chofer, categoría y salud tributaria SUNAT.",
+      "Soporte Multi-Empresa y Copilot WhatsApp para consultar indicadores desde tu celular.",
       "Información privada y auditable conforme a la Ley N° 29733.",
     ],
   },
@@ -71,18 +71,18 @@ const ROLE_OUTCOMES = [
     role: "Jefatura de Operaciones",
     headline: "Adopción inmediata por tus conductores sin instalar aplicaciones.",
     points: [
-      "Los choferes reportan por su WhatsApp habitual (foto o nota de voz).",
-      "Seguimiento continuo del saldo entregado frente a lo rendido.",
-      "Alertas de desvíos Km/galón y reglas de topes por categoría.",
+      "Lectura IA de tableros de odómetro y combustible, Auto-Despacho y reporte de taller por WhatsApp.",
+      "Control de choferes, tractos, carretas y saldos de viáticos por viaje en curso.",
+      "Alertas por Telegram y reglas configurables de topes y consumo Km/galón.",
     ],
   },
   {
     role: "Contabilidad y Auditoría",
-    headline: "Cierre ágil con respaldos ordenados y listos para SUNAT.",
+    headline: "Cierre ágil con expediente OCR, Bancarización Ley 28194 y SIRE SUNAT.",
     points: [
-      "Validación de RUC (Activo/Habido) y detección de series duplicadas.",
-      "Exportación en Excel, liquidación por viaje y TXT SIRE Compras.",
-      "Carpeta ZIP descargable con las fotografías de respaldo por periodo.",
+      "Expediente lado a lado (foto + ítems OCR), consulta SUNAT y alertas de voucher bancario (>= S/ 2,000).",
+      "Exportación directa: Liquidación de Choferes, Libro de Compras Excel y Paquete SIRE RCE 8.4.",
+      "Carpeta ZIP descargable con fotografías ordenadas, índice CSV y conectores API ERP.",
     ],
   },
 ] as const;

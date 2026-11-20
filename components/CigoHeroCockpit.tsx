@@ -38,80 +38,100 @@ interface HeroCase {
   metric2Value: string;
   metric3Label: string;
   metric3Value: string;
+  previewImg: string;
+  previewWidth: number;
+  previewHeight: number;
+  previewAlt: string;
+  previewLabel: string;
 }
 
 const HERO_CASES: HeroCase[] = [
   {
     id: "fuel",
     tab: "Ticket combustible",
-    plate: "V1A-892",
+    plate: "V5C-892",
     driver: "Carlos Mendoza",
-    route: "Lima — Trujillo",
+    route: "Lima — Huancayo",
     time: "10:14",
-    receiptTitle: "REPSOL COMBUSTIBLE S.A.",
-    receiptSub: "78.4 gal Diésel B5 S-50",
-    receiptCode: "F042-0019284",
-    receiptAmount: "S/ 1,420.00",
-    receiptExtra: "Odómetro: 142,500 km",
-    botTitle: "Carga auditada y válida SUNAT",
-    botSummary: "Rendimiento 3.84 km/gal · Saldo viático S/ 1,280.00",
-    panelCode: "F042-0019284",
-    panelVendor: "Repsol Combustible S.A.",
-    panelStatus: "Aceptado SUNAT",
-    metric1Label: "Rendimiento",
-    metric1Value: "3.84 km/gal",
-    metric2Label: "IGV recuperable",
-    metric2Value: "S/ 216.61",
-    metric3Label: "Saldo viaje",
-    metric3Value: "S/ 1,280.00",
+    receiptTitle: "ESTACIÓN DE SERVICIOS SAN JOSÉ",
+    receiptSub: "100 gal Diésel B5 S-50 UV · Orden de crédito",
+    receiptCode: "425045",
+    receiptAmount: "S/ 2,425.00",
+    receiptExtra: "Odómetro: 51,408 km · 80%",
+    botTitle: "Carga auditada y registrada",
+    botSummary: "100 gal a S/ 24.25 · Alerta Ley 28194 (voucher bancario)",
+    panelCode: "#2611-004",
+    panelVendor: "Estación de Servicios San José",
+    panelStatus: "Aprobado · Ley 28194",
+    metric1Label: "Combustible",
+    metric1Value: "100.0 gal",
+    metric2Label: "Validación SUNAT",
+    metric2Value: "94% al día",
+    metric3Label: "Importe",
+    metric3Value: "S/ 2,425.00",
+    previewImg: "/cigo/screens/01-dashboard.webp",
+    previewWidth: 972,
+    previewHeight: 867,
+    previewAlt: "Panel de Control Analítico real de CIGO con indicadores SUNAT y gastos por categoría",
+    previewLabel: "Panel de Control Analítico",
   },
   {
     id: "toll",
-    tab: "Boleta de peaje",
-    plate: "B4K-719",
+    tab: "Expediente OCR + SUNAT",
+    plate: "V5C-892",
     driver: "Jorge Rojas",
-    route: "Chimbote — Piura",
+    route: "Trujillo — Lima",
     time: "11:42",
-    receiptTitle: "AUTOPISTA DEL NORTE S.A.C.",
-    receiptSub: "Peaje Estación Virú · 6 ejes",
-    receiptCode: "B001-004892",
-    receiptAmount: "S/ 45.00",
-    receiptExtra: "RUC 20517933998 · Habido",
-    botTitle: "Comprobante validado y único",
-    botSummary: "IGV S/ 6.86 listo para SIRE · Saldo S/ 310.00",
-    panelCode: "B001-004892",
-    panelVendor: "Autopista del Norte S.A.C.",
-    panelStatus: "Aceptado SUNAT",
-    metric1Label: "Duplicados",
-    metric1Value: "0 alertas",
-    metric2Label: "IGV recuperable",
-    metric2Value: "S/ 6.86",
-    metric3Label: "Saldo viaje",
-    metric3Value: "S/ 310.00",
+    receiptTitle: "COMPROBANTE EN RUTA",
+    receiptSub: "Lectura OCR de ítems, galones y precio unitario",
+    receiptCode: "N° 425045",
+    receiptAmount: "S/ 2,425.00",
+    receiptExtra: "Bancarización Ley 28194",
+    botTitle: "Expediente con foto archivado",
+    botSummary: "Desglose automático y solicitud de voucher bancarizado",
+    panelCode: "EXP-425045",
+    panelVendor: "Expediente de Gasto + OCR",
+    panelStatus: "Requiere Voucher",
+    metric1Label: "Ítem extraído",
+    metric1Value: "Diésel B5",
+    metric2Label: "Precio unit.",
+    metric2Value: "S/ 24.25/gal",
+    metric3Label: "Ley 28194",
+    metric3Value: ">= S/ 2,000",
+    previewImg: "/cigo/screens/06-expediente-gasto.webp",
+    previewWidth: 1024,
+    previewHeight: 746,
+    previewAlt: "Expediente de gasto real de CIGO comparando foto del vale físico con desglose OCR y alerta de bancarización",
+    previewLabel: "Expediente OCR + Bancarización",
   },
   {
     id: "audio",
-    tab: "Audio gasto menor",
-    plate: "T9M-405",
+    tab: "Odómetro y Bot en vivo",
+    plate: "VBH-737",
     driver: "Luis Paredes",
-    route: "Arequipa — Matarani",
-    time: "18:05",
-    receiptTitle: "NOTA DE VOZ TRANSCRITA",
-    receiptSub: "“Cochera S/ 20 y parchado S/ 25”",
-    receiptCode: "MOV-0084",
-    receiptAmount: "S/ 45.00",
-    receiptExtra: "0:08 · Audio WhatsApp",
-    botTitle: "Gasto menor en planilla",
-    botSummary: "2 conceptos registrados · Saldo S/ 640.00",
-    panelCode: "MOV-0084",
-    panelVendor: "Planilla de Movilidad (2 ítems)",
-    panelStatus: "Aprobado interno",
-    metric1Label: "Digitación",
-    metric1Value: "0 minutos",
-    metric2Label: "Total gasto",
-    metric2Value: "S/ 45.00",
-    metric3Label: "Saldo viaje",
-    metric3Value: "S/ 640.00",
+    route: "Arequipa — Cusco",
+    time: "13:43",
+    receiptTitle: "TABLERO DIGITAL / AUDIO",
+    receiptSub: "“Llegué a Arequipa: tablero en 51,408 km y 80% de tanque.”",
+    receiptCode: "VJ-261119",
+    receiptAmount: "51,408 km",
+    receiptExtra: "0:08 · Bot WhatsApp IA",
+    botTitle: "Lectura detectada: 51,408 km",
+    botSummary: "Combustible 80% · Botones: Cerrar Ruta / Control en Ruta",
+    panelCode: "VJ-261119",
+    panelVendor: "Consola WhatsApp en Vivo",
+    panelStatus: "En curso",
+    metric1Label: "Odómetro IA",
+    metric1Value: "51,408 km",
+    metric2Label: "Nivel tanque",
+    metric2Value: "80% lleno",
+    metric3Label: "Auto-despacho",
+    metric3Value: "WhatsApp",
+    previewImg: "/cigo/screens/03-consola-whatsapp.webp",
+    previewWidth: 1024,
+    previewHeight: 456,
+    previewAlt: "Consola WhatsApp real de CIGO leyendo foto del tablero digital de un camión en ruta",
+    previewLabel: "Consola WhatsApp + Lectura IA",
   },
 ];
 
@@ -177,7 +197,7 @@ export default function CigoHeroCockpit() {
           })}
         </div>
         <span className="font-cigo-mono text-[11px] text-[#94A3B8]">
-          Haz clic para probar cada flujo
+          Haz clic para ver cada pantalla real
         </span>
       </div>
 
@@ -281,7 +301,7 @@ export default function CigoHeroCockpit() {
           </div>
         </div>
 
-        {/* RIGHT (7 cols): Real Synced CIGO Panel Card (Matches 02-dashboard & 04-comprobantes) */}
+        {/* RIGHT (7 cols): Real Synced CIGO Panel Card with Live Production Screenshot */}
         <div className="md:col-span-7 bg-white text-[#0F172A] rounded-2xl border border-[#CBD5E1] shadow-xl overflow-hidden flex flex-col justify-between">
           <div>
             {/* CIGO Panel Header */}
@@ -301,8 +321,8 @@ export default function CigoHeroCockpit() {
               </span>
             </div>
 
-            {/* Synced Comprobante Entry (Exact style of 04-comprobantes.webp) */}
-            <div key={`panel-${current.id}`} className="p-4 space-y-3.5 cigo-swap">
+            {/* Synced Comprobante Entry + Real Production Screen */}
+            <div key={`panel-${current.id}`} className="p-4 space-y-3 cigo-swap">
               <div className="rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] p-3 flex flex-wrap items-center justify-between gap-2">
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
@@ -314,26 +334,21 @@ export default function CigoHeroCockpit() {
                     </span>
                   </div>
                   <div className="text-[11px] text-[#64748B] mt-0.5">
-                    Chofer: {current.driver} · Registrado por WhatsApp
+                    {current.previewLabel} · Registrado desde WhatsApp
                   </div>
                 </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <span className="font-cigo-mono text-sm font-bold text-[#0F172A]">
-                    {current.receiptAmount}
-                  </span>
-                  <span className="text-[10px] font-bold text-[#0F766E] bg-[#CCFBF1] px-2 py-0.5 rounded-full">
-                    {current.panelStatus}
-                  </span>
-                </div>
+                <span className="text-[10px] font-bold text-[#0F766E] bg-[#CCFBF1] px-2 py-0.5 rounded-full shrink-0">
+                  {current.panelStatus}
+                </span>
               </div>
 
-              {/* 3 CIGO Live Metrics */}
+              {/* 3 Live CIGO Metrics */}
               <div className="grid grid-cols-3 gap-2">
                 <div className="rounded-lg border border-[#E2E8F0] p-2.5 bg-white">
                   <div className="text-[10px] font-medium text-[#64748B]">
                     {current.metric1Label}
                   </div>
-                  <div className="font-cigo-mono text-sm font-bold text-[#0F172A] mt-0.5">
+                  <div className="font-cigo-mono text-xs sm:text-sm font-bold text-[#0F172A] mt-0.5">
                     {current.metric1Value}
                   </div>
                 </div>
@@ -341,7 +356,7 @@ export default function CigoHeroCockpit() {
                   <div className="text-[10px] font-medium text-[#64748B]">
                     {current.metric2Label}
                   </div>
-                  <div className="font-cigo-mono text-sm font-bold text-[#0D9488] mt-0.5">
+                  <div className="font-cigo-mono text-xs sm:text-sm font-bold text-[#0D9488] mt-0.5">
                     {current.metric2Value}
                   </div>
                 </div>
@@ -349,22 +364,22 @@ export default function CigoHeroCockpit() {
                   <div className="text-[10px] font-medium text-[#64748B]">
                     {current.metric3Label}
                   </div>
-                  <div className="font-cigo-mono text-sm font-bold text-[#0F172A] mt-0.5">
+                  <div className="font-cigo-mono text-xs sm:text-sm font-bold text-[#0F172A] mt-0.5">
                     {current.metric3Value}
                   </div>
                 </div>
               </div>
 
-              {/* Real CIGO Dashboard Preview */}
+              {/* Real New Production CIGO Screenshot */}
               <div className="rounded-lg border border-[#E2E8F0] overflow-hidden bg-[#F8FAFC]">
                 <Image
-                  src="/cigo/02-dashboard.webp"
-                  alt="Captura real del panel gerencial de CIGO"
-                  width={1037}
-                  height={720}
+                  src={current.previewImg}
+                  alt={current.previewAlt}
+                  width={current.previewWidth}
+                  height={current.previewHeight}
                   priority
-                  sizes="(max-width: 768px) 100vw, 440px"
-                  className="w-full h-36 sm:h-40 object-cover object-top block"
+                  sizes="(max-width: 768px) 100vw, 460px"
+                  className="w-full h-40 sm:h-44 object-cover object-top block"
                 />
               </div>
             </div>
@@ -373,7 +388,7 @@ export default function CigoHeroCockpit() {
           <div className="px-4 py-2.5 bg-[#F8FAFC] border-t border-[#E2E8F0] flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#475569]">
             <span className="font-semibold text-[#0F172A]">Exportación contable:</span>
             <span className="font-cigo-mono text-[#0F766E] font-medium">
-              Excel · Liquidación · SIRE TXT · ZIP
+              Liquidación · Excel · SIRE 8.4 · ZIP
             </span>
           </div>
         </div>
