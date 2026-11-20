@@ -2,8 +2,9 @@
 
 import { useRef, useEffect, useState } from "react";
 
+const REGISTER_URL = "https://cigo.devorq.com/registro";
 const WSP_MAIN =
-  "https://wa.me/51929222980?text=Hola%20Devorq%2C%20quisiera%20solicitar%20la%20Prueba%20Gratis%20de%207%20d%C3%ADas%20de%20CIGO%20para%20mi%20flota.";
+  "https://wa.me/51929222980?text=Hola%20Devorq%2C%20quisiera%20agendar%20una%20demostraci%C3%B3n%20gratuita%20de%2015%20minutos%20de%20CIGO%20para%20mi%20flota.";
 const DEMO_VIDEO_URL = "https://q.me-qr.com/ll0rpmpm";
 const CARTA_PDF_URL = "/cigo/carta-presentacion-cigo.pdf";
 const BROCHURE_PDF_URL = "/cigo/brochure-cigo.pdf";
@@ -240,7 +241,7 @@ export default function RoiCalculator() {
                   marginBottom: "0.85rem",
                 }}
               >
-                Documento Ejecutivo · 6 Páginas A4
+                Documento Ejecutivo · 7 Páginas A4
               </span>
               <h3
                 style={{
@@ -251,7 +252,7 @@ export default function RoiCalculator() {
                   lineHeight: 1.25,
                 }}
               >
-                Carta de Presentación y Dossier Ejecutivo CIGO
+                Carta de Presentación y Propuesta Comercial CIGO
               </h3>
               <p
                 style={{
@@ -261,7 +262,7 @@ export default function RoiCalculator() {
                   marginBottom: "1.25rem",
                 }}
               >
-                Documento formal dirigido a Gerencia General, Operaciones y Contabilidad. Detalla los 5 problemas que resuelve CIGO en ruta, control de Km/galón, comparativa frente al método en papel, empresas clientes y alcance legal (Ley N° 29733).
+                Documento formal dirigido a Gerencia General, Operaciones y Contabilidad. Incluye los 5 problemas en ruta, control Km/galón, casos reales, tabla de inversión por volumen (IGV incluido) y formato de aceptación.
               </p>
             </div>
 
@@ -519,41 +520,64 @@ export default function RoiCalculator() {
                 Prueba Gratis · 7 Días (1 Semana)
               </span>
               <span style={{ fontSize: "0.82rem", fontWeight: 700, color: "#0284C7" }}>
-                Hasta 10 unidades en ruta activa · Sin compromiso de permanencia
+                Hasta 5 unidades en ruta activa · Activación inmediata sin tarjeta
               </span>
             </div>
             <h3 style={{ fontSize: "1.2rem", fontWeight: 900, color: "#0F172A", marginBottom: "0.25rem" }}>
-              Evalúa CIGO en tu propia operación durante 1 semana gratis
+              Registra tu flota y evalúa CIGO durante 7 días gratis
             </h3>
             <p style={{ fontSize: "0.9rem", color: "#475569", lineHeight: 1.55, margin: 0 }}>
-              Habilitamos la plataforma con acompañamiento directo para tus conductores y equipo administrativo. Atención inmediata al{" "}
+              Crea tu cuenta en 1 minuto y comienza a recibir comprobantes desde WhatsApp. Si prefieres acompañamiento directo escríbenos al{" "}
               <strong style={{ color: "#0F172A" }}>+51 929 222 980</strong> /{" "}
-              <strong style={{ color: "#0F172A" }}>+51 935 351 768</strong> o en{" "}
+              <strong style={{ color: "#0F172A" }}>+51 935 351 768</strong> o{" "}
               <strong style={{ color: "#0F172A" }}>contacto@devorq.com</strong>.
             </p>
           </div>
 
-          <a
-            href={WSP_MAIN}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.55rem",
-              background: "#25D366",
-              color: "#FFFFFF",
-              fontWeight: 800,
-              fontSize: "0.92rem",
-              padding: "0.85rem 1.65rem",
-              borderRadius: "100px",
-              textDecoration: "none",
-              boxShadow: "0 8px 20px rgba(37, 211, 102, 0.3)",
-              whiteSpace: "nowrap",
-            }}
-          >
-            Solicitar 7 Días Gratis por WhatsApp →
-          </a>
+          <div style={{ display: "flex", gap: "0.65rem", flexWrap: "wrap" }}>
+            <a
+              href={REGISTER_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.55rem",
+                background: "linear-gradient(135deg, #10B981 0%, #059669 100%)",
+                color: "#FFFFFF",
+                fontWeight: 800,
+                fontSize: "0.92rem",
+                padding: "0.85rem 1.65rem",
+                borderRadius: "100px",
+                textDecoration: "none",
+                boxShadow: "0 8px 20px rgba(16, 185, 129, 0.32)",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Comenzar Prueba Gratis Ahora →
+            </a>
+            <a
+              href={WSP_MAIN}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.45rem",
+                background: "#F8FAFC",
+                color: "#0F172A",
+                fontWeight: 700,
+                fontSize: "0.88rem",
+                padding: "0.85rem 1.3rem",
+                borderRadius: "100px",
+                border: "1px solid #CBD5E1",
+                textDecoration: "none",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Agendar Demo (WhatsApp)
+            </a>
+          </div>
         </div>
       </div>
     </section>

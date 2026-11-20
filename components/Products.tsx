@@ -550,6 +550,7 @@ function ProductRow({
   description,
   features,
   href,
+  secondaryCta,
   visual,
   delay = 0,
   id,
@@ -566,6 +567,7 @@ function ProductRow({
   description: string;
   features: { icon: string; title: string; desc: string }[];
   href: string;
+  secondaryCta?: { label: string; href: string };
   visual: React.ReactNode;
   delay?: number;
   id?: string;
@@ -759,6 +761,40 @@ function ProductRow({
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </Link>
+            {secondaryCta && (
+              <a
+                href={secondaryCta.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.45rem",
+                  padding: "0.8rem 1.45rem",
+                  borderRadius: "100px",
+                  background: "#10B981",
+                  color: "#FFFFFF",
+                  fontWeight: 700,
+                  fontSize: "0.9rem",
+                  textDecoration: "none",
+                  boxShadow: "0 8px 20px rgba(16,185,129,0.28)",
+                  transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                  e.currentTarget.style.boxShadow = "0 12px 26px rgba(16,185,129,0.38)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "0 8px 20px rgba(16,185,129,0.28)";
+                }}
+              >
+                {secondaryCta.label}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </a>
+            )}
           </div>
         )}
       </div>
@@ -858,6 +894,10 @@ export default function Products() {
               },
             ]}
             href="/cigo"
+            secondaryCta={{
+              label: "Prueba Gratis 7 Días",
+              href: "https://cigo.devorq.com/registro",
+            }}
             visual={<CigoMockup />}
           />
 
