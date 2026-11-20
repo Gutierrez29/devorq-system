@@ -46,8 +46,8 @@ const MODULES: PlatformModule[] = [
     ],
     outcome: "Control claro del gasto real de tu flota antes del cierre de mes.",
     img: "/cigo/screens/01-dashboard.webp",
-    width: 972,
-    height: 867,
+    width: 1024,
+    height: 1013,
     icon: LayoutDashboard,
   },
   {
@@ -63,7 +63,7 @@ const MODULES: PlatformModule[] = [
     outcome: "Toda tu tripulación y flota vinculada al canal de WhatsApp en minutos.",
     img: "/cigo/screens/02-choferes-flota.webp",
     width: 1024,
-    height: 516,
+    height: 543,
     icon: Users,
   },
   {
@@ -95,7 +95,7 @@ const MODULES: PlatformModule[] = [
     outcome: "Sabes exactamente cuánto costó cada viaje y cada parada de mantenimiento.",
     img: "/cigo/screens/04-rutas-viajes.webp",
     width: 1024,
-    height: 522,
+    height: 541,
     icon: Route,
   },
   {
