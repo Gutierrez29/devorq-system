@@ -4,14 +4,12 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import {
   BarChart3,
-  Building2,
   Check,
   ChevronLeft,
   ChevronRight,
   FileSearch,
   FileText,
   LayoutDashboard,
-  Lock,
   Maximize2,
   MessageSquare,
   Route,
@@ -151,14 +149,14 @@ const MODULES: PlatformModule[] = [
   {
     id: "usuarios",
     navName: "Usuarios",
-    title: "Usuarios, Grupos y Copilot WhatsApp",
-    desc: "Administra cuentas web por empresa o grupo corporativo con permisos por rol, además de los accesos a Copilot WhatsApp para jefes de flota.",
+    title: "Usuarios, Multi-Empresa y Copilot WhatsApp",
+    desc: "Administra cuentas web por empresa o grupo corporativo con roles y permisos granulares, además de accesos Multi-Empresa y Copilot WhatsApp para jefes de flota.",
     highlights: [
-      "Soporte para Grupos Corporativos con múltiples empresas clientes",
+      "Soporte Multi-Empresa para grupos corporativos con múltiples razones sociales",
       "Pestaña Copilot WhatsApp para consultas directas de jefes de flota",
-      "Control granular de roles: Gerencia, Operaciones, Auditoría y Contabilidad",
+      "Roles diferenciados: Gerencia, Operaciones, Auditoría y Contabilidad",
     ],
-    outcome: "Cada integrante y empresa del grupo accede solo a lo que le corresponde.",
+    outcome: "Cada integrante y razón social accede solo a lo que le corresponde.",
     img: "/cigo/screens/08-usuarios-copilot.webp",
     width: 1024,
     height: 524,
@@ -168,49 +166,17 @@ const MODULES: PlatformModule[] = [
     id: "configuracion",
     navName: "Configuración",
     title: "Perfil Fiscal, Políticas, Telegram y API",
-    desc: "Configura tu RUC y régimen tributario, topes de viáticos, metodología de combustible, alertas por Telegram, integraciones API ERP y capacidad de tu plan.",
+    desc: "Configura tu RUC y régimen tributario, topes de viáticos, metodología de combustible, alertas por Telegram, integraciones API ERP y seguridad Ley N° 29733.",
     highlights: [
       "Políticas & Reglas: topes de comida/hotel, bancarización y combustible",
       "Alertas Telegram configurables para retrasos y notificaciones operativas",
-      "API & Integraciones ERP para conectar tus datos con tu sistema contable",
+      "API & Integraciones ERP con entorno privado aislado por empresa",
     ],
     outcome: "Adapta las reglas de control y alertas exactamente a tu operación.",
     img: "/cigo/screens/09-configuracion-politicas.webp",
     width: 1024,
     height: 530,
     icon: Settings,
-  },
-  {
-    id: "perfil",
-    navName: "Perfil y Multi-Empresa",
-    title: "Expediente de Usuario y Acceso Multi-Empresa",
-    desc: "Gestiona credenciales, seguridad personal y la lista de razones sociales autorizadas para auditar y operar varias empresas desde una sola sesión.",
-    highlights: [
-      "Acceso Multi-Empresa para grupos de transporte con varios RUC",
-      "Gestión segura de credenciales y datos del responsable",
-      "Trazabilidad clara del rol y empresas asignadas",
-    ],
-    outcome: "Controla todas tus razones sociales sin cerrar sesión ni mezclar datos.",
-    img: "/cigo/screens/10-perfil-multiempresa.webp",
-    width: 1024,
-    height: 685,
-    icon: Building2,
-  },
-  {
-    id: "acceso",
-    navName: "Inicio de Sesión",
-    title: "Acceso Privado y Resguardo Cloud",
-    desc: "Portal autenticado con aislamiento por empresa y protección de comprobantes y datos operativos conforme a la Ley N° 29733.",
-    highlights: [
-      "Entorno privado aislado por empresa y reserva comercial Ley N° 29733",
-      "Cifrado de sesiones y respaldo permanente en la nube",
-      "Acceso rápido desde oficina o celular",
-    ],
-    outcome: "Tu información operativa y fiscal permanece privada y siempre disponible.",
-    img: "/cigo/01-login.webp",
-    width: 1417,
-    height: 742,
-    icon: Lock,
   },
 ];
 
@@ -219,6 +185,7 @@ export default function CigoModulesShowcase() {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   const current = MODULES[activeIndex];
+  const nextMod = MODULES[(activeIndex + 1) % MODULES.length];
 
   const handlePrev = () => {
     setActiveIndex((prev) => (prev - 1 + MODULES.length) % MODULES.length);
@@ -246,14 +213,14 @@ export default function CigoModulesShowcase() {
       className="py-16 sm:py-20 px-5 sm:px-8 bg-white border-b border-[#E2E8F0]"
     >
       <div className="max-w-[1240px] mx-auto">
-        {/* Compact Section Header so the full module + text + image fits in one viewport */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-7">
+        {/* Header Row */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-6">
           <div>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.025em] text-[#0F172A] leading-tight">
               Conoce cada módulo real de CIGO Dashboard
             </h2>
             <p className="text-sm sm:text-base text-[#475569] mt-1.5">
-              Selecciona cualquier pantalla del menú para ver qué incluye y amplía la captura si deseas revisar el detalle.
+              Explora los 9 módulos operativos y contables del sistema real. Haz clic en cualquier pantalla para ampliarla.
             </p>
           </div>
           <div className="flex items-center gap-3 shrink-0">
@@ -281,8 +248,12 @@ export default function CigoModulesShowcase() {
           </div>
         </div>
 
-        {/* Mobile Horizontal Pill Bar */}
-        <div className="flex lg:hidden gap-2 overflow-x-auto pb-3 mb-4 [scrollbar-width:none]">
+        {/* Top Horizontal Module Tabs (All 9 Commercial Modules Directly Accessible) */}
+        <div
+          role="tablist"
+          aria-label="Módulos de CIGO Dashboard"
+          className="flex flex-nowrap lg:flex-wrap gap-2 overflow-x-auto lg:overflow-visible pb-3 lg:pb-0 mb-6 [scrollbar-width:none]"
+        >
           {MODULES.map((mod, idx) => {
             const Icon = mod.icon;
             const active = idx === activeIndex;
@@ -290,15 +261,19 @@ export default function CigoModulesShowcase() {
               <button
                 key={mod.id}
                 type="button"
+                role="tab"
+                aria-selected={active}
                 onClick={() => setActiveIndex(idx)}
-                className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold whitespace-nowrap border cursor-pointer shrink-0 transition-colors ${
+                className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs sm:text-[13px] font-semibold whitespace-nowrap border transition-colors cursor-pointer shrink-0 ${
                   active
                     ? "bg-[#0F172A] text-white border-[#0F172A]"
-                    : "bg-[#F8FAFC] text-[#475569] border-[#E2E8F0]"
+                    : "bg-[#F8FAFC] text-[#475569] border-[#E2E8F0] hover:border-[#0D9488] hover:text-[#0F172A]"
                 }`}
               >
                 <Icon
-                  className={`w-3.5 h-3.5 ${active ? "text-[#14B8A6]" : "text-[#64748B]"}`}
+                  className={`w-3.5 h-3.5 shrink-0 ${
+                    active ? "text-[#14B8A6]" : "text-[#64748B]"
+                  }`}
                   strokeWidth={2}
                 />
                 <span>{mod.navName}</span>
@@ -307,83 +282,31 @@ export default function CigoModulesShowcase() {
           })}
         </div>
 
-        {/* Unified Single-Viewport App Shell: Real CIGO Sidebar (Left) + Description ABOVE Screenshot (Right) */}
-        <div className="border border-[#CBD5E1] rounded-2xl overflow-hidden bg-white shadow-sm grid grid-cols-1 lg:grid-cols-12">
-          {/* Left 3 cols: Authentic CIGO Dashboard Sidebar */}
-          <aside
-            aria-label="Módulos de CIGO Dashboard"
-            className="hidden lg:flex lg:col-span-3 flex-col bg-[#F8FAFC] border-r border-[#E2E8F0] py-3 px-2.5"
-          >
-            <div className="px-3 pb-2 mb-1 text-[11px] font-bold text-[#64748B]">
-              Menú de CIGO
-            </div>
-            <div className="space-y-0.5">
-              {MODULES.map((mod, idx) => {
-                const Icon = mod.icon;
-                const active = idx === activeIndex;
-                return (
-                  <button
-                    key={mod.id}
-                    type="button"
-                    onClick={() => setActiveIndex(idx)}
-                    aria-current={active ? "true" : undefined}
-                    className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-left text-[13px] transition-colors cursor-pointer ${
-                      active
-                        ? "bg-[#CCFBF1]/70 text-[#0F766E] font-bold"
-                        : "text-[#475569] hover:text-[#0F172A] hover:bg-white font-medium"
-                    }`}
-                  >
-                    <Icon
-                      className={`w-4 h-4 shrink-0 ${
-                        active ? "text-[#0D9488]" : "text-[#64748B]"
-                      }`}
-                      strokeWidth={2}
-                    />
-                    <span className="truncate">{mod.navName}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </aside>
-
-          {/* Right 9 cols: Visible Info Header ABOVE the Image + Crisp Screenshot + Bottom Outcome Bar */}
-          <div key={current.id} className="lg:col-span-9 flex flex-col justify-between bg-white cigo-swap">
-            {/* TOP: Immediately Visible Module Explanation & 3 Concrete Benefits */}
-            <div className="px-5 sm:px-6 py-4 border-b border-[#E2E8F0] bg-white space-y-3">
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-cigo-mono text-[11px] font-bold text-[#0F766E] bg-[#CCFBF1] px-2 py-0.5 rounded">
-                      {current.navName}
-                    </span>
-                    <h3 className="text-lg sm:text-xl font-bold text-[#0F172A] tracking-[-0.02em]">
-                      {current.title}
-                    </h3>
-                  </div>
-                  <p className="text-sm text-[#475569] leading-relaxed mt-1.5 max-w-[76ch]">
-                    {current.desc}
-                  </p>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setIsLightboxOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-[#0F766E] bg-[#F0FDFA] hover:bg-[#CCFBF1] border border-[#99F6E4] cursor-pointer shrink-0 transition-colors"
-                >
-                  <Maximize2 className="w-3.5 h-3.5" strokeWidth={2} />
-                  <span>Ampliar captura</span>
-                </button>
+        {/* Main 12-Col Side-by-Side Stage: Left Explanation (4 cols) + Right Large Full-Width Screenshot (8 cols) */}
+        <div
+          key={current.id}
+          className="grid grid-cols-1 lg:grid-cols-12 gap-7 lg:gap-8 items-start cigo-swap"
+        >
+          {/* Left 4 cols: Always-Visible Clean Explanation & Actions */}
+          <div className="lg:col-span-4 bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-6 flex flex-col justify-between gap-6">
+            <div className="space-y-4">
+              <div>
+                <span className="inline-block font-cigo-mono text-[11px] font-bold text-[#0F766E] bg-[#CCFBF1] px-2.5 py-0.5 rounded mb-2.5">
+                  {current.navName}
+                </span>
+                <h3 className="text-xl sm:text-2xl font-bold text-[#0F172A] tracking-[-0.02em] leading-snug">
+                  {current.title}
+                </h3>
+                <p className="text-sm text-[#475569] leading-relaxed mt-2">
+                  {current.desc}
+                </p>
               </div>
 
-              {/* 3 Compact Scannable Check Bullets (100% visible above the fold!) */}
-              <ul className="grid grid-cols-1 md:grid-cols-3 gap-2 pt-1">
+              <ul className="space-y-2.5 pt-2 border-t border-[#E2E8F0]">
                 {current.highlights.map((item) => (
-                  <li
-                    key={item}
-                    className="flex items-start gap-2 text-xs text-[#1E293B] bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg px-3 py-2 leading-snug"
-                  >
+                  <li key={item} className="flex items-start gap-2.5 text-sm text-[#1E293B] leading-snug">
                     <Check
-                      className="w-3.5 h-3.5 text-[#0D9488] shrink-0 mt-0.5"
+                      className="w-4 h-4 text-[#0D9488] shrink-0 mt-0.5"
                       strokeWidth={2.5}
                     />
                     <span>{item}</span>
@@ -392,40 +315,54 @@ export default function CigoModulesShowcase() {
               </ul>
             </div>
 
-            {/* MIDDLE: Clean Uncropped Real Screenshot */}
-            <div className="p-4 sm:p-5 bg-[#F8FAFC] flex-1 flex items-center justify-center">
-              <button
-                type="button"
-                onClick={() => setIsLightboxOpen(true)}
-                aria-label={`Ampliar captura de ${current.title}`}
-                className="block w-full rounded-xl overflow-hidden border border-[#CBD5E1] bg-white cursor-zoom-in shadow-xs hover:border-[#0D9488] transition-colors"
-              >
-                <Image
-                  src={current.img}
-                  alt={current.title}
-                  width={current.width}
-                  height={current.height}
-                  sizes="(max-width: 1024px) 100vw, 880px"
-                  className="w-full h-auto max-h-[380px] object-contain block mx-auto bg-white"
-                />
-              </button>
-            </div>
-
-            {/* BOTTOM: Single Crisp Operational Takeaway Line */}
-            <div className="px-5 sm:px-6 py-3 bg-white border-t border-[#E2E8F0] flex flex-wrap items-center justify-between gap-2 text-xs">
-              <div className="text-[#334155]">
+            <div className="pt-4 border-t border-[#E2E8F0] space-y-3.5">
+              <p className="text-xs text-[#334155] leading-relaxed">
                 <strong className="text-[#0F766E] font-bold">Resultado:</strong>{" "}
                 {current.outcome}
+              </p>
+
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsLightboxOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-bold text-[#0B1320] bg-[#14B8A6] hover:bg-[#0D9488] hover:text-white cursor-pointer transition-colors"
+                >
+                  <Maximize2 className="w-3.5 h-3.5" strokeWidth={2.25} />
+                  Ampliar captura
+                </button>
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  className="inline-flex items-center gap-1 px-3.5 py-2 rounded-lg text-xs font-semibold text-[#0F172A] bg-white hover:bg-[#F1F5F9] border border-[#CBD5E1] cursor-pointer transition-colors"
+                >
+                  <span>{nextMod.navName}</span>
+                  <ChevronRight className="w-3.5 h-3.5" strokeWidth={2.25} />
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={handleNext}
-                className="inline-flex items-center gap-1 font-bold text-[#0F172A] hover:text-[#0F766E] cursor-pointer transition-colors"
-              >
-                <span>Siguiente: {MODULES[(activeIndex + 1) % MODULES.length].navName}</span>
-                <ChevronRight className="w-3.5 h-3.5" strokeWidth={2.25} />
-              </button>
             </div>
+          </div>
+
+          {/* Right 8 cols: Full-Width Crisp Real Screenshot (No Dead Side Margins) */}
+          <div className="lg:col-span-8">
+            <button
+              type="button"
+              onClick={() => setIsLightboxOpen(true)}
+              aria-label={`Ampliar captura de ${current.title}`}
+              className="group relative block w-full rounded-2xl overflow-hidden border border-[#CBD5E1] hover:border-[#0D9488] bg-white shadow-sm cursor-zoom-in transition-colors text-left"
+            >
+              <Image
+                src={current.img}
+                alt={current.title}
+                width={current.width}
+                height={current.height}
+                sizes="(max-width: 1024px) 100vw, 820px"
+                className="w-full h-auto max-h-[560px] object-contain block bg-white"
+              />
+              <span className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-[#0F172A]/90 text-white opacity-90 group-hover:opacity-100 transition-opacity">
+                <Maximize2 className="w-3.5 h-3.5 text-[#14B8A6]" strokeWidth={2} />
+                Ver en grande
+              </span>
+            </button>
           </div>
         </div>
       </div>
