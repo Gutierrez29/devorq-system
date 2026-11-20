@@ -198,33 +198,34 @@
   }
 }
 
-/* Offset para anclas con navbar fijo */
-section[id] {
-  scroll-margin-top: 80px;
-}
+/* ─── Reset & Base (inside @layer base so Tailwind v4 utilities override cleanly) ─── */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
-/* ─── Reset & Base ───────────────────────────────────────────── */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
 
-html {
-  scroll-behavior: smooth;
-  -webkit-text-size-adjust: 100%;
-}
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
 
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: 'Inter', system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
-  line-height: 1.6;
+  section[id] {
+    scroll-margin-top: 80px;
+  }
 }
 
 ::-webkit-scrollbar {
@@ -450,4 +451,89 @@ body {
 .card-hover-glow:hover {
   transform: translateY(-4px);
   box-shadow: 0 20px 40px rgba(14, 165, 233, 0.12), 0 1px 3px rgba(0, 0, 0, 0.04);
-}
+}
+
+/* ─── CIGO Command-Center Telemetry Animations ─────────────────── */
+@keyframes cigo-dash-flow {
+  0% {
+    stroke-dashoffset: 36;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes cigo-beam-x {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(260%);
+    opacity: 0;
+  }
+}
+
+@keyframes cigo-fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes cigo-progress-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.cigo-grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(56, 189, 248, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(56, 189, 248, 0.07) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+.cigo-route-dash {
+  stroke-dasharray: 6 6;
+  animation: cigo-dash-flow 1.4s linear infinite;
+}
+
+.cigo-beam {
+  animation: cigo-beam-x 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.cigo-fade-up {
+  animation: cigo-fade-up 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.cigo-progress-bar {
+  transform-origin: left center;
+  animation: cigo-progress-fill 9s linear forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cigo-route-dash,
+  .cigo-beam,
+  .cigo-fade-up,
+  .cigo-progress-bar,
+  .badge-float-1,
+  .badge-float-2,
+  .radar-live {
+    animation: none !important;
+  }
+}
+
