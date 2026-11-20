@@ -1,7 +1,16 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { ArrowRight, Check, Fuel, Mic, Receipt } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  CheckCheck,
+  Fuel,
+  Mic,
+  Play,
+  Receipt,
+  ShieldCheck,
+} from "lucide-react";
 
 const REGISTER_URL = "https://cigo.devorq.com/registro";
 
@@ -12,92 +21,103 @@ interface SimulationScenario {
   label: string;
   driverHeader: string;
   sentTime: string;
-  userLines: string[];
+  receiptVendor: string;
+  receiptSeries: string;
+  receiptDetail: string;
+  receiptTotal: string;
+  receiptMeta: string;
+  audioCaption?: string;
   analyzingText: string;
   botTitle: string;
   botLines: string[];
-  ledgerFields: { field: string; value: string; mono?: boolean; highlight?: "ok" | "blue" }[];
+  ledgerFields: { field: string; value: string; mono?: boolean; tone?: "teal" | "navy" }[];
 }
 
 const SCENARIOS: Record<ChatTab, SimulationScenario> = {
   combustible: {
     id: "combustible",
-    label: "Combustible",
-    driverHeader: "Carlos M. (Tracto V1A-892)",
+    label: "Combustible + Odómetro",
+    driverHeader: "Carlos Mendoza · V1A-892",
     sentTime: "10:14",
-    userLines: [
-      "Foto Ticket Repsol: 78.4 gal Diésel B5",
-      "Foto Tablero Odómetro: 142,500 km",
-    ],
+    receiptVendor: "REPSOL COMBUSTIBLE S.A.",
+    receiptSeries: "F042-0019284",
+    receiptDetail: "78.4 gal Diésel B5 S-50 + foto tablero",
+    receiptTotal: "S/ 1,420.00",
+    receiptMeta: "Odómetro leído: 142,500 km",
     analyzingText: "Leyendo comprobante y calculando Km/galón...",
     botTitle: "Carga registrada y validada en SUNAT",
     botLines: [
       "Proveedor: Repsol Combustible S.A.",
       "Carga: 78.4 gal Diésel B5 (S/ 1,420.00)",
-      "Rendimiento: 3.84 km/gal (dentro de meta)",
+      "Rendimiento: 3.84 km/gal (óptimo)",
       "Saldo restante de viático: S/ 1,280.00",
     ],
     ledgerFields: [
-      { field: "Unidad y chofer", value: "V1A-892 / Carlos Mendoza", mono: true },
-      { field: "Proveedor", value: "Repsol Combustible S.A." },
-      { field: "Serie y correlativo", value: "F042-0019284", mono: true },
+      { field: "Tracto y chofer", value: "V1A-892 / Carlos Mendoza", mono: true },
+      { field: "Emisor y RUC", value: "Repsol S.A. · 20503840121", mono: true },
+      { field: "Comprobante", value: "Factura F042-0019284", mono: true },
       { field: "Abastecimiento", value: "78.4 gal · S/ 1,420.00", mono: true },
-      { field: "Lectura odómetro", value: "142,500 km", mono: true },
-      { field: "Rendimiento real", value: "3.84 km/gal", mono: true, highlight: "blue" },
-      { field: "Estado SUNAT", value: "Aceptado (RUC Activo y Habido)", highlight: "ok" },
-      { field: "Saldo de viaje", value: "S/ 1,280.00", mono: true },
+      { field: "IGV recuperable (18%)", value: "S/ 216.61", mono: true, tone: "teal" },
+      { field: "Rendimiento real", value: "3.84 km/gal (en meta)", mono: true, tone: "teal" },
+      { field: "Validación SUNAT", value: "Aceptado · RUC Activo y Habido", tone: "teal" },
+      { field: "Saldo de viaje", value: "S/ 1,280.00", mono: true, tone: "navy" },
     ],
   },
   audio: {
     id: "audio",
-    label: "Nota de voz",
-    driverHeader: "Carlos M. (Tracto V1A-892)",
+    label: "Nota de voz en ruta",
+    driverHeader: "Carlos Mendoza · V1A-892",
     sentTime: "19:22",
-    userLines: [
-      "“Pagué 20 soles de cochera en Chimbote para pernoctar.”",
-    ],
+    receiptVendor: "AUDIO WHATSAPP",
+    receiptSeries: "MOV-0084",
+    receiptDetail: "Gasto menor sin boleta",
+    receiptTotal: "S/ 20.00",
+    receiptMeta: "Duración 0:06",
+    audioCaption: "“Pagué 20 soles de cochera en Chimbote para pernoctar.”",
     analyzingText: "Transcribiendo nota de voz...",
     botTitle: "Gasto menor registrado en planilla",
     botLines: [
-      "Concepto: Cochera / Pernocte en ruta",
+      "Concepto: Cochera / Pernocte en Chimbote",
       "Monto extraído: S/ 20.00",
       "Destino: Planilla de Movilidad CIGO",
       "Estado: Listo para liquidación de viaje",
     ],
     ledgerFields: [
-      { field: "Unidad y chofer", value: "V1A-892 / Carlos Mendoza", mono: true },
-      { field: "Origen del registro", value: "Audio WhatsApp transcrito" },
+      { field: "Tracto y chofer", value: "V1A-892 / Carlos Mendoza", mono: true },
+      { field: "Canal", value: "Nota de voz WhatsApp transcrita" },
       { field: "Concepto", value: "Cochera / Pernocte en Chimbote" },
       { field: "Monto", value: "S/ 20.00", mono: true },
       { field: "Clasificación", value: "Planilla de Movilidad (sin comprobante)" },
-      { field: "Validación", value: "Dentro de tope diario configurado", highlight: "ok" },
-      { field: "Exportación", value: "Liquidación por viaje (.xlsx)", highlight: "blue" },
+      { field: "Regla de empresa", value: "Dentro del tope diario configurado", tone: "teal" },
+      { field: "Exportación", value: "Liquidación por viaje (.xlsx)", tone: "navy" },
     ],
   },
   peaje: {
     id: "peaje",
-    label: "Peaje SUNAT",
-    driverHeader: "Carlos M. (Tracto V1A-892)",
+    label: "Peaje validado SUNAT",
+    driverHeader: "Carlos Mendoza · V1A-892",
     sentTime: "13:08",
-    userLines: [
-      "Foto Boleta de Peaje Autopista del Norte",
-    ],
+    receiptVendor: "AUTOPISTA DEL NORTE S.A.C.",
+    receiptSeries: "B001-004892",
+    receiptDetail: "Peaje Estación Virú · 6 ejes",
+    receiptTotal: "S/ 45.00",
+    receiptMeta: "IGV incluido: S/ 6.86",
     analyzingText: "Consultando comprobante ante SUNAT...",
     botTitle: "Comprobante validado y archivado",
     botLines: [
       "Comprobante: B001-004892",
       "Monto: S/ 45.00 (IGV S/ 6.86)",
-      "Estado SUNAT: Aceptado (RUC Activo y Habido)",
+      "Estado SUNAT: Aceptado (Activo y Habido)",
       "Control duplicado: comprobante único",
     ],
     ledgerFields: [
-      { field: "Unidad y chofer", value: "V1A-892 / Carlos Mendoza", mono: true },
+      { field: "Tracto y chofer", value: "V1A-892 / Carlos Mendoza", mono: true },
       { field: "Emisor", value: "Autopista del Norte S.A.C." },
-      { field: "Comprobante", value: "B001-004892", mono: true },
+      { field: "Comprobante", value: "Boleta B001-004892", mono: true },
       { field: "Total e IGV", value: "S/ 45.00 (IGV S/ 6.86)", mono: true },
-      { field: "Estado SUNAT", value: "Aceptado · Activo y Habido", highlight: "ok" },
-      { field: "Control duplicados", value: "Sin registros repetidos", highlight: "ok" },
-      { field: "Exportación", value: "TXT SIRE Compras + foto en ZIP", highlight: "blue" },
+      { field: "Validación SUNAT", value: "Aceptado · Activo y Habido", tone: "teal" },
+      { field: "Control duplicados", value: "Único en base de datos", tone: "teal" },
+      { field: "Exportación", value: "TXT SIRE Compras + foto en ZIP", tone: "navy" },
     ],
   },
 };
@@ -105,23 +125,46 @@ const SCENARIOS: Record<ChatTab, SimulationScenario> = {
 const ROLLOUT_SEQUENCE = [
   {
     step: "1",
-    timing: "En 5 minutos",
-    title: "Registro directo y alta de flota",
-    desc: "Creas tu cuenta gratuita sin tarjeta de crédito, cargas las placas de tus camiones y habilitas el WhatsApp de tus conductores.",
+    timing: "5 minutos",
+    title: "Creas tu cuenta y cargas tus placas",
+    desc: "Activas tu prueba gratuita de 7 días sin tarjeta y registras tus camiones y números de WhatsApp de tus choferes.",
   },
   {
     step: "2",
     timing: "Día 1 en carretera",
-    title: "Reporte directo desde el celular del chofer",
-    desc: "No instalan aplicaciones ni recuerdan claves. Envían fotos de boletas, odómetro o notas de voz incluso tras tramos sin cobertura.",
+    title: "Tus choferes reportan por su WhatsApp",
+    desc: "Cero apps nuevas ni contraseñas. Envían fotos de tickets, tablero de odómetro o audios incluso tras zonas sin señal.",
   },
   {
     step: "3",
-    timing: "Cierre continuo en oficina",
-    title: "Validación SUNAT y exportación contable",
-    desc: "Operaciones sigue el consumo Km/galón en vivo y Contabilidad descarga Excel, liquidación de viaje, TXT SIRE y respaldo ZIP.",
+    timing: "Cierre en minutos",
+    title: "Operaciones audita y Contabilidad exporta",
+    desc: "Control continuo de Km/galón y saldos de viáticos; descarga en 1 clic de Excel, liquidación, SIRE TXT y carpeta ZIP.",
   },
 ] as const;
+
+const AUDIO_HEIGHT_CLASSES = [
+  "h-2",
+  "h-4",
+  "h-5",
+  "h-3",
+  "h-6",
+  "h-4",
+  "h-2.5",
+  "h-5",
+  "h-4",
+  "h-3",
+  "h-5",
+  "h-6",
+  "h-3.5",
+  "h-4",
+  "h-2.5",
+  "h-5",
+  "h-4",
+  "h-3",
+  "h-4.5",
+  "h-2",
+];
 
 export default function CigoWhatsAppDemo() {
   const [activeTab, setActiveTab] = useState<ChatTab>("combustible");
@@ -135,7 +178,7 @@ export default function CigoWhatsAppDemo() {
     if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
       setIsAnalyzing(false);
-    }, 380);
+    }, 360);
   };
 
   useEffect(() => {
@@ -149,216 +192,270 @@ export default function CigoWhatsAppDemo() {
   return (
     <section
       id="whatsapp-feature"
-      className="py-20 sm:py-24 px-5 sm:px-8 bg-[#F6F5F1] border-b border-[#D8D6CE]"
+      className="py-20 sm:py-24 px-5 sm:px-8 bg-[#F8FAFC] border-b border-[#E2E8F0]"
     >
       <div className="max-w-[1240px] mx-auto">
-        {/* Left-aligned Editorial Heading */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end mb-12">
+        {/* Heading */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end mb-10">
           <div className="lg:col-span-7">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-[-0.025em] text-[#14181D] leading-[1.12]">
-              El conductor envía una foto o un audio por WhatsApp. Tu oficina recibe el asiento listo.
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-[-0.025em] text-[#0F172A] leading-[1.12]">
+              Así de simple lo usa tu chofer en WhatsApp y así llega a tu oficina.
             </h2>
           </div>
           <div className="lg:col-span-5">
-            <p className="text-base text-[#4E5661] leading-relaxed">
-              Sin instalar aplicaciones adicionales ni capacitar durante semanas. Selecciona un tipo de gasto para ver cómo se procesa de extremo a extremo.
+            <p className="text-base text-[#475569] leading-relaxed">
+              Si tu conductor sabe mandar una foto o un audio por WhatsApp, ya sabe usar CIGO. Prueba los 3 escenarios reales:
             </p>
           </div>
         </div>
 
-        {/* Interactive Split Desk: Left WhatsApp Thread | Right Accounting Ledger */}
-        <div className="bg-white border border-[#D8D6CE] rounded-xl overflow-hidden mb-14">
-          {/* Scenario Tabs Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 px-4 sm:px-6 py-3 bg-[#F0EFE9] border-b border-[#D8D6CE]">
-            <div className="flex flex-wrap gap-1.5" role="tablist" aria-label="Escenarios de reporte en WhatsApp">
-              {(
-                [
-                  { id: "combustible", label: "Combustible", icon: Fuel },
-                  { id: "audio", label: "Nota de voz", icon: Mic },
-                  { id: "peaje", label: "Peaje SUNAT", icon: Receipt },
-                ] as const
-              ).map((item) => {
-                const Icon = item.icon;
-                const active = activeTab === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    role="tab"
-                    aria-selected={active}
-                    onClick={() => handleSwitchTab(item.id)}
-                    className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-md text-xs font-semibold transition-colors cursor-pointer ${
-                      active
-                        ? "bg-[#14181D] text-white"
-                        : "text-[#4E5661] hover:text-[#14181D] hover:bg-white/80"
-                    }`}
-                  >
-                    <Icon className="w-3.5 h-3.5" strokeWidth={1.75} />
-                    <span>{item.label}</span>
-                  </button>
-                );
-              })}
-            </div>
+        {/* Scenario Switcher */}
+        <div
+          className="flex flex-wrap gap-2 mb-8"
+          role="tablist"
+          aria-label="Casos de reporte por WhatsApp"
+        >
+          {(
+            [
+              { id: "combustible", label: "Combustible + Odómetro", icon: Fuel },
+              { id: "audio", label: "Nota de voz en ruta", icon: Mic },
+              { id: "peaje", label: "Peaje validado SUNAT", icon: Receipt },
+            ] as const
+          ).map((item) => {
+            const Icon = item.icon;
+            const active = activeTab === item.id;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                role="tab"
+                aria-selected={active}
+                onClick={() => handleSwitchTab(item.id)}
+                className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold border transition-colors cursor-pointer ${
+                  active
+                    ? "bg-[#0F172A] text-white border-[#0F172A]"
+                    : "bg-white text-[#334155] border-[#CBD5E1] hover:border-[#0D9488] hover:text-[#0F172A]"
+                }`}
+              >
+                <Icon
+                  className={`w-4 h-4 ${active ? "text-[#14B8A6]" : "text-[#0D9488]"}`}
+                  strokeWidth={2}
+                />
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
+        </div>
 
-            <span className="text-xs text-[#5B6470]">
-              Simulación en vivo: chat del conductor y registro contable
-            </span>
+        {/* Main 12-Col Split: Authentic Smartphone Frame + Structured CIGO Record */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mb-16">
+          {/* Left 5 cols: Full-Size Crisp Smartphone WhatsApp Mockup */}
+          <div className="lg:col-span-5 flex justify-center">
+            <div className="w-full max-w-[370px] bg-[#0F172A] p-2.5 rounded-[32px] border border-[#334155] shadow-xl">
+              <div className="rounded-[24px] overflow-hidden bg-[#EFEAE2]">
+                {/* WhatsApp Top Bar */}
+                <div className="bg-[#075E54] text-white px-4 py-3.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-9 h-9 rounded-full bg-[#14B8A6] text-[#0B1320] font-cigo-display font-extrabold text-xs flex items-center justify-center shrink-0">
+                        CIGO
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-sm font-bold leading-tight truncate">
+                          CIGO Flotas Bot
+                        </div>
+                        <div className="text-[11px] text-[#A7F3D0] truncate">
+                          {isAnalyzing ? current.analyzingText : "En línea · WhatsApp Oficial"}
+                        </div>
+                      </div>
+                    </div>
+                    <span className="font-cigo-mono text-[11px] text-emerald-100/90 shrink-0">
+                      {current.sentTime}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Chat Thread */}
+                <div className="cigo-wa-bg p-4 min-h-[340px] flex flex-col justify-center gap-3">
+                  {/* Outgoing Driver Message */}
+                  <div
+                    key={`wa-u-${current.id}`}
+                    className="self-end w-[92%] bg-[#D9FDD3] rounded-xl rounded-tr-none p-2.5 shadow-xs text-[#111B21] cigo-swap"
+                  >
+                    <div className="text-[11px] font-bold text-[#075E54] mb-1.5">
+                      {current.driverHeader}
+                    </div>
+
+                    {current.id === "audio" ? (
+                      <div className="bg-white/75 rounded-lg p-2.5 space-y-2 mb-1.5">
+                        <div className="flex items-center gap-2.5">
+                          <span className="w-9 h-9 rounded-full bg-[#25D366] text-white flex items-center justify-center shrink-0">
+                            <Play className="w-4 h-4 fill-current ml-0.5" />
+                          </span>
+                          <div className="flex-1 flex items-center gap-[2px] h-7" aria-hidden="true">
+                            {AUDIO_HEIGHT_CLASSES.map((heightCls, i) => (
+                              <span
+                                key={i}
+                                className={`flex-1 rounded-full bg-[#075E54]/65 ${heightCls}`}
+                              />
+                            ))}
+                          </div>
+                          <span className="font-cigo-mono text-[10px] text-[#54656F]">
+                            0:06
+                          </span>
+                        </div>
+                        <p className="text-xs text-[#1E293B] italic leading-snug">
+                          {current.audioCaption}
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="bg-white border border-dashed border-[#CBD5E1] rounded-lg p-3 text-[#0F172A] mb-1.5">
+                        <div className="flex items-center justify-between gap-2 pb-1.5 mb-1.5 border-b border-dashed border-[#CBD5E1]">
+                          <span className="text-[11px] font-bold truncate">
+                            {current.receiptVendor}
+                          </span>
+                          <span className="font-cigo-mono text-[10px] font-bold text-[#0F766E] shrink-0">
+                            {current.receiptSeries}
+                          </span>
+                        </div>
+                        <div className="text-[11px] text-[#475569]">
+                          {current.receiptDetail}
+                        </div>
+                        <div className="flex items-baseline justify-between mt-2 pt-1.5 border-t border-[#F1F5F9]">
+                          <span className="font-cigo-mono text-[10px] text-[#64748B]">
+                            {current.receiptMeta}
+                          </span>
+                          <span className="font-cigo-mono text-sm font-bold text-[#0F172A]">
+                            {current.receiptTotal}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="flex items-center justify-end gap-1 text-[10px] text-[#54656F]">
+                      <span>{current.sentTime}</span>
+                      <CheckCheck className="w-3.5 h-3.5 text-[#34B7F1]" strokeWidth={2.25} />
+                    </div>
+                  </div>
+
+                  {/* Incoming CIGO Reply */}
+                  {isAnalyzing ? (
+                    <div className="self-start bg-white text-[#475569] px-3.5 py-2.5 rounded-xl rounded-tl-none shadow-xs text-xs">
+                      {current.analyzingText}
+                    </div>
+                  ) : (
+                    <div
+                      key={`wa-b-${current.id}`}
+                      className="self-start w-[94%] bg-white rounded-xl rounded-tl-none p-3 shadow-xs text-xs leading-relaxed text-[#1E293B] cigo-swap"
+                    >
+                      <div className="font-bold text-[#0F766E] mb-1.5 flex items-center gap-1.5">
+                        <Check className="w-4 h-4 shrink-0" strokeWidth={2.5} />
+                        <span>{current.botTitle}</span>
+                      </div>
+                      <div className="space-y-0.5 text-[#334155]">
+                        {current.botLines.map((line) => (
+                          <div key={line}>{line}</div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12">
-            {/* Left: Realistic WhatsApp Window */}
-            <div className="lg:col-span-5 bg-[#EFEAE2] border-b lg:border-b-0 lg:border-r border-[#D8D6CE] flex flex-col">
-              {/* WhatsApp Header */}
-              <div className="bg-[#075E54] text-white px-4 py-3 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-white/15 border border-white/25 font-cigo-display font-bold text-xs flex items-center justify-center">
-                    CIGO
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold leading-tight">CIGO Flotas</div>
-                    <div className="text-[11px] text-emerald-100">
-                      {isAnalyzing ? current.analyzingText : "Cuenta verificada · WhatsApp"}
-                    </div>
-                  </div>
+          {/* Right 7 cols: Structured CIGO Web Panel Output */}
+          <div className="lg:col-span-7 bg-white border border-[#E2E8F0] rounded-2xl overflow-hidden shadow-xs">
+            <div className="px-6 py-4 bg-[#0F172A] text-white flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <ShieldCheck className="w-5 h-5 text-[#14B8A6]" strokeWidth={2} />
+                <div>
+                  <h3 className="text-base font-bold leading-tight">
+                    Así queda registrado en tu Panel CIGO
+                  </h3>
+                  <p className="text-xs text-[#94A3B8]">
+                    Sin digitación manual · Listo para auditoría y contabilidad
+                  </p>
                 </div>
-                <span className="font-cigo-mono text-[11px] text-emerald-100/90">
-                  {current.sentTime}
-                </span>
               </div>
-
-              {/* Messages Thread */}
-              <div className="p-4 sm:p-5 flex-1 flex flex-col justify-center gap-3 min-h-[300px]">
-                {/* Outgoing Driver Bubble */}
-                <div
-                  key={`u-${current.id}`}
-                  className="self-end max-w-[88%] bg-[#D9FDD3] text-[#111B21] px-3.5 py-2.5 rounded-lg rounded-tr-none shadow-xs text-xs leading-relaxed cigo-swap"
-                >
-                  <div className="text-[11px] font-semibold text-[#147A4B] mb-1">
-                    {current.driverHeader}
-                  </div>
-                  {current.userLines.map((line) => (
-                    <div key={line}>{line}</div>
-                  ))}
-                </div>
-
-                {/* Incoming Bot Reply */}
-                {isAnalyzing ? (
-                  <div className="self-start bg-white text-[#54656F] px-3.5 py-2.5 rounded-lg rounded-tl-none shadow-xs text-xs">
-                    {current.analyzingText}
-                  </div>
-                ) : (
-                  <div
-                    key={`b-${current.id}`}
-                    className="self-start max-w-[92%] bg-white text-[#111B21] px-3.5 py-3 rounded-lg rounded-tl-none shadow-xs text-xs leading-relaxed cigo-swap"
-                  >
-                    <div className="font-semibold text-[#147A4B] mb-1.5 flex items-center gap-1.5">
-                      <Check className="w-3.5 h-3.5 shrink-0" strokeWidth={2.25} />
-                      <span>{current.botTitle}</span>
-                    </div>
-                    <div className="space-y-0.5 text-[#3B4A54]">
-                      {current.botLines.map((line) => (
-                        <div key={line}>{line}</div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
+              <span className="font-cigo-mono text-[11px] font-bold text-[#0B1320] bg-[#14B8A6] px-2.5 py-1 rounded">
+                {isAnalyzing ? "Validando..." : "Sincronizado"}
+              </span>
             </div>
 
-            {/* Right: Accounting & Operations Live Record */}
-            <div className="lg:col-span-7 p-5 sm:p-8 bg-white flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between gap-3 pb-4 mb-2 border-b border-[#E4E2DA]">
-                  <div>
-                    <h3 className="text-base font-bold text-[#14181D]">
-                      Registro estructurado en el panel web
-                    </h3>
-                    <p className="text-xs text-[#5B6470] mt-0.5">
-                      Datos extraídos automáticamente y listos para revisión o exportación
-                    </p>
-                  </div>
-                  <span className="font-cigo-mono text-[11px] font-medium text-[#147A4B] bg-[#EAF6F0] border border-[#C3E5D3] px-2.5 py-1 rounded">
-                    {isAnalyzing ? "Procesando..." : "Sincronizado"}
-                  </span>
-                </div>
-
-                <dl
-                  key={`l-${current.id}`}
-                  className={`divide-y divide-[#ECEAE3] text-sm transition-opacity duration-200 ${
-                    isAnalyzing ? "opacity-45" : "opacity-100 cigo-swap"
-                  }`}
-                >
-                  {current.ledgerFields.map((row) => (
-                    <div
-                      key={row.field}
-                      className="py-3 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-4"
+            <div className="p-6">
+              <dl
+                key={`led-${current.id}`}
+                className={`divide-y divide-[#F1F5F9] text-sm transition-opacity duration-200 ${
+                  isAnalyzing ? "opacity-45" : "opacity-100 cigo-swap"
+                }`}
+              >
+                {current.ledgerFields.map((row) => (
+                  <div
+                    key={row.field}
+                    className="py-3 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-4"
+                  >
+                    <dt className="text-xs font-medium text-[#64748B]">{row.field}</dt>
+                    <dd
+                      className={`text-sm sm:text-right font-semibold ${
+                        row.tone === "teal"
+                          ? "text-[#0F766E]"
+                          : "text-[#0F172A]"
+                      } ${row.mono ? "font-cigo-mono" : ""}`}
                     >
-                      <dt className="text-xs font-medium text-[#5B6470]">{row.field}</dt>
-                      <dd
-                        className={`text-sm font-medium sm:text-right ${
-                          row.highlight === "ok"
-                            ? "text-[#147A4B] font-semibold"
-                            : row.highlight === "blue"
-                            ? "text-[#0A58CA] font-semibold"
-                            : "text-[#14181D]"
-                        } ${row.mono ? "font-cigo-mono" : ""}`}
-                      >
-                        {row.value}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
+                      {row.value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
             </div>
           </div>
         </div>
 
-        {/* Genuine Sequential 3-Step Rollout Timeline (No boxed cards) */}
-        <div className="pt-8 border-t border-[#D8D6CE]">
+        {/* Genuine Sequential 3-Step Rollout (48h) */}
+        <div className="pt-10 border-t border-[#E2E8F0]">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>
-              <h3 className="text-2xl font-bold tracking-[-0.02em] text-[#14181D]">
+              <h3 className="text-2xl font-bold tracking-[-0.02em] text-[#0F172A]">
                 Tu flota operando en menos de 48 horas
               </h3>
-              <p className="text-sm text-[#4E5661] mt-1">
-                Tres pasos reales desde el alta de placas hasta el primer cierre contable.
+              <p className="text-sm text-[#475569] mt-1">
+                Tres pasos claros desde el registro gratuito hasta tu primera liquidación exportada.
               </p>
             </div>
             <a
               href={REGISTER_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-[#0A58CA] hover:text-[#084298] underline underline-offset-4 shrink-0"
+              className="inline-flex items-center gap-2 text-sm font-bold text-[#0F766E] hover:text-[#0D9488] underline underline-offset-4 shrink-0"
             >
-              Activar cuenta gratuita ahora
-              <ArrowRight className="w-4 h-4" strokeWidth={1.75} />
+              Activar prueba de 7 días ahora
+              <ArrowRight className="w-4 h-4" strokeWidth={2} />
             </a>
           </div>
 
-          <ol className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-0 md:divide-x md:divide-[#D8D6CE]">
-            {ROLLOUT_SEQUENCE.map((item, idx) => (
+          <ol className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {ROLLOUT_SEQUENCE.map((item) => (
               <li
                 key={item.step}
-                className={
-                  idx === 0
-                    ? "md:pr-8"
-                    : idx === 1
-                    ? "md:px-8"
-                    : "md:pl-8"
-                }
+                className="bg-white border border-[#E2E8F0] rounded-xl p-6 flex flex-col justify-between gap-3"
               >
-                <div className="flex items-baseline gap-2.5 mb-2.5">
-                  <span className="font-cigo-mono text-xs font-semibold text-[#0A58CA]">
-                    Paso {item.step}
-                  </span>
-                  <span className="text-xs text-[#5B6470]">({item.timing})</span>
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <span className="font-cigo-mono text-xs font-bold text-[#0F766E] bg-[#CCFBF1] px-2.5 py-0.5 rounded">
+                      Paso {item.step}
+                    </span>
+                    <span className="font-cigo-mono text-xs text-[#64748B]">
+                      {item.timing}
+                    </span>
+                  </div>
+                  <h4 className="font-cigo-display text-lg font-bold text-[#0F172A] mb-1.5">
+                    {item.title}
+                  </h4>
+                  <p className="text-sm text-[#475569] leading-relaxed">
+                    {item.desc}
+                  </p>
                 </div>
-                <h4 className="font-cigo-display text-lg font-bold text-[#14181D] mb-2">
-                  {item.title}
-                </h4>
-                <p className="text-sm text-[#4E5661] leading-relaxed">
-                  {item.desc}
-                </p>
               </li>
             ))}
           </ol>

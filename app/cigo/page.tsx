@@ -6,6 +6,7 @@ import Image from "next/image";
 import {
   ArrowLeft,
   ArrowRight,
+  Check,
   ChevronDown,
   FileText,
   Mail,
@@ -28,23 +29,31 @@ const GMAIL_URL =
 const OPERATIONAL_GAPS = [
   {
     issue: "Boletas térmicas perdidas o borradas en cabina",
-    before: "Los recibos de grifo y peaje en papel térmico se borran por el calor o se extravían, perdiendo crédito fiscal (IGV) y gasto deducible.",
-    after: "El chofer fotografía el ticket en el grifo y CIGO conserva imagen, serie, RUC y montos en la nube.",
+    before:
+      "Los recibos de grifo y peaje en papel térmico se borran por el calor o se extravían, perdiendo crédito fiscal (IGV) y gasto deducible.",
+    after:
+      "El chofer fotografía el ticket en el grifo y CIGO conserva imagen, serie, RUC y montos en la nube.",
   },
   {
     issue: "Liquidaciones de viáticos atrasadas por semanas",
-    before: "Administración espera que el tracto vuelva a base con un sobre de papeles físicos para recién cuadrar caja chica y saldos.",
-    after: "Cada entrega y gasto se descuenta en vivo mientras el camión sigue en ruta.",
+    before:
+      "Administración espera que el tracto vuelva a base con un sobre de papeles físicos para recién cuadrar caja chica y saldos.",
+    after:
+      "Cada entrega y gasto se descuenta en vivo mientras el camión sigue en ruta.",
   },
   {
-    issue: "Sobreconsumos de diésel detectados tarde",
-    before: "Al revisar facturas recién a fin de mes es imposible reaccionar ante desvíos de rendimiento Km/galón o cargas atípicas.",
-    after: "Cálculo por abastecimiento con foto de odómetro y alertas automáticas cuando el rendimiento cae fuera de meta.",
+    issue: "Sobreconsumos de diésel detectados demasiado tarde",
+    before:
+      "Al revisar facturas recién a fin de mes es imposible reaccionar ante desvíos de rendimiento Km/galón o cargas atípicas.",
+    after:
+      "Cálculo por abastecimiento con foto de odómetro y alertas automáticas cuando el rendimiento cae fuera de meta.",
   },
   {
     issue: "Digitación manual y riesgo de boletas duplicadas",
-    before: "Horas pasando comprobantes uno por uno a Excel sin validar si el emisor está Habido en SUNAT o si la serie ya se rindió antes.",
-    after: "Consulta automática de RUC/comprobante, bloqueo de duplicados y descarga directa en Excel, SIRE TXT y ZIP.",
+    before:
+      "Horas pasando comprobantes uno por uno a Excel sin validar si el emisor está Habido en SUNAT o si la serie ya se rindió antes.",
+    after:
+      "Consulta automática de RUC/comprobante, bloqueo de duplicados y descarga directa en Excel, SIRE TXT y ZIP.",
   },
 ] as const;
 
@@ -55,7 +64,7 @@ const ROLE_OUTCOMES = [
     points: [
       "Control real de margen operativo en cada ruta nacional.",
       "Reducción de fugas en combustible, peajes y gastos no autorizados.",
-      "Información privada y auditable bajo Ley N° 29733.",
+      "Información privada y auditable conforme a la Ley N° 29733.",
     ],
   },
   {
@@ -107,10 +116,10 @@ const CIGO_FAQS = [
 
 const NAV_ITEMS = [
   { id: "problema", label: "El problema" },
-  { id: "whatsapp-feature", label: "Cómo opera" },
+  { id: "whatsapp-feature", label: "WhatsApp en ruta" },
   { id: "modulos-carousel", label: "Módulos" },
   { id: "documentacion-cigo", label: "Clientes y PDF" },
-  { id: "planes", label: "Tarifas" },
+  { id: "planes", label: "Precios" },
   { id: "faq", label: "FAQ" },
 ] as const;
 
@@ -147,39 +156,39 @@ export default function CigoPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F6F5F1] text-[#14181D]">
-      {/* ── Header Bar (Warm Industrial Paper + Crisp Hairline) ── */}
-      <header className="sticky top-0 z-50 bg-[#F6F5F1]/95 backdrop-blur-md border-b border-[#D8D6CE]">
+    <div className="min-h-screen bg-[#F8FAFC] text-[#0F172A]">
+      {/* ── Brand Header (Crisp White + Prominent CIGO Logo + Teal CTA) ── */}
+      <header className="sticky top-0 z-50 bg-white/96 backdrop-blur-md border-b border-[#E2E8F0]">
         <nav
           aria-label="Navegación principal CIGO"
           className="max-w-[1240px] mx-auto px-5 sm:px-8 h-16 flex items-center justify-between gap-4"
         >
           {/* Brand Lockup */}
           <div className="flex items-center gap-3 min-w-0">
+            <Image
+              src="/cigo-logo.webp"
+              alt="CIGO — Control Inteligente de Gastos Operativos"
+              width={118}
+              height={48}
+              priority
+              className="h-8 w-auto object-contain"
+            />
+            <span className="hidden sm:inline-block h-5 w-px bg-[#CBD5E1]" aria-hidden="true" />
             <Link
               href="/"
-              className="inline-flex items-center gap-2 text-[#4E5661] hover:text-[#14181D] transition-colors shrink-0"
+              className="hidden sm:inline-flex items-center gap-1.5 text-xs font-medium text-[#64748B] hover:text-[#0F172A] transition-colors shrink-0"
               title="Volver a Devorq Systems"
             >
               <Image
                 src="/devorq-isotype.png"
                 alt="Devorq Systems"
-                width={26}
-                height={26}
+                width={20}
+                height={20}
                 priority
-                className="w-[26px] h-[26px] rounded object-contain"
+                className="w-5 h-5 rounded object-contain"
               />
-              <span className="hidden sm:inline text-xs font-semibold">Devorq</span>
+              <span>por Devorq</span>
             </Link>
-            <span className="h-4 w-px bg-[#C9C6BC]" aria-hidden="true" />
-            <Image
-              src="/cigo-logo.webp"
-              alt="CIGO — Control Inteligente de Gastos Operativos"
-              width={110}
-              height={45}
-              priority
-              className="h-7 w-auto object-contain"
-            />
           </div>
 
           {/* Desktop Navigation */}
@@ -189,31 +198,32 @@ export default function CigoPage() {
                 key={item.id}
                 type="button"
                 onClick={() => scrollToSection(item.id)}
-                className="text-xs font-medium text-[#4E5661] hover:text-[#14181D] transition-colors cursor-pointer"
+                className="text-xs font-semibold text-[#475569] hover:text-[#0F766E] transition-colors cursor-pointer"
               >
                 {item.label}
               </button>
             ))}
           </div>
 
-          {/* Desktop Actions */}
+          {/* Desktop Conversion CTAs */}
           <div className="hidden md:flex items-center gap-3 shrink-0">
             <a
               href="/cigo/carta-presentacion-cigo.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#14181D] hover:text-[#0A58CA] transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold text-[#334155] hover:text-[#0F172A] hover:bg-[#F8FAFC] border border-[#E2E8F0] transition-colors"
             >
-              <FileText className="w-3.5 h-3.5" strokeWidth={1.75} />
+              <FileText className="w-3.5 h-3.5 text-[#0D9488]" strokeWidth={2} />
               Dossier PDF
             </a>
             <a
               href={REGISTER_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-xs font-bold text-white bg-[#147A4B] hover:bg-[#10643D] transition-colors"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-extrabold text-[#0B1320] bg-[#14B8A6] hover:bg-[#0D9488] hover:text-white transition-colors"
             >
               Probar 7 días gratis
+              <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.25} />
             </a>
           </div>
 
@@ -223,25 +233,25 @@ export default function CigoPage() {
             onClick={() => setMobileMenuOpen((prev) => !prev)}
             aria-expanded={mobileMenuOpen}
             aria-label={mobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
-            className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-md border border-[#D8D6CE] bg-white text-[#14181D] cursor-pointer"
+            className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-[#CBD5E1] bg-white text-[#0F172A] cursor-pointer"
           >
             {mobileMenuOpen ? (
-              <X className="w-5 h-5" strokeWidth={1.75} />
+              <X className="w-5 h-5" strokeWidth={2} />
             ) : (
-              <Menu className="w-5 h-5" strokeWidth={1.75} />
+              <Menu className="w-5 h-5" strokeWidth={2} />
             )}
           </button>
         </nav>
 
         {/* Mobile Drawer */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-[#D8D6CE] bg-[#F6F5F1] px-5 py-4 space-y-1.5">
+          <div className="md:hidden border-t border-[#E2E8F0] bg-white px-5 py-4 space-y-1.5">
             {NAV_ITEMS.map((item) => (
               <button
                 key={item.id}
                 type="button"
                 onClick={() => scrollToSection(item.id)}
-                className="block w-full text-left py-2.5 text-sm font-medium text-[#14181D] border-b border-[#E4E2DA] cursor-pointer"
+                className="block w-full text-left py-2.5 text-sm font-semibold text-[#0F172A] border-b border-[#F1F5F9] cursor-pointer"
               >
                 {item.label}
               </button>
@@ -251,26 +261,26 @@ export default function CigoPage() {
                 href={REGISTER_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 rounded-md text-sm font-bold text-white bg-[#147A4B]"
+                className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 rounded-lg text-sm font-extrabold text-[#0B1320] bg-[#14B8A6]"
               >
                 Probar 7 días gratis
-                <ArrowRight className="w-4 h-4" strokeWidth={2} />
+                <ArrowRight className="w-4 h-4" strokeWidth={2.25} />
               </a>
               <div className="grid grid-cols-2 gap-2">
                 <a
                   href="/cigo/carta-presentacion-cigo.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-md text-xs font-semibold text-[#14181D] bg-white border border-[#D8D6CE]"
+                  className="inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg text-xs font-semibold text-[#0F172A] bg-[#F8FAFC] border border-[#E2E8F0]"
                 >
-                  <FileText className="w-3.5 h-3.5" strokeWidth={1.75} />
+                  <FileText className="w-3.5 h-3.5 text-[#0D9488]" strokeWidth={2} />
                   Dossier PDF
                 </a>
                 <Link
                   href="/"
-                  className="inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-md text-xs font-semibold text-[#4E5661] bg-white border border-[#D8D6CE]"
+                  className="inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg text-xs font-semibold text-[#475569] bg-[#F8FAFC] border border-[#E2E8F0]"
                 >
-                  <ArrowLeft className="w-3.5 h-3.5" strokeWidth={1.75} />
+                  <ArrowLeft className="w-3.5 h-3.5" strokeWidth={2} />
                   Devorq
                 </Link>
               </div>
@@ -280,118 +290,128 @@ export default function CigoPage() {
       </header>
 
       <main>
-        {/* ── 1. EDITORIAL ASYMMETRIC HERO + LIVE PRODUCT WORKBENCH ── */}
-        <section className="pt-12 pb-16 sm:pt-16 sm:pb-20 px-5 sm:px-8 bg-[#F6F5F1] border-b border-[#D8D6CE]">
-          <div className="max-w-[1240px] mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-end mb-12 sm:mb-14 cigo-enter">
-              {/* Left 7 cols: Commanding Editorial Headline & Direct Actions */}
-              <div className="lg:col-span-7 space-y-6">
-                <h1 className="text-4xl sm:text-5xl lg:text-[3.45rem] font-extrabold tracking-[-0.03em] leading-[1.06] text-[#14181D]">
-                  Controla el combustible y los viáticos de tu flota desde el WhatsApp de tus choferes.
-                </h1>
+        {/* ── 1. CIGO DEEP NAVY HERO + INTERACTIVE WHATSAPP ↔ PANEL BRIDGE ── */}
+        <section className="py-12 sm:py-16 lg:py-20 px-5 sm:px-8 bg-[#0B1320] text-white border-b border-[#1E2D45]">
+          <div className="max-w-[1240px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-10 items-center">
+            {/* Left 5 cols: Conversion Copy + Direct CTAs + Real Client Proof */}
+            <div className="lg:col-span-5 space-y-6 cigo-enter">
+              <div className="w-12 h-1 rounded-full bg-[#14B8A6]" aria-hidden="true" />
 
-                <p className="text-base sm:text-lg text-[#4E5661] leading-relaxed max-w-[60ch]">
-                  Tus conductores envían fotos de tickets, lecturas de odómetro o notas de voz sin descargar ninguna aplicación. CIGO valida comprobantes ante SUNAT, calcula el rendimiento Km/galón y entrega tu cierre contable listo.
-                </p>
+              <h1 className="text-3xl sm:text-4xl lg:text-[2.85rem] font-extrabold tracking-[-0.03em] leading-[1.08] text-white">
+                Controla combustible, viáticos y boletas desde el WhatsApp de tus choferes.
+              </h1>
 
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1">
-                  <a
-                    href={REGISTER_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md text-sm sm:text-base font-bold text-white bg-[#147A4B] hover:bg-[#10643D] transition-colors"
-                  >
-                    Probar 7 días gratis
-                    <ArrowRight className="w-4 h-4" strokeWidth={2} />
-                  </a>
-                  <a
-                    href={WSP_DEMO_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-md text-sm font-semibold text-[#14181D] bg-white hover:bg-[#ECEAE3] border border-[#C9C6BC] transition-colors"
-                  >
-                    <MessageCircle className="w-4 h-4 text-[#147A4B]" strokeWidth={1.75} />
-                    Agendar demo de 15 min
-                  </a>
-                </div>
+              <p className="text-base text-[#CBD5E1] leading-relaxed">
+                Tus conductores mandan una foto del ticket, odómetro o nota de voz sin instalar apps. CIGO valida el RUC en SUNAT, calcula el rendimiento{" "}
+                <strong className="text-[#2DD4BF] font-semibold">Km/galón</strong> y entrega tu cierre en Excel, SIRE TXT y ZIP.
+              </p>
 
-                <p className="text-xs text-[#5B6470]">
-                  Hasta 5 camiones activos durante la prueba sin tarjeta de crédito. Factura electrónica con IGV incluido en Perú.
-                </p>
+              {/* Primary + Secondary CTAs */}
+              <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row items-stretch sm:items-center gap-3 pt-1">
+                <a
+                  href={REGISTER_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg text-sm sm:text-base font-extrabold text-[#0B1320] bg-[#14B8A6] hover:bg-[#2DD4BF] transition-colors"
+                >
+                  Probar 7 días gratis
+                  <ArrowRight className="w-4 h-4" strokeWidth={2.25} />
+                </a>
+                <a
+                  href={WSP_DEMO_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-lg text-sm font-semibold text-white bg-[#162236] hover:bg-[#1E2E48] border border-[#2C3E5A] transition-colors"
+                >
+                  <MessageCircle className="w-4 h-4 text-[#25D366]" strokeWidth={2} />
+                  Agendar demo 15 min
+                </a>
               </div>
 
-              {/* Right 5 cols: Operational Spec Sheet (Replaces generic stat cards) */}
-              <div className="lg:col-span-5 border-t border-[#14181D]">
-                <dl className="divide-y divide-[#D8D6CE] text-sm">
-                  <div className="py-3.5 flex items-baseline justify-between gap-4">
-                    <dt className="text-xs font-medium text-[#5B6470]">Canal en carretera</dt>
-                    <dd className="text-right font-semibold text-[#14181D]">
-                      WhatsApp habitual (0 apps extra)
-                    </dd>
-                  </div>
-                  <div className="py-3.5 flex items-baseline justify-between gap-4">
-                    <dt className="text-xs font-medium text-[#5B6470]">Auditoría fiscal</dt>
-                    <dd className="text-right font-semibold text-[#14181D]">
-                      Consulta RUC SUNAT y duplicados
-                    </dd>
-                  </div>
-                  <div className="py-3.5 flex items-baseline justify-between gap-4">
-                    <dt className="text-xs font-medium text-[#5B6470]">Entregables contables</dt>
-                    <dd className="text-right font-semibold text-[#14181D]">
-                      Excel, Liquidación, SIRE TXT y ZIP
-                    </dd>
-                  </div>
-                  <div className="py-3.5 flex items-baseline justify-between gap-4">
-                    <dt className="text-xs font-medium text-[#5B6470]">Flotas operando</dt>
-                    <dd className="text-right font-semibold text-[#0A58CA]">
-                      TRANSYACU S.A.C. y DIFEYA S.A.C.
-                    </dd>
-                  </div>
-                </dl>
+              {/* Risk Reversal Checks */}
+              <ul className="flex flex-wrap gap-x-5 gap-y-2 text-xs font-medium text-[#CBD5E1]">
+                <li className="inline-flex items-center gap-1.5">
+                  <Check className="w-3.5 h-3.5 text-[#14B8A6]" strokeWidth={2.5} />
+                  Hasta 5 camiones gratis
+                </li>
+                <li className="inline-flex items-center gap-1.5">
+                  <Check className="w-3.5 h-3.5 text-[#14B8A6]" strokeWidth={2.5} />
+                  Sin tarjeta de crédito
+                </li>
+                <li className="inline-flex items-center gap-1.5">
+                  <Check className="w-3.5 h-3.5 text-[#14B8A6]" strokeWidth={2.5} />
+                  Factura con IGV
+                </li>
+              </ul>
+
+              {/* Real Peruvian Fleets Operating */}
+              <div className="pt-5 border-t border-[#1E2D45]">
+                <div className="text-xs text-[#94A3B8] mb-2">
+                  Operando en rutas nacionales del Perú con:
+                </div>
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-bold text-white">
+                  <span>TRANSYACU S.A.C. (+25 tractos)</span>
+                  <span className="text-[#334155]" aria-hidden="true">|</span>
+                  <span>DIFEYA S.A.C.</span>
+                </div>
               </div>
             </div>
 
-            {/* Authored Centerpiece: Live Interactive Dispatch Workbench + Real Dashboard */}
-            <div className="cigo-enter-delay">
+            {/* Right 7 cols: Real Smartphone WhatsApp -> Synced CIGO Panel */}
+            <div className="lg:col-span-7 cigo-enter-delay">
               <CigoHeroCockpit />
             </div>
           </div>
         </section>
 
-        {/* ── 2. EL PROBLEMA VS. CIGO (EDITORIAL HAIRLINE LEDGER) ── */}
-        <section id="problema" className="py-20 sm:py-24 px-5 sm:px-8 bg-white border-b border-[#D8D6CE]">
+        {/* ── 2. POR QUÉ PIERDES DINERO EN RUTA (ANTES VS. CON CIGO) ── */}
+        <section
+          id="problema"
+          className="py-20 sm:py-24 px-5 sm:px-8 bg-white border-b border-[#E2E8F0]"
+        >
           <div className="max-w-[1240px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
             {/* Left Sticky Summary */}
             <div className="lg:col-span-4 lg:sticky lg:top-24 space-y-4">
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-[-0.025em] text-[#14181D] leading-[1.12]">
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-[-0.025em] text-[#0F172A] leading-[1.12]">
                 Cuatro fugas que el sobre de papel esconde hasta fin de mes.
               </h2>
-              <p className="text-sm sm:text-base text-[#4E5661] leading-relaxed">
-                Gestionar viajes con recibos térmicos sueltos y hojas manuales encarece cada ruta y sobrecarga al área administrativa. Así cambia la operación al pasar a CIGO.
+              <p className="text-sm sm:text-base text-[#475569] leading-relaxed">
+                Operar con boletas térmicas sueltas y rendiciones tardías te hace perder crédito fiscal, horas contables y control real sobre el combustible de cada camión.
               </p>
+              <div className="pt-2">
+                <a
+                  href={REGISTER_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-sm font-bold text-[#0F766E] hover:text-[#0D9488] underline underline-offset-4"
+                >
+                  Probar CIGO 7 días sin costo
+                  <ArrowRight className="w-4 h-4" strokeWidth={2} />
+                </a>
+              </div>
             </div>
 
-            {/* Right Editorial Contrast Ledger */}
-            <div className="lg:col-span-8 border-t border-[#14181D] divide-y divide-[#D8D6CE]">
+            {/* Right Contrast Ledger */}
+            <div className="lg:col-span-8 border-t-2 border-[#0F172A] divide-y divide-[#E2E8F0]">
               {OPERATIONAL_GAPS.map((row) => (
                 <article key={row.issue} className="py-7 space-y-4">
-                  <h3 className="text-lg sm:text-xl font-bold text-[#14181D] tracking-[-0.015em]">
+                  <h3 className="text-lg sm:text-xl font-bold text-[#0F172A] tracking-[-0.015em]">
                     {row.issue}
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                      <div className="text-xs font-semibold text-[#9F2D2D] mb-1">
-                        Operación en papel
+                      <div className="text-xs font-bold text-[#B91C1C] mb-1">
+                        Sin CIGO (papel y Excel)
                       </div>
-                      <p className="text-sm text-[#4E5661] leading-relaxed">
+                      <p className="text-sm text-[#475569] leading-relaxed">
                         {row.before}
                       </p>
                     </div>
                     <div>
-                      <div className="text-xs font-semibold text-[#147A4B] mb-1">
-                        Con CIGO en ruta
+                      <div className="text-xs font-bold text-[#0F766E] mb-1">
+                        Con CIGO en carretera
                       </div>
-                      <p className="text-sm text-[#14181D] leading-relaxed font-medium">
+                      <p className="text-sm text-[#0F172A] leading-relaxed font-medium">
                         {row.after}
                       </p>
                     </div>
@@ -402,82 +422,85 @@ export default function CigoPage() {
           </div>
         </section>
 
-        {/* ── 3. SIMULADOR WHATSAPP → REGISTRO CONTABLE + SECUENCIA 48H ── */}
+        {/* ── 3. EXPERIENCIA INTERACTIVA COMPLETA DE WHATSAPP + 48H ROLLOUT ── */}
         <CigoWhatsAppDemo />
 
-        {/* ── 4. IMPACTO POR ÁREA (3-COLUMN EDITORIAL MATRIX, NO BENTO CARDS) ── */}
-        <section id="beneficios" className="py-20 sm:py-24 px-5 sm:px-8 bg-[#FAF9F6] border-b border-[#D8D6CE]">
+        {/* ── 4. EXPLORADOR DE LOS 8 MÓDULOS REALES DE CIGO ── */}
+        <CigoModulesShowcase />
+
+        {/* ── 5. BENEFICIOS POR ÁREA (GERENCIA, OPERACIONES Y CONTABILIDAD) ── */}
+        <section
+          id="beneficios"
+          className="py-20 sm:py-24 px-5 sm:px-8 bg-[#F8FAFC] border-b border-[#E2E8F0]"
+        >
           <div className="max-w-[1240px] mx-auto">
             <div className="max-w-2xl mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-[-0.025em] text-[#14181D] leading-[1.12]">
-                Un mismo dato sirve a gerencia, operaciones y contabilidad.
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-[-0.025em] text-[#0F172A] leading-[1.12]">
+                Un solo registro sirve a gerencia, operaciones y contabilidad.
               </h2>
-              <p className="text-base text-[#4E5661] mt-3 leading-relaxed">
-                Sin reescribir planillas entre departamentos ni perseguir comprobantes cuando el camión ya salió a otro viaje.
+              <p className="text-base text-[#475569] mt-3 leading-relaxed">
+                Cada área recibe la información que necesita en tiempo real sin duplicar hojas ni perseguir recibos en papel.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 border-t border-[#14181D] divide-y lg:divide-y-0 lg:divide-x divide-[#D8D6CE]">
-              {ROLE_OUTCOMES.map((col, idx) => (
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {ROLE_OUTCOMES.map((col) => (
                 <article
                   key={col.role}
-                  className={
-                    idx === 0
-                      ? "py-7 lg:pr-8"
-                      : idx === 1
-                      ? "py-7 lg:px-8"
-                      : "py-7 lg:pl-8"
-                  }
+                  className="bg-white border border-[#E2E8F0] rounded-2xl p-6 sm:p-7 flex flex-col justify-between gap-4"
                 >
-                  <div className="font-cigo-mono text-xs font-semibold text-[#0A58CA] mb-2">
-                    {col.role}
+                  <div>
+                    <div className="font-cigo-mono text-xs font-bold text-[#0F766E] mb-2">
+                      {col.role}
+                    </div>
+                    <h3 className="text-xl font-bold text-[#0F172A] tracking-[-0.015em] leading-snug mb-4">
+                      {col.headline}
+                    </h3>
+                    <ul className="space-y-2.5 text-sm text-[#475569] leading-relaxed">
+                      {col.points.map((pt) => (
+                        <li key={pt} className="flex items-start gap-2.5">
+                          <Check
+                            className="w-4 h-4 text-[#0D9488] shrink-0 mt-0.5"
+                            strokeWidth={2.25}
+                          />
+                          <span>{pt}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <h3 className="text-xl font-bold text-[#14181D] tracking-[-0.015em] leading-snug mb-4">
-                    {col.headline}
-                  </h3>
-                  <ul className="space-y-2.5 text-sm text-[#4E5661] leading-relaxed">
-                    {col.points.map((pt) => (
-                      <li key={pt} className="flex items-start gap-2.5">
-                        <span className="text-[#147A4B] font-bold" aria-hidden="true">
-                          /
-                        </span>
-                        <span>{pt}</span>
-                      </li>
-                    ))}
-                  </ul>
                 </article>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ── 5. EXPLORADOR DE LOS 8 MÓDULOS REALES ── */}
-        <CigoModulesShowcase />
-
-        {/* ── 6. CLIENTES EN OPERACIÓN Y DOCUMENTACIÓN EJECUTIVA ── */}
+        {/* ── 6. CLIENTES REALES EN PERÚ Y DOCUMENTACIÓN OFICIAL ── */}
         <RoiCalculator />
 
-        {/* ── 7. PRICING DE EXPANSIÓN (SINGLE CARBON ANCHOR BAND) ── */}
+        {/* ── 7. PRICING DE EXPANSIÓN (CIGO DEEP NAVY + TEAL) ── */}
         <CigoPricing />
 
-        {/* ── 8. PREGUNTAS FRECUENTES (2-COL EDITORIAL SPLIT) ── */}
-        <section id="faq" className="py-20 sm:py-24 px-5 sm:px-8 bg-white border-b border-[#D8D6CE]">
+        {/* ── 8. PREGUNTAS FRECUENTES ── */}
+        <section
+          id="faq"
+          className="py-20 sm:py-24 px-5 sm:px-8 bg-white border-b border-[#E2E8F0]"
+        >
           <div className="max-w-[1240px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
             <div className="lg:col-span-4 space-y-4">
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-[-0.025em] text-[#14181D] leading-[1.12]">
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-[-0.025em] text-[#0F172A] leading-[1.12]">
                 Preguntas frecuentes sobre CIGO.
               </h2>
-              <p className="text-sm sm:text-base text-[#4E5661] leading-relaxed">
-                Detalles claros sobre la prueba gratuita de 7 días, tarifas con IGV, consultas SUNAT y exportaciones SIRE.
+              <p className="text-sm sm:text-base text-[#475569] leading-relaxed">
+                Respuestas directas sobre la prueba gratuita de 7 días, tarifas con IGV, consultas SUNAT y exportaciones SIRE.
               </p>
-              <div className="pt-4 border-t border-[#E4E2DA] space-y-1.5 text-xs text-[#4E5661]">
-                <div className="font-semibold text-[#14181D]">Atención directa en Perú</div>
+              <div className="pt-4 border-t border-[#E2E8F0] space-y-1.5 text-xs text-[#475569]">
+                <div className="font-bold text-[#0F172A]">Atención comercial en Perú</div>
                 <div className="font-cigo-mono">+51 929 222 980 / +51 935 351 768</div>
                 <div className="font-cigo-mono">contacto@devorq.com</div>
               </div>
             </div>
 
-            <div className="lg:col-span-8 border-t border-[#14181D] divide-y divide-[#D8D6CE]">
+            <div className="lg:col-span-8 border-t-2 border-[#0F172A] divide-y divide-[#E2E8F0]">
               {CIGO_FAQS.map((faq, idx) => {
                 const isOpen = openFaqIndex === idx;
                 return (
@@ -489,23 +512,23 @@ export default function CigoPage() {
                       className="w-full flex items-center justify-between gap-4 text-left cursor-pointer group"
                     >
                       <span
-                        className={`text-base font-semibold transition-colors ${
+                        className={`text-base font-bold transition-colors ${
                           isOpen
-                            ? "text-[#0A58CA]"
-                            : "text-[#14181D] group-hover:text-[#0A58CA]"
+                            ? "text-[#0F766E]"
+                            : "text-[#0F172A] group-hover:text-[#0F766E]"
                         }`}
                       >
                         {faq.q}
                       </span>
                       <ChevronDown
-                        className={`w-4 h-4 text-[#5B6470] shrink-0 transition-transform ${
-                          isOpen ? "rotate-180 text-[#0A58CA]" : ""
+                        className={`w-4 h-4 text-[#64748B] shrink-0 transition-transform ${
+                          isOpen ? "rotate-180 text-[#0F766E]" : ""
                         }`}
                         strokeWidth={2}
                       />
                     </button>
                     {isOpen && (
-                      <p className="mt-3 text-sm text-[#4E5661] leading-relaxed max-w-[68ch] cigo-swap">
+                      <p className="mt-3 text-sm text-[#475569] leading-relaxed max-w-[68ch] cigo-swap">
                         {faq.a}
                       </p>
                     )}
@@ -516,57 +539,64 @@ export default function CigoPage() {
           </div>
         </section>
 
-        {/* ── 9. CIERRE DIRECTO DE CONVERSIÓN ── */}
-        <section className="py-20 sm:py-24 px-5 sm:px-8 bg-[#F6F5F1]">
-          <div className="max-w-[1240px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
-            <div className="lg:col-span-7 space-y-4">
-              <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-extrabold tracking-[-0.03em] text-[#14181D] leading-[1.08]">
-                Activa tu prueba gratis de 7 días con hasta 5 camiones hoy mismo.
-              </h2>
-              <p className="text-base text-[#4E5661] leading-relaxed max-w-[58ch]">
-                Crea tu cuenta en{" "}
-                <strong className="text-[#14181D] font-semibold">cigo.devorq.com/registro</strong> sin tarjeta de crédito, o coordina una demostración de 15 minutos con nuestro equipo técnico.
-              </p>
+        {/* ── 9. CIERRE DE CONVERSIÓN (CIGO NAVY + TEAL) ── */}
+        <section className="py-16 sm:py-20 px-5 sm:px-8 bg-[#F8FAFC]">
+          <div className="max-w-[1240px] mx-auto bg-[#0B1320] text-white rounded-2xl border border-[#1E2D45] p-8 sm:p-12">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              <div className="lg:col-span-7 space-y-4">
+                <div className="font-cigo-mono text-xs font-bold text-[#2DD4BF]">
+                  Activación inmediata · Sin tarjeta de crédito
+                </div>
+                <h2 className="text-3xl sm:text-4xl font-extrabold tracking-[-0.03em] text-white leading-[1.1]">
+                  Empieza tu prueba gratis de 7 días con hasta 5 camiones hoy mismo.
+                </h2>
+                <p className="text-base text-[#CBD5E1] leading-relaxed max-w-[58ch]">
+                  Registra tu flota directamente en{" "}
+                  <strong className="text-white font-semibold">cigo.devorq.com/registro</strong> o coordina una demostración en vivo de 15 minutos por WhatsApp.
+                </p>
+              </div>
+
+              <div className="lg:col-span-5 flex flex-col gap-3">
+                <a
+                  href={REGISTER_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg text-sm sm:text-base font-extrabold text-[#0B1320] bg-[#14B8A6] hover:bg-[#2DD4BF] transition-colors"
+                >
+                  Registrar mi flota gratis (7 días)
+                  <ArrowRight className="w-4 h-4" strokeWidth={2.25} />
+                </a>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <a
+                    href={WSP_DEMO_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-sm font-semibold text-white bg-[#162236] hover:bg-[#1E2E48] border border-[#2C3E5A] transition-colors"
+                  >
+                    <MessageCircle className="w-4 h-4 text-[#25D366]" strokeWidth={2} />
+                    Demo WhatsApp
+                  </a>
+                  <a
+                    href={GMAIL_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-sm font-semibold text-[#CBD5E1] hover:text-white bg-[#111C2F] border border-[#24344D] transition-colors"
+                  >
+                    <Mail className="w-4 h-4 text-[#14B8A6]" strokeWidth={2} />
+                    Correo
+                  </a>
+                </div>
+              </div>
             </div>
 
-            <div className="lg:col-span-5 flex flex-col sm:flex-row lg:flex-col xl:flex-row gap-3 lg:justify-end">
-              <a
-                href={REGISTER_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md text-sm font-bold text-white bg-[#147A4B] hover:bg-[#10643D] transition-colors"
-              >
-                Registrar mi flota gratis
-                <ArrowRight className="w-4 h-4" strokeWidth={2} />
-              </a>
-              <a
-                href={WSP_DEMO_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-md text-sm font-semibold text-[#14181D] bg-white hover:bg-[#ECEAE3] border border-[#C9C6BC] transition-colors"
-              >
-                <MessageCircle className="w-4 h-4 text-[#147A4B]" strokeWidth={1.75} />
-                Demo por WhatsApp
-              </a>
-              <a
-                href={GMAIL_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-md text-sm font-semibold text-[#4E5661] hover:text-[#14181D] bg-white border border-[#D8D6CE] transition-colors"
-              >
-                <Mail className="w-4 h-4" strokeWidth={1.75} />
-                Correo
-              </a>
-            </div>
-          </div>
-
-          <div className="max-w-[1240px] mx-auto mt-12 pt-6 border-t border-[#D8D6CE] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-[#5B6470]">
-            <span>Formatos de exportación incluidos en el panel web:</span>
-            <div className="flex flex-wrap gap-x-5 gap-y-1 font-cigo-mono text-[#14181D]">
-              <span>Excel operativo (.xlsx)</span>
-              <span>Liquidación por viaje (.xlsx)</span>
-              <span>TXT SIRE Compras SUNAT</span>
-              <span>Respaldo fotográfico (.zip)</span>
+            <div className="mt-10 pt-6 border-t border-[#1E2D45] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-[#94A3B8]">
+              <span>Exportaciones contables incluidas en el panel web:</span>
+              <div className="flex flex-wrap gap-x-5 gap-y-1 font-cigo-mono text-[#CBD5E1]">
+                <span>Excel operativo (.xlsx)</span>
+                <span>Liquidación por viaje (.xlsx)</span>
+                <span className="text-[#2DD4BF]">TXT SIRE Compras SUNAT</span>
+                <span>Evidencias (.zip)</span>
+              </div>
             </div>
           </div>
         </section>
@@ -575,23 +605,23 @@ export default function CigoPage() {
         {showTerms && (
           <section
             id="terminos"
-            className="py-14 px-5 sm:px-8 bg-white border-t border-[#D8D6CE]"
+            className="py-14 px-5 sm:px-8 bg-white border-t border-[#E2E8F0]"
           >
-            <div className="max-w-4xl mx-auto text-[#4E5661] text-sm leading-relaxed relative">
+            <div className="max-w-4xl mx-auto text-[#475569] text-sm leading-relaxed relative">
               <button
                 type="button"
                 onClick={() => setShowTerms(false)}
                 aria-label="Cerrar términos y condiciones"
-                className="absolute top-0 right-0 w-9 h-9 rounded-md border border-[#D8D6CE] bg-[#F6F5F1] hover:bg-[#ECEAE3] text-[#14181D] flex items-center justify-center cursor-pointer transition-colors"
+                className="absolute top-0 right-0 w-9 h-9 rounded-lg border border-[#CBD5E1] bg-[#F8FAFC] hover:bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center cursor-pointer transition-colors"
                 title="Cerrar"
               >
-                <X className="w-4 h-4" strokeWidth={1.75} />
+                <X className="w-4 h-4" strokeWidth={2} />
               </button>
 
-              <h2 className="text-2xl font-bold text-[#14181D] pr-12">
+              <h2 className="text-2xl font-bold text-[#0F172A] pr-12">
                 TÉRMINOS Y CONDICIONES DEL SERVICIO &quot;CIGO&quot;
               </h2>
-              <p className="font-cigo-mono text-xs text-[#5B6470] mt-1 mb-6">
+              <p className="font-cigo-mono text-xs text-[#64748B] mt-1 mb-6">
                 Última actualización: Noviembre 2026
               </p>
 
@@ -605,7 +635,7 @@ export default function CigoPage() {
 
               <div className="space-y-5">
                 <div>
-                  <h3 className="text-base font-bold text-[#14181D] mb-1.5">
+                  <h3 className="text-base font-bold text-[#0F172A] mb-1.5">
                     1. NATURALEZA Y ALCANCE DEL SERVICIO
                   </h3>
                   <p>
@@ -614,7 +644,7 @@ export default function CigoPage() {
                 </div>
 
                 <div>
-                  <h3 className="text-base font-bold text-[#14181D] mb-1.5">
+                  <h3 className="text-base font-bold text-[#0F172A] mb-1.5">
                     2. DESLINDE DE RESPONSABILIDAD CONTABLE Y TRIBUTARIA
                   </h3>
                   <p>
@@ -623,7 +653,7 @@ export default function CigoPage() {
                 </div>
 
                 <div>
-                  <h3 className="text-base font-bold text-[#14181D] mb-1.5">
+                  <h3 className="text-base font-bold text-[#0F172A] mb-1.5">
                     3. DISPONIBILIDAD DEL SERVICIO (SLA Y PROVEEDORES TERCEROS)
                   </h3>
                   <p>
@@ -632,7 +662,7 @@ export default function CigoPage() {
                 </div>
 
                 <div>
-                  <h3 className="text-base font-bold text-[#14181D] mb-1.5">
+                  <h3 className="text-base font-bold text-[#0F172A] mb-1.5">
                     4. PROTECCIÓN DE DATOS PERSONALES (LEY N° 29733)
                   </h3>
                   <p>
@@ -641,7 +671,7 @@ export default function CigoPage() {
                 </div>
 
                 <div>
-                  <h3 className="text-base font-bold text-[#14181D] mb-1.5">
+                  <h3 className="text-base font-bold text-[#0F172A] mb-1.5">
                     5. PAGOS, FACTURACIÓN Y SUSPENSIÓN DEL SERVICIO
                   </h3>
                   <p>
@@ -650,7 +680,7 @@ export default function CigoPage() {
                 </div>
 
                 <div>
-                  <h3 className="text-base font-bold text-[#14181D] mb-1.5">
+                  <h3 className="text-base font-bold text-[#0F172A] mb-1.5">
                     6. JURISDICCIÓN Y LEY APLICABLE
                   </h3>
                   <p>
@@ -664,8 +694,8 @@ export default function CigoPage() {
       </main>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-[#D8D6CE] py-7 px-5 sm:px-8 bg-[#F6F5F1]">
-        <div className="max-w-[1240px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#5B6470]">
+      <footer className="border-t border-[#E2E8F0] py-7 px-5 sm:px-8 bg-white">
+        <div className="max-w-[1240px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#64748B]">
           <p>© {new Date().getFullYear()} Devorq Systems · CIGO Control Inteligente de Gastos Operativos</p>
           <div className="flex items-center gap-4">
             <button
@@ -678,11 +708,11 @@ export default function CigoPage() {
                   }, 100);
                 }
               }}
-              className="text-[#14181D] hover:text-[#0A58CA] font-medium underline underline-offset-4 cursor-pointer"
+              className="text-[#0F172A] hover:text-[#0F766E] font-semibold underline underline-offset-4 cursor-pointer"
             >
               {showTerms ? "Ocultar Términos y Condiciones" : "Términos y Condiciones"}
             </button>
-            <Link href="/" className="text-[#14181D] hover:text-[#0A58CA] font-medium">
+            <Link href="/" className="text-[#0F172A] hover:text-[#0F766E] font-semibold">
               Volver a Devorq
             </Link>
           </div>

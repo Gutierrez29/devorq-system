@@ -453,11 +453,11 @@
   box-shadow: 0 20px 40px rgba(14, 165, 233, 0.12), 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
-/* ─── CIGO Editorial Industrial Scoped Tokens & Motion ─────────── */
+/* ─── CIGO Brand Scoped Tokens & Motion ────────────────────────── */
 .cigo-surface {
   font-family: var(--font-cigo-sans), "IBM Plex Sans", system-ui, sans-serif;
-  background-color: #f6f5f1;
-  color: #14181d;
+  background-color: #f8fafc;
+  color: #0f172a;
 }
 
 .cigo-surface h1,
@@ -474,6 +474,13 @@
 
 .cigo-tabular {
   font-variant-numeric: tabular-nums;
+}
+
+/* Subtle authentic WhatsApp wallpaper dot texture (no neon/cyber grid) */
+.cigo-wa-bg {
+  background-color: #efeae2;
+  background-image: radial-gradient(rgba(11, 20, 26, 0.055) 1px, transparent 1px);
+  background-size: 16px 16px;
 }
 
 @keyframes cigo-enter {
@@ -511,12 +518,12 @@
 }
 
 .cigo-surface :focus-visible {
-  outline: 2px solid #0a58ca;
+  outline: 2px solid #14b8a6;
   outline-offset: 2px;
 }
 
 .cigo-range {
-  accent-color: #38bdf8;
+  accent-color: #14b8a6;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -42,7 +42,7 @@ export default function CigoLayout({
 }) {
   return (
     <div
-      className={`${archivo.variable} ${ibmPlexSans.variable} ${ibmPlexMono.variable} cigo-surface selection:bg-[#0A58CA] selection:text-white`}
+      className={`${archivo.variable} ${ibmPlexSans.variable} ${ibmPlexMono.variable} cigo-surface selection:bg-[#14B8A6] selection:text-[#0B1320]`}
     >
       {children}
     </div>

@@ -102,34 +102,37 @@ export default function CigoModulesShowcase() {
   };
 
   return (
-    <section id="modulos-carousel" className="py-20 sm:py-24 px-5 sm:px-8 bg-white border-b border-[#D8D6CE]">
+    <section
+      id="modulos-carousel"
+      className="py-20 sm:py-24 px-5 sm:px-8 bg-white border-b border-[#E2E8F0]"
+    >
       <div className="max-w-[1240px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end mb-12">
           <div className="lg:col-span-7">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-[-0.025em] text-[#14181D] leading-[1.12]">
-              Ocho módulos reales conectados entre carretera y oficina.
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-[-0.025em] text-[#0F172A] leading-[1.12]">
+              Conoce la plataforma real por dentro: 8 módulos conectados.
             </h2>
           </div>
           <div className="lg:col-span-5 flex lg:justify-end items-center gap-3">
-            <span className="font-cigo-mono text-xs text-[#5B6470]">
+            <span className="font-cigo-mono text-xs text-[#64748B]">
               Módulo {activeIndex + 1} de {MODULES.length}
             </span>
-            <div className="inline-flex border border-[#D8D6CE] rounded-md overflow-hidden">
+            <div className="inline-flex border border-[#CBD5E1] rounded-lg overflow-hidden">
               <button
                 type="button"
                 onClick={handlePrev}
                 aria-label="Módulo anterior"
-                className="px-3 py-2 text-[#14181D] hover:bg-[#F6F5F1] transition-colors cursor-pointer border-r border-[#D8D6CE]"
+                className="px-3 py-2 text-[#0F172A] hover:bg-[#F8FAFC] transition-colors cursor-pointer border-r border-[#CBD5E1]"
               >
-                <ChevronLeft className="w-4 h-4" strokeWidth={1.75} />
+                <ChevronLeft className="w-4 h-4" strokeWidth={2} />
               </button>
               <button
                 type="button"
                 onClick={handleNext}
                 aria-label="Módulo siguiente"
-                className="px-3 py-2 text-[#14181D] hover:bg-[#F6F5F1] transition-colors cursor-pointer"
+                className="px-3 py-2 text-[#0F172A] hover:bg-[#F8FAFC] transition-colors cursor-pointer"
               >
-                <ChevronRight className="w-4 h-4" strokeWidth={1.75} />
+                <ChevronRight className="w-4 h-4" strokeWidth={2} />
               </button>
             </div>
           </div>
@@ -144,10 +147,10 @@ export default function CigoModulesShowcase() {
                 key={mod.id}
                 type="button"
                 onClick={() => setActiveIndex(idx)}
-                className={`px-3.5 py-2 rounded-md text-xs font-semibold whitespace-nowrap border cursor-pointer shrink-0 transition-colors ${
+                className={`px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap border cursor-pointer shrink-0 transition-colors ${
                   active
-                    ? "bg-[#14181D] text-white border-[#14181D]"
-                    : "bg-[#F6F5F1] text-[#4E5661] border-[#D8D6CE]"
+                    ? "bg-[#0F172A] text-white border-[#0F172A]"
+                    : "bg-[#F8FAFC] text-[#475569] border-[#E2E8F0]"
                 }`}
               >
                 {mod.shortName}
@@ -156,10 +159,10 @@ export default function CigoModulesShowcase() {
           })}
         </div>
 
-        {/* Desktop 12-Col Editorial Index + Full Real Screenshot */}
+        {/* Desktop 12-Col Index + Real Screenshot */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
-          {/* Left 4-col Vertical Navigation Index (Desktop) */}
-          <div className="hidden lg:block lg:col-span-4 border-t border-[#D8D6CE]">
+          {/* Left 4-col Vertical Index */}
+          <div className="hidden lg:block lg:col-span-4 border-t border-[#E2E8F0]">
             {MODULES.map((mod, idx) => {
               const active = idx === activeIndex;
               return (
@@ -168,68 +171,62 @@ export default function CigoModulesShowcase() {
                   type="button"
                   onClick={() => setActiveIndex(idx)}
                   aria-current={active ? "true" : undefined}
-                  className={`w-full text-left py-4 px-3 border-b border-[#E4E2DA] transition-colors cursor-pointer flex items-center justify-between gap-3 ${
+                  className={`w-full text-left py-4 px-4 border-b border-[#E2E8F0] transition-colors cursor-pointer flex items-center justify-between gap-3 ${
                     active
-                      ? "bg-[#F6F5F1] text-[#14181D]"
-                      : "text-[#5B6470] hover:text-[#14181D] hover:bg-[#FAF9F6]"
+                      ? "bg-[#F0FDFA] text-[#0F172A]"
+                      : "text-[#475569] hover:text-[#0F172A] hover:bg-[#F8FAFC]"
                   }`}
                 >
-                  <span
-                    className={`text-sm ${
-                      active ? "font-bold text-[#14181D]" : "font-medium"
-                    }`}
-                  >
+                  <span className={active ? "text-sm font-bold text-[#0F172A]" : "text-sm font-medium"}>
                     {mod.shortName}
                   </span>
-                  <span
-                    className={`font-cigo-mono text-[11px] ${
-                      active ? "text-[#0A58CA] font-semibold" : "text-[#8B939E]"
-                    }`}
-                  >
-                    {active ? "Activo" : ""}
-                  </span>
+                  {active && (
+                    <span className="font-cigo-mono text-[11px] font-bold text-[#0F766E]">
+                      Viendo
+                    </span>
+                  )}
                 </button>
               );
             })}
           </div>
 
-          {/* Right 8-col Real Screenshot & Operational Detail */}
+          {/* Right 8-col Uncropped Real Screenshot + Outcomes */}
           <div key={current.id} className="lg:col-span-8 space-y-6 cigo-swap">
-            <div className="border border-[#D8D6CE] rounded-xl overflow-hidden bg-[#F6F5F1]">
+            <div className="border border-[#CBD5E1] rounded-2xl overflow-hidden bg-[#F8FAFC] shadow-sm">
               <Image
                 src={current.img}
                 alt={current.title}
                 width={1280}
                 height={720}
                 sizes="(max-width: 1024px) 100vw, 780px"
-                className="w-full h-auto max-h-[470px] object-contain block bg-[#F6F5F1]"
+                className="w-full h-auto max-h-[470px] object-contain block bg-[#F8FAFC]"
               />
             </div>
 
             <div className="space-y-4">
               <div>
-                <h3 className="text-xl sm:text-2xl font-bold text-[#14181D] tracking-[-0.02em]">
+                <h3 className="text-xl sm:text-2xl font-bold text-[#0F172A] tracking-[-0.02em]">
                   {current.title}
                 </h3>
-                <p className="text-sm sm:text-base text-[#4E5661] leading-relaxed mt-2 max-w-[68ch]">
+                <p className="text-sm sm:text-base text-[#475569] leading-relaxed mt-2 max-w-[68ch]">
                   {current.desc}
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-5 border-t border-[#E4E2DA]">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-5 border-t border-[#E2E8F0]">
                 <div>
-                  <div className="text-xs font-semibold text-[#14181D] mb-1">
+                  <div className="text-xs font-bold text-[#0F172A] mb-1">
                     Qué resuelve para tu empresa
                   </div>
-                  <p className="text-sm text-[#4E5661] leading-relaxed">
+                  <p className="text-sm text-[#475569] leading-relaxed">
                     {current.logro}
                   </p>
                 </div>
                 <div>
-                  <div className="text-xs font-semibold text-[#147A4B] mb-1">
-                    Qué se automatiza en el proceso
+                  <div className="text-xs font-bold text-[#0F766E] mb-1">
+                    Qué automatiza el sistema
                   </div>
-                  <p className="text-sm text-[#4E5661] leading-relaxed">
+                  <p className="text-sm text-[#475569] leading-relaxed">
                     {current.auto}
                   </p>
                 </div>
