@@ -526,6 +526,17 @@
   accent-color: #14b8a6;
 }
 
+.cigo-number-input::-webkit-inner-spin-button,
+.cigo-number-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.cigo-number-input {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .cigo-enter,
   .cigo-enter-delay,
